@@ -105,13 +105,39 @@ As they navigate a world connected by Moon Rock portals and face threats from th
       clan: 'Sun Clan',
       age: 'Unknown',
       height: '6\'4"',
-      rank: 1,
+      rank: 'Sunk King',
       design: 'Fiery hair, extremely muscular with 8-pack, big biceps and triceps, fire-colored grim reaper-style suit, sandals',
       personality: 'Ruthless and powerful',
       weapon: 'Yellow staff with a mini sun on top',
       powerState: 'Extremely powerful. Powers: Gravity Control, U.V Ray, God Ray, Eternal Noon, Supernova Collapse (strongest)',
       bio: 'Leader of the Sunseekers and the ultimate threat. Appears at the end of the anime as an overwhelmingly powerful adversary.'
+    },
+    {
+      name: 'Kuroshi Shirogane',
+      clan: 'Moon Clan',
+      height: '5\'8"',
+      rank: 5,
+      design: 'Silver-white hair, lean athletic build, dark blue kimono with moon patterns, black combat boots',
+      personality: 'Mysterious and calculating',
+      weapon: 'Twin silver daggers with crescent moon engravings',
+      powerState: 'No techniques, no awakened power. Has Tsukinome (inactive, unknown to him)',
+      bio: 'A skilled fighter from the Moon Clan with a mysterious past. Known for his strategic mind and swift combat style.'
     }
+    // ============================================================
+    // TEMPLATE FOR NEXT CHARACTER - Uncomment and fill in when ready
+    // ============================================================
+    // {
+    //   name: '[Character Name]',
+    //   clan: '[Sun/Moon/Earth/Fire/Water/Lightning] Clan',
+    //   age: 0,
+    //   height: '[Height in feet/inches]',
+    //   rank: 0,
+    //   design: '[Physical appearance, clothing, distinctive features]',
+    //   personality: '[Key personality traits]',
+    //   weapon: '[Weapon description or "None specified"]',
+    //   powerState: '[Current power status, techniques, clan eye status]',
+    //   bio: '[Character background and story role]'
+    // }
   ],
 
   episodes: [

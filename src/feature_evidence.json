@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-revert-the-public-site-hero-section-background-image-to-the-exact-background-artwork-that-was-used-immediately-before-the-current-image-assets-generated-anime-hero-bg-moon-waterfall-volcano-sun-dim-1920x1080-png-update-the-hero-so-it-no-longer-uses-the-current-background-image",
-      "featureTitle": "Revert the public site hero section background image to the exact background artwork that was used immediately before the current image (/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png). Update the hero so it no longer uses the current background image.",
+      "featureId": "feature-update-the-character-data-in-frontend-src-content-animesiteconfig-ts-so-that-kuroshi-shirogane-sensei-does-not-have-an-age-value-remove-the-age-13-entry-entirely-or-set-it-to-a-missing-undefined-value-that-will-not-render-do-not-replace-it-with-another-age-or-with-the-word-unknown",
+      "featureTitle": "Update the character data in `frontend/src/content/animeSiteConfig.ts` so that Kuroshi Shirogane (Sensei) does not have an age value (remove the `age: 13` entry entirely or set it to a missing/undefined value that will not render). Do not replace it with another age or with the word \"Unknown\".",
       "files": [
-        "frontend/src/components/HeroSection.tsx"
+        "frontend/src/content/animeSiteConfig.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -17,6 +17,25 @@
       ],
       "testIds": [
         "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-characters-section-ui-frontend-src-components-characterssection-tsx-so-that-the-age-label-value-is-only-shown-when-a-character-has-a-valid-age-value-if-a-character-has-no-age-value-the-rendered-metadata-line-must-omit-the-entire-age-portion-including-the-word-age-and-its-separator-dot-while-keeping-the-rest-of-the-metadata-clan-height-rank-intact",
+      "featureTitle": "Update the Characters section UI (`frontend/src/components/CharactersSection.tsx`) so that the age label/value is only shown when a character has a valid age value. If a character has no age value, the rendered metadata line must omit the entire age portion (including the word \"Age\" and its separator dot) while keeping the rest of the metadata (clan, height, rank) intact.",
+      "files": [
+        "frontend/src/components/CharactersSection.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
       ],
       "confidence": "high"
     }

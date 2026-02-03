@@ -20,7 +20,7 @@ export function HeroSection() {
       id="hero"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{
-        backgroundImage: 'url(/assets/generated/anime-hero-bg.dim_1920x1080.png)',
+        backgroundImage: 'url(/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'

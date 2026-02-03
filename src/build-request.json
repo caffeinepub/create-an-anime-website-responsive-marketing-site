@@ -1,53 +1,50 @@
 {
   "kind": "build_request",
-  "title": "Revert hero background to the previous background artwork",
+  "title": "Remove Sensei Kuroshi Shirogane’s age from character content and UI",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Revert the public site hero section background image to the exact background artwork that was used immediately before the current image (/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png). Update the hero so it no longer uses the current background image.",
+      "text": "Update the character data in `frontend/src/content/animeSiteConfig.ts` so that Kuroshi Shirogane (Sensei) does not have an age value (remove the `age: 13` entry entirely or set it to a missing/undefined value that will not render). Do not replace it with another age or with the word \"Unknown\".",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-3"
+          "msg-1"
         ],
         "quotes": [
-          "no I want the other background the one u had before this one"
+          "for the sensei don't make his age 13 just don't say anything for age"
         ]
       },
       "acceptanceCriteria": [
-        "The Hero section (frontend/src/components/HeroSection.tsx) no longer references /assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png as its background image.",
-        "When loading the site, the visible hero background matches the previously-used background artwork (the one used before the most recent background change).",
-        "No other sections (About, Characters, Worldbuilding, Episodes, Contact, Admin, Footer) have visual or functional regressions."
+        "In `animeSiteConfig.characters`, Kuroshi Shirogane no longer has `age: 13` and no age text is provided for him."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "If the previously-used hero background image file is not present in the repository under frontend/public/assets (or frontend/public/assets/generated), restore it (re-add the prior asset) and ensure it is served as a static frontend asset.",
+      "text": "Update the Characters section UI (`frontend/src/components/CharactersSection.tsx`) so that the age label/value is only shown when a character has a valid age value. If a character has no age value, the rendered metadata line must omit the entire age portion (including the word \"Age\" and its separator dot) while keeping the rest of the metadata (clan, height, rank) intact.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6",
-          "msg-3"
+          "msg-1"
         ],
         "quotes": [
-          "do u remember the background before this new one?",
-          "no I want the other background the one u had before this one"
+          "just don't say anything for age"
         ]
       },
       "acceptanceCriteria": [
-        "The previously-used background image file exists in the frontend static assets and loads without 404s in the browser network tab.",
-        "The Hero section uses the restored prior background asset path."
+        "Kuroshi Shirogane’s card does not display any age text (no \"Age\", no number, no placeholder).",
+        "Other characters with an age value continue to display age as before.",
+        "The metadata line formatting does not show extra separators (e.g., no double bullets) when age is omitted."
       ]
     }
   ],
   "constraints": [
-    "Do not change any backend canister logic; this request is limited to the site background/asset selection.",
-    "Do not edit files in frontend/immutablePaths (compose using existing components/hooks instead)."
+    "Use English for any user-facing text.",
+    "Do not modify files under `frontend/src/components/ui` or other immutable paths listed in SYSTEM_CONTEXT."
   ],
   "nonGoals": [
-    "Do not create a new background design or change the art direction; the goal is to restore the exact previously-used background.",
-    "Do not add a UI toggle/setting to switch backgrounds unless explicitly requested."
+    "Do not change any backend (Motoko) code or contact/admin features.",
+    "Do not add new character fields or new UI sections beyond conditionally hiding the age display."
   ],
   "imageRequirements": {
     "required": [],

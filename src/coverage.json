@@ -1,43 +1,47 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-03T19:45:48.829Z",
+  "generatedAt": "2026-02-03T23:53:44.232Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
     "total": 2,
-    "implemented": 1,
+    "implemented": 2,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Revert the public site hero section background image to the exact background artwork that was used immediately before the current image (/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png). Update the hero so it no longer uses the current background image.",
+        "summary": "Update the character data in `frontend/src/content/animeSiteConfig.ts` so that Kuroshi Shirogane (Sensei) does not have an age value (remove the `age: 13` entry entirely or set it to a missing/undefined value that will not render). Do not replace it with another age or with the word \"Unknown\".",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/HeroSection.tsx"
+          "frontend/src/content/animeSiteConfig.ts"
         ],
         "matchedFiles": [
-          "frontend/src/components/HeroSection.tsx"
+          "frontend/src/content/animeSiteConfig.ts"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "If the previously-used hero background image file is not present in the repository under frontend/public/assets (or frontend/public/assets/generated), restore it (re-add the prior asset) and ensure it is served as a static frontend asset.",
-        "status": "missing",
+        "summary": "Update the Characters section UI (`frontend/src/components/CharactersSection.tsx`) so that the age label/value is only shown when a character has a valid age value. If a character has no age value, the rendered metadata line must omit the entire age portion (including the word \"Age\" and its separator dot) while keeping the rest of the metadata (clan, height, rank) intact.",
+        "status": "implemented",
         "plannedFiles": [
-          "frontend/public/assets/generated/anime-hero-bg.dim_1920x1080.png"
+          "frontend/src/components/CharactersSection.tsx"
         ],
-        "matchedFiles": []
+        "matchedFiles": [
+          "frontend/src/components/CharactersSection.tsx"
+        ]
       }
     ]
   },
   "changedFiles": [
     "build-request.json",
+    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/HeroSection.tsx",
+    "frontend/src/components/CharactersSection.tsx",
+    "frontend/src/content/animeSiteConfig.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

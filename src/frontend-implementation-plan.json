@@ -1,36 +1,35 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Restore prior hero background artwork",
+  "title": "Remove Kuroshi Shirogane age from content and conditionally render age in Characters UI",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Revert the Hero section background image to the previously-used artwork and remove usage of the current background image.",
+      "summary": "Remove Kuroshi Shirogane’s age from the character content configuration so no age text can be rendered for him.",
       "acceptanceCriteria": [
-        "The Hero section (frontend/src/components/HeroSection.tsx) no longer references /assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png as its background image.",
-        "When loading the site, the visible hero background matches the previously-used background artwork (the one used before the most recent background change).",
-        "No other sections (About, Characters, Worldbuilding, Episodes, Contact, Admin, Footer) have visual or functional regressions."
+        "In `animeSiteConfig.characters`, Kuroshi Shirogane no longer has `age: 13` and no age text is provided for him."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/HeroSection.tsx",
+          "path": "frontend/src/content/animeSiteConfig.ts",
           "operation": "modify",
-          "description": "Update the hero section inline backgroundImage to use the previously-used hero background artwork (switch away from /assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png and restore the prior path, expected to be /assets/generated/anime-hero-bg.dim_1920x1080.png)."
+          "description": "Update the Kuroshi Shirogane character object to remove the `age: 13` property entirely (or make it missing/undefined) so the UI has no age value to render for him; do not replace with another age or with \"Unknown\"."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Ensure the previously-used hero background image file exists in frontend static assets and is served without 404s.",
+      "summary": "Conditionally render the age label/value in character cards only when a character has a valid age value, and omit the entire age portion (including separators) when missing.",
       "acceptanceCriteria": [
-        "The previously-used background image file exists in the frontend static assets and loads without 404s in the browser network tab.",
-        "The Hero section uses the restored prior background asset path."
+        "Kuroshi Shirogane’s card does not display any age text (no \"Age\", no number, no placeholder).",
+        "Other characters with an age value continue to display age as before.",
+        "The metadata line formatting does not show extra separators (e.g., no double bullets) when age is omitted."
       ],
       "file_operations": [
         {
-          "path": "frontend/public/assets/generated/anime-hero-bg.dim_1920x1080.png",
-          "operation": "create",
-          "description": "Restore (re-add) the previously-used hero background artwork file as a static asset at this exact path if it is missing from the repository, so it can be served by the frontend without 404s."
+          "path": "frontend/src/components/CharactersSection.tsx",
+          "operation": "modify",
+          "description": "Adjust the character metadata line to build its parts conditionally so \"Age {value}\" is only included when the character has a valid age (e.g., a number), and ensure the bullet separator between metadata parts is only rendered between present parts (no extra/double bullets) while keeping clan, height, and rank intact."
         }
       ]
     }

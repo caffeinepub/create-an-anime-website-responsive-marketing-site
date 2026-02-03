@@ -1,10 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Restore the public site hero section background to the exact previously-used background artwork (reverting from the current image).
+**Goal:** Remove Sensei Kuroshi Shirogane’s age from character content and ensure the UI only shows age when it exists.
 
 **Planned changes:**
-- Update `frontend/src/components/HeroSection.tsx` to stop using `/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png` and reference the previously-used hero background image instead.
-- If the previously-used hero background asset is missing from `frontend/public/assets` (or `frontend/public/assets/generated`), restore/re-add it so it is served as a static frontend asset.
+- Update `frontend/src/content/animeSiteConfig.ts` to remove Kuroshi Shirogane’s `age: 13` value and leave him with no age value (nothing that would render).
+- Update `frontend/src/components/CharactersSection.tsx` to conditionally render the age label/value only when a character has a valid age, omitting the entire age portion (and its separator) when missing while keeping other metadata (clan, height, rank) intact.
 
-**User-visible outcome:** The site hero section displays the same background artwork that was used before the most recent background change, and the hero background loads correctly without affecting other sections.
+**User-visible outcome:** Kuroshi Shirogane’s character card no longer shows any age text, while other characters that have ages continue to display them normally without formatting artifacts.
