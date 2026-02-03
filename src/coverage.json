@@ -1,0 +1,49 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-03T18:45:41.859Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 2,
+    "implemented": 2,
+    "items": [
+      {
+        "id": "REQ-10",
+        "summary": "Generate a new hero background image depicting a moon scene with a waterfall on one side and a volcano with the sun on the other side, and add it as a static asset under frontend/public/assets/generated.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/public/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png"
+        ],
+        "matchedFiles": [
+          "frontend/public/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png"
+        ]
+      },
+      {
+        "id": "REQ-11",
+        "summary": "Update the Hero section to use the newly generated background image instead of the current /assets/generated/anime-hero-bg.dim_1920x1080.png background.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/HeroSection.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/HeroSection.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/public/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png",
+    "frontend/src/components/HeroSection.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

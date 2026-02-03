@@ -1,0 +1,37 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Update hero background artwork (moon + waterfall + volcano + sun)",
+  "requirements": [
+    {
+      "id": "REQ-10",
+      "summary": "Add the newly generated moon/waterfall + volcano/sun hero background image as a static asset under frontend/public/assets/generated.",
+      "acceptanceCriteria": [
+        "A new image file exists in frontend/public/assets/generated with the exact filename specified in imageRequirements.required.",
+        "The image visually includes: (1) moon-themed side with a waterfall, (2) opposite side with a volcano and the sun."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png",
+          "operation": "create",
+          "description": "Add the generated static hero background image asset (Epic anime-style landscape with moonlit waterfall on one side and volcano with bright sun on the other), to be served directly from the frontend as a static file."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Update the Hero section to use the newly generated background image while preserving full-screen cover behavior and overlay readability.",
+      "acceptanceCriteria": [
+        "frontend/src/components/HeroSection.tsx references the new generated image path in its backgroundImage style.",
+        "The hero remains full-screen with the background covering the section (no tiling) and the text remains readable with the existing overlay."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/HeroSection.tsx",
+          "operation": "modify",
+          "description": "Replace the current backgroundImage reference (/assets/generated/anime-hero-bg.dim_1920x1080.png) with /assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png while keeping the existing backgroundSize/backgroundPosition/backgroundRepeat and the overlay for text readability."
+        }
+      ]
+    }
+  ]
+}

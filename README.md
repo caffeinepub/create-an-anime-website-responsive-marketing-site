@@ -1,2 +1,3 @@
-# create-an-anime-website-responsive-marketing-site
-Exported from Caffeine project: Whispers of the White Moon
+## 
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`

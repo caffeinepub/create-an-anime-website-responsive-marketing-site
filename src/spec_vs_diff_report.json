@@ -1,0 +1,32 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-03T18:45:41.840Z",
+  "summary": "HeroSection.tsx was updated to reference the new background image path and retain cover/no-repeat styling, satisfying REQ-11. However, the required new image asset file was not added under frontend/public/assets/generated, so REQ-10 is not met. Two additional project metadata files were modified without being requested.",
+  "missing_requirements": [
+    {
+      "id": "REQ-10",
+      "requirement": "Generate a new hero background image depicting a moon scene with a waterfall on one side and a volcano with the sun on the other side, and add it as a static asset under frontend/public/assets/generated with the exact filename anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png.",
+      "reason": "The diff shows no added files, and there is no evidence of a new image file being added under frontend/public/assets/generated.",
+      "evidence": [
+        "File diff summary: \"Added: 0\" and \"ADDED FILES: - none\""
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Updated/maintained generated documentation/metadata files (frontend-file-summaries.txt and project_state.json).",
+      "reason": "The BuildRequest only asks to add a static image asset and update HeroSection.tsx; it does not request changes to summary/metadata files.",
+      "evidence": [
+        "frontend-file-summaries.txt",
+        "project_state.json (truncated)"
+      ]
+    }
+  ],
+  "confidence": 0.74,
+  "changed_files": [
+    "frontend-file-summaries.txt",
+    "frontend/src/components/HeroSection.tsx",
+    "project_state.json"
+  ]
+}
