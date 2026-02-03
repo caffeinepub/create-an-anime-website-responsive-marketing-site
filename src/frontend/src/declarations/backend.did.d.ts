@@ -10,7 +10,41 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface _SERVICE {}
+export interface ContactRequest {
+  'id' : string,
+  'topic' : Topics,
+  'email' : string,
+  'message' : string,
+  'timestamp' : Time,
+  'processed' : boolean,
+}
+export interface NewRequest {
+  'topic' : Topics,
+  'email' : string,
+  'message' : string,
+}
+export type Time = bigint;
+export type Topics = { 'businessPartnerships' : null } |
+  { 'interviewRequests' : null } |
+  { 'publishingSubmissions' : null } |
+  { 'eventOrWorkshopProposals' : null } |
+  { 'advertisingInquiries' : null } |
+  { 'challengesAndBounties' : null } |
+  { 'generalInquiries' : null };
+export type UserRole = { 'admin' : null } |
+  { 'user' : null } |
+  { 'guest' : null };
+export interface _SERVICE {
+  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'getAllRequests' : ActorMethod<[], Array<ContactRequest>>,
+  'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getRequestsByStatus' : ActorMethod<[boolean], Array<ContactRequest>>,
+  'getRequestsByTopic' : ActorMethod<[Topics], Array<ContactRequest>>,
+  'isCallerAdmin' : ActorMethod<[], boolean>,
+  'submitRequest' : ActorMethod<[NewRequest], string>,
+  'updateRequestStatus' : ActorMethod<[string, boolean], undefined>,
+}
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];
 export declare const idlFactory: IDL.InterfaceFactory;

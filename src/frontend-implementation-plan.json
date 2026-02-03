@@ -1,35 +1,36 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Update hero background artwork (moon + waterfall + volcano + sun)",
+  "title": "Restore prior hero background artwork",
   "requirements": [
     {
-      "id": "REQ-10",
-      "summary": "Add the newly generated moon/waterfall + volcano/sun hero background image as a static asset under frontend/public/assets/generated.",
+      "id": "REQ-1",
+      "summary": "Revert the Hero section background image to the previously-used artwork and remove usage of the current background image.",
       "acceptanceCriteria": [
-        "A new image file exists in frontend/public/assets/generated with the exact filename specified in imageRequirements.required.",
-        "The image visually includes: (1) moon-themed side with a waterfall, (2) opposite side with a volcano and the sun."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/public/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png",
-          "operation": "create",
-          "description": "Add the generated static hero background image asset (Epic anime-style landscape with moonlit waterfall on one side and volcano with bright sun on the other), to be served directly from the frontend as a static file."
-        }
-      ]
-    },
-    {
-      "id": "REQ-11",
-      "summary": "Update the Hero section to use the newly generated background image while preserving full-screen cover behavior and overlay readability.",
-      "acceptanceCriteria": [
-        "frontend/src/components/HeroSection.tsx references the new generated image path in its backgroundImage style.",
-        "The hero remains full-screen with the background covering the section (no tiling) and the text remains readable with the existing overlay."
+        "The Hero section (frontend/src/components/HeroSection.tsx) no longer references /assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png as its background image.",
+        "When loading the site, the visible hero background matches the previously-used background artwork (the one used before the most recent background change).",
+        "No other sections (About, Characters, Worldbuilding, Episodes, Contact, Admin, Footer) have visual or functional regressions."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/HeroSection.tsx",
           "operation": "modify",
-          "description": "Replace the current backgroundImage reference (/assets/generated/anime-hero-bg.dim_1920x1080.png) with /assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png while keeping the existing backgroundSize/backgroundPosition/backgroundRepeat and the overlay for text readability."
+          "description": "Update the hero section inline backgroundImage to use the previously-used hero background artwork (switch away from /assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png and restore the prior path, expected to be /assets/generated/anime-hero-bg.dim_1920x1080.png)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Ensure the previously-used hero background image file exists in frontend static assets and is served without 404s.",
+      "acceptanceCriteria": [
+        "The previously-used background image file exists in the frontend static assets and loads without 404s in the browser network tab.",
+        "The Hero section uses the restored prior background asset path."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/anime-hero-bg.dim_1920x1080.png",
+          "operation": "create",
+          "description": "Restore (re-add) the previously-used hero background artwork file as a static asset at this exact path if it is missing from the repository, so it can be served by the frontend without 404s."
         }
       ]
     }

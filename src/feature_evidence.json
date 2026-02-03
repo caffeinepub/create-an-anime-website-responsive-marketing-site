@@ -2,24 +2,8 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-generate-a-new-hero-background-image-depicting-a-moon-scene-with-a-waterfall-on-one-side-and-a-volcano-with-the-sun-on-the-other-side-and-add-it-as-a-static-asset-under-frontend-public-assets-generated",
-      "featureTitle": "Generate a new hero background image depicting a moon scene with a waterfall on one side and a volcano with the sun on the other side, and add it as a static asset under frontend/public/assets/generated.",
-      "files": [],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-10"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-the-hero-section-to-use-the-newly-generated-background-image-instead-of-the-current-assets-generated-anime-hero-bg-dim-1920x1080-png-background",
-      "featureTitle": "Update the Hero section to use the newly generated background image instead of the current /assets/generated/anime-hero-bg.dim_1920x1080.png background.",
+      "featureId": "feature-revert-the-public-site-hero-section-background-image-to-the-exact-background-artwork-that-was-used-immediately-before-the-current-image-assets-generated-anime-hero-bg-moon-waterfall-volcano-sun-dim-1920x1080-png-update-the-hero-so-it-no-longer-uses-the-current-background-image",
+      "featureTitle": "Revert the public site hero section background image to the exact background artwork that was used immediately before the current image (/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png). Update the hero so it no longer uses the current background image.",
       "files": [
         "frontend/src/components/HeroSection.tsx"
       ],
@@ -28,10 +12,11 @@
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-11"
+        "REQ-1"
       ],
       "confidence": "high"
     }

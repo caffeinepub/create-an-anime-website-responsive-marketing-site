@@ -1,29 +1,21 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-03T18:45:41.840Z",
-  "summary": "HeroSection.tsx was updated to reference the new background image path and retain cover/no-repeat styling, satisfying REQ-11. However, the required new image asset file was not added under frontend/public/assets/generated, so REQ-10 is not met. Two additional project metadata files were modified without being requested.",
+  "generatedAt": "2026-02-03T19:45:48.808Z",
+  "summary": "HeroSection.tsx was updated to use a different background image path (/assets/generated/anime-hero-bg.dim_1920x1080.png) and no longer references the current moon-waterfall-volcano-sun image. However, the diff does not show the previously-used background asset being restored/added under frontend/public/assets (or /generated), so asset-restoration/static-serving requirements are not evidenced.",
   "missing_requirements": [
     {
-      "id": "REQ-10",
-      "requirement": "Generate a new hero background image depicting a moon scene with a waterfall on one side and a volcano with the sun on the other side, and add it as a static asset under frontend/public/assets/generated with the exact filename anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png.",
-      "reason": "The diff shows no added files, and there is no evidence of a new image file being added under frontend/public/assets/generated.",
+      "id": "REQ-2",
+      "requirement": "If the previously-used hero background image file is not present in the repository under frontend/public/assets (or frontend/public/assets/generated), restore it (re-add the prior asset) and ensure it is served as a static frontend asset.",
+      "reason": "The diff shows no added/restored asset file under frontend/public/assets or frontend/public/assets/generated; only a code reference change in HeroSection.tsx and updates to summary/state files are shown.",
       "evidence": [
-        "File diff summary: \"Added: 0\" and \"ADDED FILES: - none\""
+        "frontend/src/components/HeroSection.tsx",
+        "frontend-file-summaries.txt"
       ]
     }
   ],
-  "hallucinated_features": [
-    {
-      "description": "Updated/maintained generated documentation/metadata files (frontend-file-summaries.txt and project_state.json).",
-      "reason": "The BuildRequest only asks to add a static image asset and update HeroSection.tsx; it does not request changes to summary/metadata files.",
-      "evidence": [
-        "frontend-file-summaries.txt",
-        "project_state.json (truncated)"
-      ]
-    }
-  ],
-  "confidence": 0.74,
+  "hallucinated_features": [],
+  "confidence": 0.68,
   "changed_files": [
     "frontend-file-summaries.txt",
     "frontend/src/components/HeroSection.tsx",

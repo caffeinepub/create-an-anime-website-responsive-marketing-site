@@ -8,10 +8,106 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const idlService = IDL.Service({});
+export const UserRole = IDL.Variant({
+  'admin' : IDL.Null,
+  'user' : IDL.Null,
+  'guest' : IDL.Null,
+});
+export const Topics = IDL.Variant({
+  'businessPartnerships' : IDL.Null,
+  'interviewRequests' : IDL.Null,
+  'publishingSubmissions' : IDL.Null,
+  'eventOrWorkshopProposals' : IDL.Null,
+  'advertisingInquiries' : IDL.Null,
+  'challengesAndBounties' : IDL.Null,
+  'generalInquiries' : IDL.Null,
+});
+export const Time = IDL.Int;
+export const ContactRequest = IDL.Record({
+  'id' : IDL.Text,
+  'topic' : Topics,
+  'email' : IDL.Text,
+  'message' : IDL.Text,
+  'timestamp' : Time,
+  'processed' : IDL.Bool,
+});
+export const NewRequest = IDL.Record({
+  'topic' : Topics,
+  'email' : IDL.Text,
+  'message' : IDL.Text,
+});
+
+export const idlService = IDL.Service({
+  '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'getAllRequests' : IDL.Func([], [IDL.Vec(ContactRequest)], ['query']),
+  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getRequestsByStatus' : IDL.Func(
+      [IDL.Bool],
+      [IDL.Vec(ContactRequest)],
+      ['query'],
+    ),
+  'getRequestsByTopic' : IDL.Func(
+      [Topics],
+      [IDL.Vec(ContactRequest)],
+      ['query'],
+    ),
+  'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'submitRequest' : IDL.Func([NewRequest], [IDL.Text], []),
+  'updateRequestStatus' : IDL.Func([IDL.Text, IDL.Bool], [], []),
+});
 
 export const idlInitArgs = [];
 
-export const idlFactory = ({ IDL }) => { return IDL.Service({}); };
+export const idlFactory = ({ IDL }) => {
+  const UserRole = IDL.Variant({
+    'admin' : IDL.Null,
+    'user' : IDL.Null,
+    'guest' : IDL.Null,
+  });
+  const Topics = IDL.Variant({
+    'businessPartnerships' : IDL.Null,
+    'interviewRequests' : IDL.Null,
+    'publishingSubmissions' : IDL.Null,
+    'eventOrWorkshopProposals' : IDL.Null,
+    'advertisingInquiries' : IDL.Null,
+    'challengesAndBounties' : IDL.Null,
+    'generalInquiries' : IDL.Null,
+  });
+  const Time = IDL.Int;
+  const ContactRequest = IDL.Record({
+    'id' : IDL.Text,
+    'topic' : Topics,
+    'email' : IDL.Text,
+    'message' : IDL.Text,
+    'timestamp' : Time,
+    'processed' : IDL.Bool,
+  });
+  const NewRequest = IDL.Record({
+    'topic' : Topics,
+    'email' : IDL.Text,
+    'message' : IDL.Text,
+  });
+  
+  return IDL.Service({
+    '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'getAllRequests' : IDL.Func([], [IDL.Vec(ContactRequest)], ['query']),
+    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getRequestsByStatus' : IDL.Func(
+        [IDL.Bool],
+        [IDL.Vec(ContactRequest)],
+        ['query'],
+      ),
+    'getRequestsByTopic' : IDL.Func(
+        [Topics],
+        [IDL.Vec(ContactRequest)],
+        ['query'],
+      ),
+    'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'submitRequest' : IDL.Func([NewRequest], [IDL.Text], []),
+    'updateRequestStatus' : IDL.Func([IDL.Text, IDL.Bool], [], []),
+  });
+};
 
 export const init = ({ IDL }) => { return []; };

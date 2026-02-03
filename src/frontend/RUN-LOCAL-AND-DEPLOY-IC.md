@@ -1,4 +1,4 @@
-# Running and Deploying "Whispers of the white moon" Outside Caffeine
+# Running and Deploying "Whispers of the White Moon" Outside Caffeine
 
 This guide explains how to run your anime website locally and deploy it to the Internet Computer (IC) so you can access it in Chrome or any browser without using Caffeine.
 

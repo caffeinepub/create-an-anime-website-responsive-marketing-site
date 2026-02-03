@@ -1,5 +1,4 @@
 import { SiGithub, SiX } from 'react-icons/si';
-import { Heart } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -7,16 +6,8 @@ export function Footer() {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-center md:text-left">
-            <p className="text-lg font-medium flex items-center justify-center md:justify-start gap-2">
-              © 2026. Built with <Heart size={18} className="text-accent fill-accent" /> using{' '}
-              <a
-                href="https://caffeine.ai"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-accent transition-colors underline"
-              >
-                caffeine.ai
-              </a>
+            <p className="text-lg font-medium">
+              © 2026
             </p>
           </div>
 

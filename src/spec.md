@@ -1,10 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Update the Hero section background to a new anime-style panoramic scene featuring a moonlit waterfall on one side and a volcano with the sun on the other.
+**Goal:** Restore the public site hero section background to the exact previously-used background artwork (reverting from the current image).
 
 **Planned changes:**
-- Add a newly generated hero background image asset under `frontend/public/assets/generated/` with the specified filename.
-- Update `frontend/src/components/HeroSection.tsx` to reference the new background image path instead of the current `anime-hero-bg.dim_1920x1080.png`, keeping full-screen cover behavior and existing readability overlay.
+- Update `frontend/src/components/HeroSection.tsx` to stop using `/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png` and reference the previously-used hero background image instead.
+- If the previously-used hero background asset is missing from `frontend/public/assets` (or `frontend/public/assets/generated`), restore/re-add it so it is served as a static frontend asset.
 
-**User-visible outcome:** The landing page Hero displays the new split-scene background (moon + waterfall vs. volcano + sun) while remaining full-screen with readable text.
+**User-visible outcome:** The site hero section displays the same background artwork that was used before the most recent background change, and the hero background loads correctly without affecting other sections.

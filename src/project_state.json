@@ -1,235 +1,262 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Whispers of the White Moon is a content-driven, anime-themed single-page website built with a React + TypeScript frontend (Vite-style entry) and Tailwind CSS. The page is composed of sections (Hero, About, Characters, Worldbuilding, Episodes, Contact, Footer) whose text and structured lore are sourced from a single central configuration module (animeSiteConfig). The repository also includes an Internet Computer (ICP) Motoko backend canister scaffold (currently empty) and optional Internet Identity authentication plus a React Query-based actor creation hook to prepare for future authenticated backend calls. The previous Gallery section/navigation has been removed from the rendered layout and configuration, leaving empty placeholder files for the removed components.",
+  "summary": "Whispers of the White Moon is an anime-themed React + TypeScript single-page website styled with Tailwind (OKLCH design tokens). The public site presents story content (Hero, About, Characters, Worldbuilding, Episodes) and a working Contact form that submits topic-tagged messages to an Internet Computer (ICP) Motoko canister. An Admin Dashboard section supports Internet Identity authentication and—when authorized—allows admins to view all contact requests, refresh the list, toggle each request’s processed status, and export requests as a JSON download. Backend authorization is implemented via a token-bootstrapped role-based access-control module and mixin.",
   "existing_features": [
     {
       "id": "IF-1",
-      "title": "ICP Motoko backend canister scaffold",
+      "title": "React + TypeScript single-page site composition",
       "synonyms": [
-        "Motoko canister",
-        "ICP backend scaffold"
+        "React SPA",
+        "Frontend scaffold"
       ],
-      "description": "Includes a backend canister entrypoint (backend/main.mo) suitable for ICP deployment; currently implemented as an empty actor placeholder.",
+      "description": "Renders a single-page layout with TopNav, multiple anchored content sections, and a footer, all assembled in the root App component.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-2",
-      "title": "React + TypeScript frontend application scaffold",
+      "title": "Tailwind CSS theming with OKLCH design tokens",
       "synonyms": [
-        "React SPA",
-        "Frontend bootstrap"
+        "Design tokens",
+        "OKLCH theme"
       ],
-      "description": "A React + TypeScript frontend mounted from frontend/index.html via src/main.tsx and rendering the SPA root component (App).",
+      "description": "Defines light/dark theme tokens via CSS variables (OKLCH) and maps them into Tailwind for consistent colors, typography, radii, and effects across the site.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-3",
-      "title": "React Query provider setup",
+      "title": "Config-driven site content (animeSiteConfig)",
       "synonyms": [
-        "@tanstack/react-query setup",
-        "QueryClientProvider"
+        "Content configuration",
+        "Single source of truth"
       ],
-      "description": "Creates a QueryClient in src/main.tsx and provides it to the app for cached async data and ICP actor creation.",
+      "description": "Centralizes title, tagline, synopsis, worldbuilding data, characters, and episodes in a single configuration object and renders sections from this data.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-4",
-      "title": "Tailwind CSS design system with OKLCH theme tokens",
+      "title": "Fixed navigation with responsive mobile menu and smooth scrolling",
       "synonyms": [
-        "Tailwind theming",
-        "Manga/ink-on-paper theme"
+        "Top navigation",
+        "Anchor navigation"
       ],
-      "description": "Tailwind configured with CSS-variable OKLCH tokens (light/dark), custom fonts (Inter + Noto Serif JP), custom scrollbar styling, and plugins (typography, container-queries, animate).",
+      "description": "Implements a sticky TopNav with scroll-aware styling, a mobile hamburger menu, and smooth scrolling to section IDs with a header offset.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-5",
-      "title": "Centralized site content configuration (animeSiteConfig)",
+      "title": "Hero section with background artwork and CTAs",
       "synonyms": [
-        "Content-driven configuration",
-        "Single source of truth for content"
+        "Landing hero",
+        "Hero banner"
       ],
-      "description": "All user-facing content (title, tagline, synopsis, CTAs, worldbuilding data, character profiles, episodes) is centralized in frontend/src/content/animeSiteConfig.ts and rendered by UI components.",
+      "description": "Displays a full-screen hero with a background image overlay, config-driven title/tagline, CTA buttons that scroll to site sections, and a scroll indicator control.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-6",
-      "title": "Single-page layout composing site sections (Gallery removed)",
+      "title": "About section (synopsis rendering)",
       "synonyms": [
-        "Landing page composition",
-        "Section-based SPA"
+        "Synopsis section"
       ],
-      "description": "App.tsx composes TopNav plus Hero, About, Characters, Worldbuilding, Episodes, Contact, and Footer into a single scrolling page; no Gallery section is rendered.",
+      "description": "Renders the multi-paragraph anime synopsis from configuration with readable typography and preserved line breaks.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-7",
-      "title": "Responsive top navigation with smooth scrolling and mobile menu",
+      "title": "Characters section (character cards)",
       "synonyms": [
-        "TopNav",
-        "Anchor navigation"
+        "Character roster",
+        "Character profiles"
       ],
-      "description": "Fixed header navigation with scroll-aware styling, desktop links, mobile menu toggle, and smooth scrolling to section IDs with a header offset; links include Home, About, Characters, Worldbuilding, Episodes, and Contact.",
+      "description": "Shows a responsive grid of character cards sourced from config, including stats (clan/age/height/rank), design notes, bio, weapon (optional), and power state.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-8",
-      "title": "Hero section with background image, CTAs, and scroll indicator",
+      "title": "Worldbuilding section (lore subsections)",
       "synonyms": [
-        "Hero banner",
-        "Landing hero"
+        "Lore section"
       ],
-      "description": "Full-screen hero with background image overlay, title/tagline from config, primary/secondary CTA buttons that scroll to sections, and a bouncing scroll indicator button.",
+      "description": "Displays structured worldbuilding content from config, including clans, clan-eye rules, power system, rank system, Shiranagi family details, and Moon Rock mechanic.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-9",
-      "title": "About section rendering synopsis text",
+      "title": "Episodes section (episode list)",
       "synonyms": [
-        "Synopsis section",
-        "About the series"
+        "Episode cards",
+        "Episode list"
       ],
-      "description": "About section displays the multi-paragraph synopsis from config with readable typography and preserved line breaks (whitespace-pre-line).",
+      "description": "Renders a list of episodes from configuration with episode number, title, and synopsis in styled cards.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-10",
-      "title": "Characters section (config-driven character cards)",
+      "title": "Footer with external social links",
       "synonyms": [
-        "Character roster",
-        "Character profile cards"
+        "Site footer"
       ],
-      "description": "Renders a responsive grid of character cards from config, displaying clan, age, height, rank, design notes, bio, optional weapon, and current power state.",
+      "description": "Displays a footer with copyright year and outbound links (Twitter/X and GitHub).",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-11",
-      "title": "Worldbuilding section (lore subsections)",
+      "title": "Toast notifications for user feedback",
       "synonyms": [
-        "Lore section",
-        "Worldbuilding content"
+        "Sonner toasts",
+        "UI notifications"
       ],
-      "description": "Displays structured lore from config including clans and eyes, clan-eye activation rules, power system rules, rank system (with starting ranks), Shiranagi family lore, and Moon Rock travel mechanic.",
+      "description": "Uses sonner to show success/error/info notifications for contact submissions and admin actions (e.g., login failure, export success).",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-12",
-      "title": "Episodes section (config-driven episode list)",
+      "title": "Motoko canister for contact request storage",
       "synonyms": [
-        "Episode list",
-        "Episode cards"
+        "ICP backend",
+        "Contact request canister"
       ],
-      "description": "Renders episodes from config in styled cards showing episode number, title, and synopsis (currently Episodes 1–2).",
+      "description": "Implements submitRequest to store contact requests (id, email, message, topic, timestamp, processed) in a Motoko Map with incrementing string IDs.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-13",
-      "title": "Contact section placeholder UI (non-functional)",
+      "title": "Backend validation for contact submissions",
       "synonyms": [
-        "Contact form UI",
-        "Coming soon contact"
+        "Server-side validation"
       ],
-      "description": "Displays a styled contact form with disabled inputs and a visible “coming soon” notice; not connected to any backend/service.",
+      "description": "Validates contact submissions in the canister: email must be non-empty; message length must be 10–1000 characters; traps on invalid input.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-14",
-      "title": "Footer with attribution and social links",
+      "title": "Admin-only contact request management APIs (backend)",
       "synonyms": [
-        "Site footer",
-        "Outbound social links"
+        "Admin queries",
+        "Request moderation APIs"
       ],
-      "description": "Footer shows copyright, caffeine.ai attribution, and links/icons for X (Twitter) and GitHub.",
+      "description": "Provides admin-restricted canister methods to list all requests, filter by topic, filter by processed status, and update the processed flag by request ID.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-15",
-      "title": "Reusable section header component",
+      "title": "Token-bootstrapped role-based access control (Motoko)",
       "synonyms": [
-        "SectionHeader",
-        "Section title header"
+        "Authorization",
+        "RBAC",
+        "AccessControl"
       ],
-      "description": "Provides consistent section title styling with a centered heading and accent underline used across page sections.",
+      "description": "Implements user roles (admin/user/guest) and admin checks; first eligible principal to initialize with a matching secret can become admin; supports admin-only role assignment.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-16",
-      "title": "Internet Identity authentication context/provider",
+      "title": "Authorization mixin exposing access-control methods",
       "synonyms": [
-        "II auth",
-        "InternetIdentityProvider"
+        "MixinAuthorization"
       ],
-      "description": "React context/provider using Dfinity AuthClient to load persisted identities, perform login/logout, expose identity and login status flags, and configure derivation origin via loaded config.",
+      "description": "Exposes canister methods for access-control initialization with secret, role lookup, role assignment, and is-admin checks by including a Motoko mixin.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-17",
-      "title": "Backend actor creation hook (authenticated/anonymous)",
+      "title": "Internet Identity authentication provider (frontend)",
       "synonyms": [
-        "useActor",
-        "Actor factory hook"
+        "II auth",
+        "AuthClient context"
       ],
-      "description": "Creates and caches an ICP canister actor via React Query, selecting anonymous vs authenticated agent options based on current Internet Identity; invalidates/refetches other queries when the actor changes.",
+      "description": "Provides a React context wrapping @dfinity/auth-client to load persisted identity, perform login/logout, and expose login status flags and errors.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-18",
-      "title": "Gallery removed from layout and navigation",
+      "title": "Backend actor creation hook with authenticated/anonymous modes",
       "synonyms": [
-        "Remove Gallery section",
-        "Remove Gallery nav link"
+        "useActor",
+        "Actor factory"
       ],
-      "description": "The Gallery section is no longer rendered in App.tsx and the Gallery link is removed from TopNav so users cannot navigate to a gallery anchor.",
-      "reqIds": [
-        "REQ-7",
-        "REQ-8"
-      ],
+      "description": "Creates an anonymous actor when unauthenticated and an identity-backed actor when logged in; on authenticated creation it calls _initializeAccessControlWithSecret using a secret from URL hash/session; invalidates and refetches dependent React Query caches when the actor changes.",
+      "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-19",
-      "title": "Gallery code/config references removed",
+      "title": "URL parameter and secret handling utilities",
       "synonyms": [
-        "Remove galleryImages config",
-        "Remove GallerySection/GalleryLightbox references"
+        "Hash secret parsing",
+        "Session persistence utilities"
       ],
-      "description": "Gallery-related configuration and references have been removed so there are no remaining imports/references to GallerySection, GalleryLightbox, or animeSiteConfig.galleryImages (gallery component files remain as empty placeholders).",
-      "reqIds": [
-        "REQ-9"
-      ],
+      "description": "Utilities to read URL params from query/hash, persist values in sessionStorage, extract secrets from the hash fragment, and clear sensitive hash params from the address bar.",
+      "reqIds": [],
       "version": 1
     },
     {
-      "id": "feature-generate-a-new-hero-background-image-depicting-a-moon-scene-with-a-waterfall-on-one-side-and-a-volcano-with-the-sun-on-the-other-side-and-add-it-as-a-static-asset-under-frontend-public-assets-generated",
-      "title": "Generate a new hero background image depicting a moon scene with a waterfall on one side and a volcano with the sun on the other side, and add it as a static asset under frontend/public/assets/generated.",
-      "reqIds": [
-        "REQ-10"
+      "id": "IF-20",
+      "title": "React Query hooks for contact request submission and admin operations",
+      "synonyms": [
+        "useSubmitContactRequest",
+        "useGetAllRequests",
+        "useUpdateRequestStatus"
       ],
+      "description": "Defines typed React Query mutations/queries that call canister actor methods to submit requests, fetch all requests (admin), and update processed status, with contactRequests cache invalidation on success.",
+      "reqIds": [],
       "version": 1
     },
     {
-      "id": "feature-update-the-hero-section-to-use-the-newly-generated-background-image-instead-of-the-current-assets-generated-anime-hero-bg-dim-1920x1080-png-background",
-      "title": "Update the Hero section to use the newly generated background image instead of the current /assets/generated/anime-hero-bg.dim_1920x1080.png background.",
+      "id": "IF-21",
+      "title": "Functional contact form (frontend)",
+      "synonyms": [
+        "ContactSection",
+        "Contact submission UI"
+      ],
+      "description": "Implements a validated contact form (email, topic, message) with client-side checks, disabled/loading states during submission, and toast feedback; submits to the canister via React Query.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-22",
+      "title": "Admin dashboard (frontend) with request table, status toggling, refresh, and JSON export",
+      "synonyms": [
+        "AdminSection",
+        "Admin view"
+      ],
+      "description": "Gates admin UI behind Internet Identity authentication; fetches and displays contact requests in a table; supports refresh, toggling processed/new status, and exporting all requests as a downloaded JSON file.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-23",
+      "title": "Shared section header component",
+      "synonyms": [
+        "SectionHeader"
+      ],
+      "description": "Provides a reusable section title/header component with consistent typography and an accent underline used across site sections.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "feature-revert-the-public-site-hero-section-background-image-to-the-exact-background-artwork-that-was-used-immediately-before-the-current-image-assets-generated-anime-hero-bg-moon-waterfall-volcano-sun-dim-1920x1080-png-update-the-hero-so-it-no-longer-uses-the-current-background-image",
+      "title": "Revert the public site hero section background image to the exact background artwork that was used immediately before the current image (/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png). Update the hero so it no longer uses the current background image.",
       "reqIds": [
-        "REQ-11"
+        "REQ-1"
       ],
       "version": 1
     }
@@ -237,62 +264,90 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Update hero/background artwork to depict a moon scene with a waterfall on one side and a volcano with the sun on the other side.",
+      "summary": "Remove Gallery section/feature from the public site UI",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Update Characters section content to use: Kazeyori Shiranagi (main), Sankei Enshiro, Haruna Hishigawa, and Aurelian (plus any related worldbuilding/episode details provided by the user).",
+      "summary": "Update site branding: remove the top-left wordmark/PNG logo entirely and remove the “Made with Caffeine” attribution",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-3",
-      "summary": "Update Contact section to list contacts (Amir Abdullah, Abdullah Nurudeen) and emails (jamesaturservice45@gmail.com, abdullahnurudeen321@gmail.com) and allow visitors to submit questions (contact/questions form).",
+      "summary": "Update site-wide background artwork/style to a split scene: moon + waterfall on one side and volcano + sun on the other",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-4",
-      "summary": "Update branding/site name: set top-left logo text to “Whispers of the White Moon” and set the intended domain/website name to “Whispersofthewhitemoon.com”.",
+      "summary": "Update Characters content to: Kazeyori Shiranagi (main), Sankei Enshiro, Haruna Hishigawa, Aurelian (and remove others)",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-5",
-      "summary": "Remove Gallery feature entirely (including deleting leftover empty placeholder GallerySection/GalleryLightbox files if still present) so there is no gallery UI or code confusion.",
+      "summary": "Update Contact section details: contacts Amir Abdullah and Abdullah Nurudeen; emails jamesaturservice45@gmail.com and abdullahnurudeen321@gmail.com; allow visitors to ask questions via a form",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Add/ensure an admin-only view for submitted contact/questions messages, restricted to the owner’s Internet Identity principal (not by email string)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Set the public site domain/subdomain to a human-readable slug (e.g., whispers-of-the-white-moon on the Caffeine domain) with no numeric suffix, if platform allows",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Generate a PNG image export of the current site background (same look as the website background)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Revert the site background to the previous background design (prior to the most recent background change)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "If the previously-used hero background image file is not present in the repository under frontend/public/assets (or frontend/public/assets/generated), restore it (re-add the prior asset) and ensure it is served as a static frontend asset.",
+      "reqIds": [
+        "REQ-2"
+      ],
       "status": "pending"
     }
   ],
   "architecturalNotes": [
-    "React + TypeScript SPA with a single-page, section-based layout composed in App.tsx.",
-    "Content/config-driven architecture: user-facing copy and structured data (worldbuilding, characters, episodes, CTAs) centralized in frontend/src/content/animeSiteConfig.ts and consumed by section components.",
-    "Tailwind CSS theming via OKLCH CSS variables (light/dark tokens) with custom typography (Google Fonts) and additional Tailwind plugins (typography, container-queries, animate).",
-    "Navigation uses section IDs plus programmatic smooth scrolling with a fixed-header offset (implemented in TopNav and Hero CTAs).",
-    "ICP integration scaffold: InternetIdentityProvider wraps the app and manages persisted identities; useActor creates/caches an anonymous or authenticated canister actor using React Query.",
-    "Static assets (hero background, wordmark logo) are referenced via public paths under /assets/generated/."
+    "Frontend is a React SPA composed of section components rendered in a single page (TopNav + multiple anchor sections + Footer).",
+    "Styling uses Tailwind CSS with OKLCH CSS-variable design tokens, plus shadcn/ui-style primitives (e.g., Button/Table/Badge) and icon libraries (lucide-react, react-icons).",
+    "Server state and canister calls are managed with @tanstack/react-query using typed queries/mutations and cache invalidation on success.",
+    "Authentication uses Internet Identity via @dfinity/auth-client, exposed through a React context/provider (login/logout + identity persistence).",
+    "ICP integration uses an actor factory created through a dedicated hook (useActor) that switches between anonymous and authenticated actors.",
+    "Backend uses a Motoko access-control module (RBAC) included via a mixin, with admin bootstrapping based on a secret compared against an environment token.",
+    "Admin access should be restricted by Internet Identity principal (caller) rather than by checking an email string."
   ],
   "knownIssues": [
-    "backend/main.mo defines an empty actor with no methods; the frontend has ICP scaffolding but nothing to call.",
-    "frontend/src/hooks/useQueries.ts is intentionally empty; there are no typed React Query hooks for backend methods.",
-    "frontend/src/components/GallerySection.tsx and frontend/src/components/GalleryLightbox.tsx are empty placeholder files; if not referenced anywhere, they should be deleted to avoid confusion.",
-    "Duplicate global CSS files exist (frontend/src/index.css and frontend/index.css). The app imports src/index.css; the extra file can confuse maintenance and theming.",
-    "InternetIdentityProvider sets loginStatus to 'idle' in a finally block even after setting 'loginError' in the catch path, potentially masking initialization errors in UI state.",
-    "DEFAULT_IDENTITY_PROVIDER is read from process.env.II_URL; if unset, login may fail without clear guidance.",
-    "frontend/RUN-LOCAL-AND-DEPLOY-IC.md appears truncated (ends after the 'Install Dependencies' step), so run/deploy instructions are incomplete in this snapshot."
+    "Duplicate React Query providers: frontend/src/main.tsx wraps <App/> in QueryClientProvider, and frontend/src/App.tsx wraps again with a different QueryClient, causing nested providers and split caches.",
+    "Two Tailwind CSS entry files exist (frontend/index.css and frontend/src/index.css). The app imports src/index.css; the extra root-level file can cause confusion or styling divergence.",
+    "frontend/RUN-LOCAL-AND-DEPLOY-IC.md is truncated/incomplete (stops mid-instructions).",
+    "frontend/src/components/GallerySection.tsx and frontend/src/components/GalleryLightbox.tsx are empty placeholder files (no implementation).",
+    "Internet Identity provider URL is read from process.env.II_URL; in Vite-style builds this may be undefined unless explicitly injected (typically via import.meta.env).",
+    "Backend contactRequests Map and nextRequestId are not stored in stable memory; data will not survive canister upgrades despite the “Persistent Storage” comment.",
+    "AccessControl.getUserRole traps for unregistered principals; since isAdmin() calls getUserRole(), admin checks can trap unexpectedly unless initialize() has been called for the principal.",
+    "MixinAuthorization._initializeAccessControlWithSecret traps if CAFFEINE_ADMIN_TOKEN is not set in the canister environment, potentially blocking authenticated admin usage entirely.",
+    "AdminSection treats any error from getAllRequests as “Access Denied”, which can mislabel network/configuration/runtime failures as authorization failures.",
+    "Exported request ordering is non-deterministic because Map.values() iteration order is not guaranteed.",
+    "PNG background export is generating a blank/white image instead of matching the site background."
   ],
-  "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Epic anime-style landscape background with a moonlit waterfall scene on one side and a volcano with a bright sun on the other, blended into a single panoramic composition (anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png)",
-  "generatedImages": [
-    {
-      "filename": "anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png",
-      "description": "Epic anime-style landscape background with a moonlit waterfall scene on one side and a volcano with a bright sun on the other, blended into a single panoramic composition",
-      "targetWidth": 1920,
-      "targetHeight": 1080
-    }
-  ],
+  "isFixRequest": true,
   "gameProjectType": "none",
   "projectName": "Whispers of the White Moon",
   "clarification_mode": "instant",

@@ -1,59 +1,56 @@
 {
   "kind": "build_request",
-  "title": "Update hero background artwork (moon + waterfall + volcano + sun)",
+  "title": "Revert hero background to the previous background artwork",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-10",
-      "text": "Generate a new hero background image depicting a moon scene with a waterfall on one side and a volcano with the sun on the other side, and add it as a static asset under frontend/public/assets/generated.",
+      "id": "REQ-1",
+      "text": "Revert the public site hero section background image to the exact background artwork that was used immediately before the current image (/assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png). Update the hero so it no longer uses the current background image.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6",
-          "msg-8"
+          "msg-3"
         ],
         "quotes": [
-          "now change backround",
-          "of the moon and a waterfall on one side and a volcano with the sun on the other side"
+          "no I want the other background the one u had before this one"
         ]
       },
       "acceptanceCriteria": [
-        "A new image file exists in frontend/public/assets/generated with the exact filename specified in imageRequirements.required.",
-        "The image visually includes: (1) moon-themed side with a waterfall, (2) opposite side with a volcano and the sun."
+        "The Hero section (frontend/src/components/HeroSection.tsx) no longer references /assets/generated/anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png as its background image.",
+        "When loading the site, the visible hero background matches the previously-used background artwork (the one used before the most recent background change).",
+        "No other sections (About, Characters, Worldbuilding, Episodes, Contact, Admin, Footer) have visual or functional regressions."
       ]
     },
     {
-      "id": "REQ-11",
-      "text": "Update the Hero section to use the newly generated background image instead of the current /assets/generated/anime-hero-bg.dim_1920x1080.png background.",
+      "id": "REQ-2",
+      "text": "If the previously-used hero background image file is not present in the repository under frontend/public/assets (or frontend/public/assets/generated), restore it (re-add the prior asset) and ensure it is served as a static frontend asset.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-6",
-          "msg-8"
+          "msg-3"
         ],
         "quotes": [
-          "now change backround",
-          "of the moon and a waterfall on one side and a volcano with the sun on the other side"
+          "do u remember the background before this new one?",
+          "no I want the other background the one u had before this one"
         ]
       },
       "acceptanceCriteria": [
-        "frontend/src/components/HeroSection.tsx references the new generated image path in its backgroundImage style.",
-        "The hero remains full-screen with the background covering the section (no tiling) and the text remains readable with the existing overlay."
+        "The previously-used background image file exists in the frontend static assets and loads without 404s in the browser network tab.",
+        "The Hero section uses the restored prior background asset path."
       ]
     }
   ],
   "constraints": [
-    "Do not modify files in frontend.immutablePaths (e.g., frontend/src/main.tsx, frontend/src/hooks/useInternetIdentity.ts(x), frontend/src/hooks/useActor.ts, frontend/src/components/ui).",
-    "Do not route or fetch the hero background image through the backend; it must be served as a static asset from frontend/public/assets/generated."
+    "Do not change any backend canister logic; this request is limited to the site background/asset selection.",
+    "Do not edit files in frontend/immutablePaths (compose using existing components/hooks instead)."
   ],
   "nonGoals": [
-    "Do not add email sending or real contact-message delivery functionality.",
-    "Do not change unrelated page sections (About, Characters, Worldbuilding, Episodes, Contact, Footer) beyond any necessary styling side-effects from the new hero background."
+    "Do not create a new background design or change the art direction; the goal is to restore the exact previously-used background.",
+    "Do not add a UI toggle/setting to switch backgrounds unless explicitly requested."
   ],
   "imageRequirements": {
-    "required": [
-      "Epic anime-style landscape background with a moonlit waterfall scene on one side and a volcano with a bright sun on the other, blended into a single panoramic composition (anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png)"
-    ],
+    "required": [],
     "edits": []
   }
 }

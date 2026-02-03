@@ -34,7 +34,8 @@ export function TopNav() {
     { label: 'Characters', id: 'characters' },
     { label: 'Worldbuilding', id: 'worldbuilding' },
     { label: 'Episodes', id: 'episodes' },
-    { label: 'Contact', id: 'contact' }
+    { label: 'Contact', id: 'contact' },
+    { label: 'Admin', id: 'admin' }
   ];
 
   return (
@@ -51,7 +52,7 @@ export function TopNav() {
             className="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-accent rounded"
           >
             <img
-              src="/assets/generated/anime-wordmark-logo.dim_512x256.png"
+              src="/assets/generated/anime-wordmark-logo-clean.dim_512x256.png"
               alt={animeSiteConfig.title}
               className="h-12 w-auto"
             />
