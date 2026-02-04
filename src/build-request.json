@@ -1,50 +1,35 @@
 {
   "kind": "build_request",
-  "title": "Remove Sensei Kuroshi Shirogane’s age from character content and UI",
+  "title": "Update 'Clan Eyes' worldbuilding rules (add controllable activation + awareness caveat for the trio)",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Update the character data in `frontend/src/content/animeSiteConfig.ts` so that Kuroshi Shirogane (Sensei) does not have an age value (remove the `age: 13` entry entirely or set it to a missing/undefined value that will not render). Do not replace it with another age or with the word \"Unknown\".",
+      "id": "REQ-4",
+      "text": "Update the 'Clan Eyes' rules content in `frontend/src/content/animeSiteConfig.ts` so that the 5th rule states that activation is controllable, but not for the trio yet, and add a 6th rule stating that characters are completely aware when they have control, but the trio is not yet.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-6"
         ],
         "quotes": [
-          "for the sensei don't make his age 13 just don't say anything for age"
+          "in clan eyes for the 5th one take out say activation is controllable but not for the trio and for the 6th one  the characters are completely aware if they have control but the trio not yet."
         ]
       },
       "acceptanceCriteria": [
-        "In `animeSiteConfig.characters`, Kuroshi Shirogane no longer has `age: 13` and no age text is provided for him."
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Update the Characters section UI (`frontend/src/components/CharactersSection.tsx`) so that the age label/value is only shown when a character has a valid age value. If a character has no age value, the rendered metadata line must omit the entire age portion (including the word \"Age\" and its separator dot) while keeping the rest of the metadata (clan, height, rank) intact.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "just don't say anything for age"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Kuroshi Shirogane’s card does not display any age text (no \"Age\", no number, no placeholder).",
-        "Other characters with an age value continue to display age as before.",
-        "The metadata line formatting does not show extra separators (e.g., no double bullets) when age is omitted."
+        "`animeSiteConfig.worldbuilding.clanEyeRules` contains 6 items.",
+        "The 5th item communicates: activation is controllable, but not for the trio yet.",
+        "The 6th item communicates: characters who have control are completely aware of activation, but the trio is not yet.",
+        "The Worldbuilding section 'Clan Eyes' bullet list renders all 6 rules in order."
       ]
     }
   ],
   "constraints": [
-    "Use English for any user-facing text.",
-    "Do not modify files under `frontend/src/components/ui` or other immutable paths listed in SYSTEM_CONTEXT."
+    "Do not edit any files under `frontend/src/components/ui`.",
+    "Do not change any files listed in `frontend.immutablePaths` in SYSTEM_CONTEXT."
   ],
   "nonGoals": [
-    "Do not change any backend (Motoko) code or contact/admin features.",
-    "Do not add new character fields or new UI sections beyond conditionally hiding the age display."
+    "Do not change layout/styling of the Worldbuilding section.",
+    "Do not add new backend functionality or persistence changes."
   ],
   "imageRequirements": {
     "required": [],

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Whispers of the White Moon is an anime-themed React + TypeScript single-page marketing/story site styled with Tailwind CSS. The site renders multiple anchored sections (Hero, About, Characters, Worldbuilding, Episodes, Contact, Admin) driven by a central content configuration. Visitors can submit topic-tagged contact requests to an Internet Computer (ICP) Motoko canister. An admin dashboard uses Internet Identity authentication and token-bootstrapped role-based access control on the canister to allow authorized admins to view all contact requests, toggle a request’s processed status, refresh data, and export requests as a JSON file.",
+  "summary": "Whispers of the White Moon is an anime-themed React + TypeScript single-page site styled with Tailwind CSS. Content is largely configuration-driven (animeSiteConfig) and rendered as anchored sections (Hero, About, Characters, Worldbuilding, Episodes, Contact, Admin) with smooth scrolling and a fixed navigation bar. Visitors can submit topic-tagged contact requests to an Internet Computer (ICP) Motoko canister. An admin dashboard uses Internet Identity authentication plus token-bootstrapped role-based access control on the canister to allow authorized admins to view all contact requests, toggle processed status, refresh, and export requests as JSON.",
   "existing_features": [
     {
       "id": "IF-1",
@@ -16,13 +16,13 @@
     },
     {
       "id": "IF-2",
-      "title": "Tailwind CSS theming with OKLCH tokens, typography, and dark mode",
+      "title": "Tailwind CSS theming with OKLCH tokens and dark mode",
       "synonyms": [
         "Design tokens",
         "OKLCH theme",
         "Tailwind theming"
       ],
-      "description": "Defines light/dark color tokens via CSS variables (OKLCH), custom fonts (Inter + Noto Serif JP), global heading typography, smooth scrolling, and custom scrollbar styling.",
+      "description": "Defines light/dark color tokens via CSS variables (OKLCH), sets global typography (Inter body, Noto Serif JP headings), enables smooth scrolling, and customizes scrollbars.",
       "reqIds": [],
       "version": 1
     },
@@ -33,35 +33,46 @@
         "Content configuration",
         "Static site config"
       ],
-      "description": "Centralizes display content (title, tagline, synopsis, CTA labels, worldbuilding data, characters roster including Kuroshi Shirogane with rank 5 and Aurelian with rank \"Sunk King\", and episodes) into a single configuration object consumed by UI components.",
+      "description": "Centralizes display content (title, tagline, synopsis, CTA labels, worldbuilding data, characters roster, and episodes) into a single configuration object consumed by UI components.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-4",
+      "title": "Reusable section header component",
+      "synonyms": [
+        "SectionHeader",
+        "Shared section title UI"
+      ],
+      "description": "Provides a consistent section title style with an accent underline used across all sections.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-5",
       "title": "Fixed top navigation with responsive menu and smooth-scroll offset",
       "synonyms": [
         "TopNav",
         "Anchor navigation",
         "Mobile menu"
       ],
-      "description": "Implements a fixed header that changes appearance on scroll, includes a logo button to scroll to the hero section, provides desktop link buttons and a mobile menu toggle, and scrolls to anchors with a header offset.",
-      "reqIds": [],
-      "version": 1
-    },
-    {
-      "id": "IF-5",
-      "title": "Hero section with background artwork and CTA scroll controls",
-      "synonyms": [
-        "Landing hero",
-        "Hero banner"
-      ],
-      "description": "Displays a full-screen hero with overlay gradient for readability, uses a configured background image, renders config-driven title/tagline, provides CTA buttons to scroll to key sections, and includes a bouncing scroll indicator.",
+      "description": "Implements a fixed header that changes appearance on scroll, includes desktop and mobile navigation, and scrolls to anchors with a fixed offset to account for the header height.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-6",
+      "title": "Hero section with background artwork and CTA scroll controls",
+      "synonyms": [
+        "Landing hero",
+        "Hero banner"
+      ],
+      "description": "Displays a full-screen hero with background artwork, an overlay gradient for readability, config-driven title/tagline, CTA buttons that scroll to sections, and a scroll indicator.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-7",
       "title": "About section (synopsis rendering)",
       "synonyms": [
         "Synopsis section"
@@ -71,18 +82,18 @@
       "version": 1
     },
     {
-      "id": "IF-7",
-      "title": "Characters section (config-driven character cards)",
+      "id": "IF-8",
+      "title": "Characters section with conditional metadata assembly",
       "synonyms": [
         "Character roster",
-        "Character profiles"
+        "Character profile cards"
       ],
-      "description": "Displays a responsive grid of character cards sourced from configuration, showing name, clan, age, height, rank, design notes, bio, optional weapon, and power state.",
+      "description": "Displays a responsive grid of character cards sourced from configuration. Builds a metadata line (clan • optional age • height • rank) where the entire age portion is omitted when no age value exists. Also renders design notes, bio, optional weapon, and power state.",
       "reqIds": [],
       "version": 1
     },
     {
-      "id": "IF-8",
+      "id": "IF-9",
       "title": "Worldbuilding section (structured lore subsections)",
       "synonyms": [
         "Lore section",
@@ -93,7 +104,7 @@
       "version": 1
     },
     {
-      "id": "IF-9",
+      "id": "IF-10",
       "title": "Episodes section (episode list)",
       "synonyms": [
         "Episode cards",
@@ -104,51 +115,51 @@
       "version": 1
     },
     {
-      "id": "IF-10",
+      "id": "IF-11",
       "title": "Contact form with validation and topic selection",
       "synonyms": [
         "ContactSection",
         "Contact submission UI"
       ],
-      "description": "Implements a contact form with email/topic/message inputs, client-side validation (email format and message length), disabled/loading UI during submission, character count feedback, and toast notifications; submits to the ICP canister.",
-      "reqIds": [],
-      "version": 1
-    },
-    {
-      "id": "IF-11",
-      "title": "Toast notifications for user feedback",
-      "synonyms": [
-        "Sonner toasts",
-        "UI notifications"
-      ],
-      "description": "Uses Sonner to show success/error/info notifications for contact submission, login failures, export success, and request status updates.",
+      "description": "Implements a contact form with email/topic/message inputs, client-side validation (email format and message length), disabled/loading UI during submission, and submits requests to the ICP canister.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-12",
-      "title": "Internet Identity authentication provider (frontend)",
+      "title": "Toast notifications for user feedback",
       "synonyms": [
-        "II auth",
-        "AuthClient context"
+        "Sonner toasts",
+        "UI notifications"
       ],
-      "description": "Wraps @dfinity/auth-client in a React context/provider to restore persisted identity, perform login/logout, and expose login status flags and errors to components.",
+      "description": "Uses Sonner to show success/error/info notifications for contact submission, login issues, export success, and request status updates.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-13",
-      "title": "Backend actor creation hook with authenticated/anonymous modes",
+      "title": "Internet Identity authentication provider (frontend)",
       "synonyms": [
-        "useActor",
-        "Actor factory hook"
+        "II auth",
+        "AuthClient context"
       ],
-      "description": "Creates an anonymous canister actor when unauthenticated and an identity-backed actor when logged in; on authenticated creation it calls _initializeAccessControlWithSecret with a secret token read from the URL hash/session, and invalidates/refetches non-actor react-query caches when the actor changes.",
+      "description": "Wraps @dfinity/auth-client in a React context/provider to restore persisted identity, perform login/logout, and expose detailed login status flags and errors to components.",
       "reqIds": [],
       "version": 1
     },
     {
       "id": "IF-14",
+      "title": "Backend actor creation hook with authenticated/anonymous modes",
+      "synonyms": [
+        "useActor",
+        "Actor factory hook"
+      ],
+      "description": "Creates an anonymous canister actor when unauthenticated and an identity-backed actor when logged in; on authenticated creation it calls _initializeAccessControlWithSecret using a secret token derived from the URL hash/session; invalidates/refetches React Query caches when the actor changes.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-15",
       "title": "URL parameter and secret persistence utilities",
       "synonyms": [
         "Hash secret parsing",
@@ -159,19 +170,19 @@
       "version": 1
     },
     {
-      "id": "IF-15",
+      "id": "IF-16",
       "title": "React Query hooks for contact request submission and admin operations",
       "synonyms": [
         "useSubmitContactRequest",
         "useGetAllRequests",
         "useUpdateRequestStatus"
       ],
-      "description": "Provides typed react-query mutations/queries that call canister actor methods to submit contact requests, fetch all requests (admin-only), and update processed status, with contactRequests cache invalidation on mutation success.",
+      "description": "Provides typed React Query mutations/queries that call canister actor methods to submit contact requests, fetch all requests (admin-only), and update processed status, with contactRequests cache invalidation on mutation success.",
       "reqIds": [],
       "version": 1
     },
     {
-      "id": "IF-16",
+      "id": "IF-17",
       "title": "Admin dashboard (authentication, request table, status toggling, refresh, export)",
       "synonyms": [
         "AdminSection",
@@ -182,7 +193,7 @@
       "version": 1
     },
     {
-      "id": "IF-17",
+      "id": "IF-18",
       "title": "Motoko canister: contact request submission, validation, and storage",
       "synonyms": [
         "ICP backend",
@@ -193,7 +204,7 @@
       "version": 1
     },
     {
-      "id": "IF-18",
+      "id": "IF-19",
       "title": "Motoko canister: admin-only request management APIs",
       "synonyms": [
         "Admin queries",
@@ -204,7 +215,7 @@
       "version": 1
     },
     {
-      "id": "IF-19",
+      "id": "IF-20",
       "title": "Token-bootstrapped RBAC and authorization mixin (Motoko)",
       "synonyms": [
         "Authorization",
@@ -212,33 +223,39 @@
         "AccessControl",
         "MixinAuthorization"
       ],
-      "description": "Implements roles (admin/user/guest); first principal to initialize with the correct secret becomes admin, subsequent new principals become users, and admins can assign roles. Exposes initialization, role lookup, role assignment, and isAdmin checks via a Motoko mixin included into the main canister actor.",
+      "description": "Implements roles (admin/user/guest); first principal to initialize with the correct secret becomes admin, subsequent new principals become users, and admins can assign roles. Exposes initialization, role lookup, role assignment, and isAdmin checks via a Motoko mixin.",
       "reqIds": [],
       "version": 1
     },
     {
-      "id": "IF-20",
-      "title": "Footer with external social links",
+      "id": "IF-21",
+      "title": "Footer with YouTube subscription link",
       "synonyms": [
-        "Site footer"
+        "Site footer",
+        "External link footer"
       ],
-      "description": "Displays a footer with copyright year and external links/icons for Twitter/X and GitHub.",
+      "description": "Displays a footer with copyright year and a YouTube subscription link to https://www.youtube.com/@WhispersOfTheMoon1.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-22",
+      "title": "Local run and ICP deploy documentation",
+      "synonyms": [
+        "Deployment guide",
+        "RUN-LOCAL-AND-DEPLOY-IC"
+      ],
+      "description": "Provides documentation for running the frontend locally and deploying the project to the Internet Computer using dfx, including prerequisites and troubleshooting guidance.",
       "reqIds": [],
       "version": 1
     },
     {
-      "id": "feature-update-the-character-data-in-frontend-src-content-animesiteconfig-ts-so-that-kuroshi-shirogane-sensei-does-not-have-an-age-value-remove-the-age-13-entry-entirely-or-set-it-to-a-missing-undefined-value-that-will-not-render-do-not-replace-it-with-another-age-or-with-the-word-unknown",
-      "title": "Update the character data in `frontend/src/content/animeSiteConfig.ts` so that Kuroshi Shirogane (Sensei) does not have an age value (remove the `age: 13` entry entirely or set it to a missing/undefined value that will not render). Do not replace it with another age or with the word \"Unknown\".",
+      "id": "feature-update-the-clan-eyes-rules-content-in-frontend-src-content-animesiteconfig-ts-so-that-the-5th-rule-states-that-activation-is-controllable-but-not-for-the-trio-yet-and-add-a-6th-rule-stating-that-characters-are-completely-aware-when-they-have-control-but-the-trio-is-not-yet",
+      "title": "Update the 'Clan Eyes' rules content in `frontend/src/content/animeSiteConfig.ts` so that the 5th rule states that activation is controllable, but not for the trio yet, and add a 6th rule stating that characters are completely aware when they have control, but the trio is not yet.",
       "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-characters-section-ui-frontend-src-components-characterssection-tsx-so-that-the-age-label-value-is-only-shown-when-a-character-has-a-valid-age-value-if-a-character-has-no-age-value-the-rendered-metadata-line-must-omit-the-entire-age-portion-including-the-word-age-and-its-separator-dot-while-keeping-the-rest-of-the-metadata-clan-height-rank-intact",
-      "title": "Update the Characters section UI (`frontend/src/components/CharactersSection.tsx`) so that the age label/value is only shown when a character has a valid age value. If a character has no age value, the rendered metadata line must omit the entire age portion (including the word \"Age\" and its separator dot) while keeping the rest of the metadata (clan, height, rank) intact.",
-      "reqIds": [
-        "REQ-2"
+        "REQ-4"
       ],
       "version": 1
     }
@@ -246,34 +263,33 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Remove/hide Sensei Kuroshi Shirogane's age field (do not display an age value)",
+      "summary": "Update 'Clan Eyes' rules copy: add that activation is controllable (but not for the trio yet) and that characters are aware when they have control (trio not yet).",
       "reqIds": [],
       "status": "pending"
     }
   ],
   "architectural_notes": [
-    "Frontend is a section-based React SPA using anchored sections and smooth scrolling with a fixed-header offset.",
-    "Styling uses Tailwind CSS with CSS-variable OKLCH design tokens, light/dark mode support, and custom typography (Inter for body, Noto Serif JP for headings).",
-    "Server-state and canister calls are managed with @tanstack/react-query via custom query/mutation hooks and cache invalidation on mutation success.",
-    "Authentication uses Internet Identity via @dfinity/auth-client wrapped in a React context/provider that restores persisted identity and exposes login/logout and status flags.",
-    "ICP integration is done through an actor factory; a custom hook (useActor) creates anonymous vs identity-backed actors and runs an access-control initialization call on authenticated actor creation.",
-    "Backend is a Motoko canister that stores contact requests in an in-memory Map and restricts admin operations using an AccessControl module composed into the main actor via a Motoko mixin (MixinAuthorization)."
+    "Frontend is a section-based React SPA with anchored sections and smooth scrolling with a fixed-header offset.",
+    "Styling is implemented with Tailwind CSS using CSS-variable OKLCH design tokens and dark-mode via the 'class' strategy.",
+    "Server-state and canister calls are orchestrated with @tanstack/react-query using dedicated query/mutation hooks and cache invalidation.",
+    "Internet Identity authentication is wrapped in a React context/provider using @dfinity/auth-client.",
+    "ICP integration uses a custom actor factory hook that switches between anonymous and identity-backed actors.",
+    "Backend is a Motoko canister that stores contact requests in an in-memory Map and restricts admin APIs using an AccessControl module composed via a Motoko mixin.",
+    "Admin bootstrapping relies on an environment-provided admin token plus a user-provided secret (from URL hash/session) to assign the first admin role."
   ],
   "known_issues": [
-    "Duplicate React Query QueryClientProvider usage: frontend/src/main.tsx and frontend/src/App.tsx each create and provide different QueryClients, which can split caches and make invalidation/refetch behavior inconsistent.",
-    "Internet Identity provider URL is read from process.env.II_URL; in Vite/ESM builds this may be undefined unless explicitly injected (commonly via import.meta.env).",
-    "Motoko state (contactRequests, nextRequestId, and access-control role map) is not stored in stable memory; all requests and roles will reset on canister upgrade despite the \"Persistent Storage\" comment.",
-    "AccessControl.getUserRole traps for unregistered principals; because isAdmin() calls getUserRole(), admin-gated endpoints can trap with \"User is not registered\" if initialization hasn’t registered the caller yet.",
-    "Admin bootstrapping is effectively one-shot per principal: if a principal is first registered as #user (e.g., wrong/missing token), later providing the correct token won’t promote them to #admin without an existing admin assigning the role.",
-    "MixinAuthorization._initializeAccessControlWithSecret traps if the CAFFEINE_ADMIN_TOKEN environment variable is not set on the canister, breaking admin bootstrapping and any flow that expects initialization to succeed.",
-    "URL secret clearing is incomplete for '#key=value' style hashes: getSecretFromHash parses such hashes, but clearParamFromHash only removes parameters when the hash contains a '?' query segment; the secret may remain in the address bar/history.",
-    "AdminSection treats any error from getAllRequests as \"Access Denied\", which can misrepresent network/config/runtime failures as authorization failures.",
-    "AdminSection awaits login() even though login() is not async and does not throw; the try/catch in handleAuth will not catch login failures delivered via AuthClient callbacks.",
-    "frontend/src/components/GallerySection.tsx and frontend/src/components/GalleryLightbox.tsx exist but are empty in this snapshot; no gallery UI is implemented from these files.",
-    "frontend/RUN-LOCAL-AND-DEPLOY-IC.md is truncated/incomplete in this snapshot.",
-    "There are two global CSS files (frontend/src/index.css and frontend/index.css) with different token sets; only src/index.css is imported, but the extra file can cause confusion."
+    "Duplicate React Query providers/clients: frontend/src/main.tsx wraps App with QueryClientProvider, and frontend/src/App.tsx also creates/wraps with its own QueryClientProvider, which can split caches and break invalidation/refetch expectations.",
+    "Internet Identity provider URL is read from process.env.II_URL; in Vite builds env vars typically come from import.meta.env, so identityProvider may be undefined unless explicitly wired.",
+    "Motoko state (contactRequests, nextRequestId, and access-control role map) is not stored in stable memory; requests/roles reset on canister upgrade despite the \"Persistent Storage\" comment.",
+    "AccessControl.getUserRole traps for unregistered principals; since isAdmin() calls getUserRole(), admin-gated endpoints can trap with \"User is not registered\" if initialization hasn’t registered the caller yet.",
+    "useActor always calls _initializeAccessControlWithSecret on authenticated actor creation; if CAFFEINE_ADMIN_TOKEN is not set in the canister environment, the call traps and can break authenticated flows.",
+    "AdminSection treats any getAllRequests error as \"Access Denied\", potentially masking network/config/runtime failures.",
+    "AdminSection uses try/catch around login() with await, but login() is callback-based and does not throw; failures are surfaced via provider state instead.",
+    "URL secret clearing is incomplete for '#secret=value' style hashes: getSecretFromHash parses such hashes, but clearParamFromHash only removes parameters when the hash contains a '?' query segment, so secrets may remain in the address bar/history.",
+    "Two different global CSS files exist (frontend/index.css and frontend/src/index.css) with conflicting design tokens; depending on build tooling, this can cause theme inconsistencies or confusion.",
+    "Contact requests are returned from Map.values() with unspecified ordering; admin table/export ordering may be unstable between runs."
   ],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "gameProjectType": "none",
   "projectName": "Whispers of the White Moon",
   "clarification_mode": "instant",

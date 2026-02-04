@@ -1,35 +1,22 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Remove Kuroshi Shirogane age from content and conditionally render age in Characters UI",
+  "title": "Update Clan Eyes rules: controllable activation + awareness caveat for the trio",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Remove Kuroshi Shirogane’s age from the character content configuration so no age text can be rendered for him.",
+      "id": "REQ-4",
+      "summary": "Revise Clan Eyes rule list to add controllable activation caveat (trio not yet) and an awareness rule (trio not yet).",
       "acceptanceCriteria": [
-        "In `animeSiteConfig.characters`, Kuroshi Shirogane no longer has `age: 13` and no age text is provided for him."
+        "`animeSiteConfig.worldbuilding.clanEyeRules` contains 6 items.",
+        "The 5th item communicates: activation is controllable, but not for the trio yet.",
+        "The 6th item communicates: characters who have control are completely aware of activation, but the trio is not yet.",
+        "The Worldbuilding section 'Clan Eyes' bullet list renders all 6 rules in order."
       ],
       "file_operations": [
         {
           "path": "frontend/src/content/animeSiteConfig.ts",
           "operation": "modify",
-          "description": "Update the Kuroshi Shirogane character object to remove the `age: 13` property entirely (or make it missing/undefined) so the UI has no age value to render for him; do not replace with another age or with \"Unknown\"."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Conditionally render the age label/value in character cards only when a character has a valid age value, and omit the entire age portion (including separators) when missing.",
-      "acceptanceCriteria": [
-        "Kuroshi Shirogane’s card does not display any age text (no \"Age\", no number, no placeholder).",
-        "Other characters with an age value continue to display age as before.",
-        "The metadata line formatting does not show extra separators (e.g., no double bullets) when age is omitted."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/CharactersSection.tsx",
-          "operation": "modify",
-          "description": "Adjust the character metadata line to build its parts conditionally so \"Age {value}\" is only included when the character has a valid age (e.g., a number), and ensure the bullet separator between metadata parts is only rendered between present parts (no extra/double bullets) while keeping clan, height, and rank intact."
+          "description": "Update `worldbuilding.clanEyeRules` so it contains 6 rules by changing the 5th rule to state activation is controllable (but not for the trio yet) and adding a 6th rule stating characters are completely aware when they have control (but the trio is not yet)."
         }
       ]
     }

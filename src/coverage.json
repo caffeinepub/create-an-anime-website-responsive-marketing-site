@@ -1,35 +1,24 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-03T23:53:44.232Z",
+  "generatedAt": "2026-02-04T12:48:00.241Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-1",
-        "summary": "Update the character data in `frontend/src/content/animeSiteConfig.ts` so that Kuroshi Shirogane (Sensei) does not have an age value (remove the `age: 13` entry entirely or set it to a missing/undefined value that will not render). Do not replace it with another age or with the word \"Unknown\".",
+        "id": "REQ-4",
+        "summary": "Update the 'Clan Eyes' rules content in `frontend/src/content/animeSiteConfig.ts` so that the 5th rule states that activation is controllable, but not for the trio yet, and add a 6th rule stating that characters are completely aware when they have control, but the trio is not yet.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/content/animeSiteConfig.ts"
         ],
         "matchedFiles": [
           "frontend/src/content/animeSiteConfig.ts"
-        ]
-      },
-      {
-        "id": "REQ-2",
-        "summary": "Update the Characters section UI (`frontend/src/components/CharactersSection.tsx`) so that the age label/value is only shown when a character has a valid age value. If a character has no age value, the rendered metadata line must omit the entire age portion (including the word \"Age\" and its separator dot) while keeping the rest of the metadata (clan, height, rank) intact.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/CharactersSection.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/CharactersSection.tsx"
         ]
       }
     ]
@@ -40,7 +29,6 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/CharactersSection.tsx",
     "frontend/src/content/animeSiteConfig.ts",
     "project_state.json",
     "scratch/component-selection.json",

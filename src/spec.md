@@ -1,10 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Remove Sensei Kuroshi Shirogane’s age from character content and ensure the UI only shows age when it exists.
+**Goal:** Update the “Clan Eyes” worldbuilding rules to clarify controllable activation and awareness, with a specific caveat for the trio.
 
 **Planned changes:**
-- Update `frontend/src/content/animeSiteConfig.ts` to remove Kuroshi Shirogane’s `age: 13` value and leave him with no age value (nothing that would render).
-- Update `frontend/src/components/CharactersSection.tsx` to conditionally render the age label/value only when a character has a valid age, omitting the entire age portion (and its separator) when missing while keeping other metadata (clan, height, rank) intact.
+- Update `frontend/src/content/animeSiteConfig.ts` so `worldbuilding.clanEyeRules` contains 6 rules total.
+- Revise the 5th rule to state that activation is controllable, but not for the trio yet.
+- Add a 6th rule stating that characters who have control are completely aware of activation, but the trio is not yet.
 
-**User-visible outcome:** Kuroshi Shirogane’s character card no longer shows any age text, while other characters that have ages continue to display them normally without formatting artifacts.
+**User-visible outcome:** The Worldbuilding → “Clan Eyes” bullet list displays six rules in order, including the updated controllable activation rule and the new awareness rule with the trio exception.

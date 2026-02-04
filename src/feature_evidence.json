@@ -2,8 +2,8 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-character-data-in-frontend-src-content-animesiteconfig-ts-so-that-kuroshi-shirogane-sensei-does-not-have-an-age-value-remove-the-age-13-entry-entirely-or-set-it-to-a-missing-undefined-value-that-will-not-render-do-not-replace-it-with-another-age-or-with-the-word-unknown",
-      "featureTitle": "Update the character data in `frontend/src/content/animeSiteConfig.ts` so that Kuroshi Shirogane (Sensei) does not have an age value (remove the `age: 13` entry entirely or set it to a missing/undefined value that will not render). Do not replace it with another age or with the word \"Unknown\".",
+      "featureId": "feature-update-the-clan-eyes-rules-content-in-frontend-src-content-animesiteconfig-ts-so-that-the-5th-rule-states-that-activation-is-controllable-but-not-for-the-trio-yet-and-add-a-6th-rule-stating-that-characters-are-completely-aware-when-they-have-control-but-the-trio-is-not-yet",
+      "featureTitle": "Update the 'Clan Eyes' rules content in `frontend/src/content/animeSiteConfig.ts` so that the 5th rule states that activation is controllable, but not for the trio yet, and add a 6th rule stating that characters are completely aware when they have control, but the trio is not yet.",
       "files": [
         "frontend/src/content/animeSiteConfig.ts"
       ],
@@ -16,26 +16,7 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-the-characters-section-ui-frontend-src-components-characterssection-tsx-so-that-the-age-label-value-is-only-shown-when-a-character-has-a-valid-age-value-if-a-character-has-no-age-value-the-rendered-metadata-line-must-omit-the-entire-age-portion-including-the-word-age-and-its-separator-dot-while-keeping-the-rest-of-the-metadata-clan-height-rank-intact",
-      "featureTitle": "Update the Characters section UI (`frontend/src/components/CharactersSection.tsx`) so that the age label/value is only shown when a character has a valid age value. If a character has no age value, the rendered metadata line must omit the entire age portion (including the word \"Age\" and its separator dot) while keeping the rest of the metadata (clan, height, rank) intact.",
-      "files": [
-        "frontend/src/components/CharactersSection.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-2"
+        "REQ-4"
       ],
       "confidence": "high"
     }

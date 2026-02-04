@@ -26,7 +26,8 @@ As they navigate a world connected by Moon Rock portals and face threats from th
       'They do not know the eyes can activate',
       'Eyes activate automatically only in very intense battles',
       'Activation is brief, instinctive, and uncontrollable',
-      'The characters are completely unaware it\'s happening'
+      'Activation is controllable for those who have mastered it, but not for the trio',
+      'Characters who have control are completely aware when their clan eyes activate, but the trio is not yet'
     ],
     powerSystem: {
       title: 'Power System (Start of Anime)',
