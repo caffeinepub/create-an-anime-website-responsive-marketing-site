@@ -31,6 +31,10 @@ export const ContactRequest = IDL.Record({
   'timestamp' : Time,
   'processed' : IDL.Bool,
 });
+export const UserProfile = IDL.Record({
+  'name' : IDL.Text,
+  'email' : IDL.Opt(IDL.Text),
+});
 export const NewRequest = IDL.Record({
   'topic' : Topics,
   'email' : IDL.Text,
@@ -41,6 +45,7 @@ export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'getAllRequests' : IDL.Func([], [IDL.Vec(ContactRequest)], ['query']),
+  'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getRequestsByStatus' : IDL.Func(
       [IDL.Bool],
@@ -52,7 +57,14 @@ export const idlService = IDL.Service({
       [IDL.Vec(ContactRequest)],
       ['query'],
     ),
+  'getUserProfile' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(UserProfile)],
+      ['query'],
+    ),
+  'grantAdminRole' : IDL.Func([IDL.Principal], [], []),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'submitRequest' : IDL.Func([NewRequest], [IDL.Text], []),
   'updateRequestStatus' : IDL.Func([IDL.Text, IDL.Bool], [], []),
 });
@@ -83,6 +95,10 @@ export const idlFactory = ({ IDL }) => {
     'timestamp' : Time,
     'processed' : IDL.Bool,
   });
+  const UserProfile = IDL.Record({
+    'name' : IDL.Text,
+    'email' : IDL.Opt(IDL.Text),
+  });
   const NewRequest = IDL.Record({
     'topic' : Topics,
     'email' : IDL.Text,
@@ -93,6 +109,7 @@ export const idlFactory = ({ IDL }) => {
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'getAllRequests' : IDL.Func([], [IDL.Vec(ContactRequest)], ['query']),
+    'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getRequestsByStatus' : IDL.Func(
         [IDL.Bool],
@@ -104,7 +121,14 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(ContactRequest)],
         ['query'],
       ),
+    'getUserProfile' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(UserProfile)],
+        ['query'],
+      ),
+    'grantAdminRole' : IDL.Func([IDL.Principal], [], []),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'submitRequest' : IDL.Func([NewRequest], [IDL.Text], []),
     'updateRequestStatus' : IDL.Func([IDL.Text, IDL.Bool], [], []),
   });

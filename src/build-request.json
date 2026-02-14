@@ -1,35 +1,34 @@
 {
   "kind": "build_request",
-  "title": "Update 'Clan Eyes' worldbuilding rules (add controllable activation + awareness caveat for the trio)",
+  "title": "Add donate text with Cash App handle in footer",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-4",
-      "text": "Update the 'Clan Eyes' rules content in `frontend/src/content/animeSiteConfig.ts` so that the 5th rule states that activation is controllable, but not for the trio yet, and add a 6th rule stating that characters are completely aware when they have control, but the trio is not yet.",
+      "id": "REQ-1",
+      "text": "Add a visible donation line to the site UI that includes the exact Cash App handle “$WOTWM”. Place it in the global footer (`frontend/src/components/Footer.tsx`) beneath the existing YouTube subscription line, using clear English wording (e.g., “Donate: Cash App $WOTWM”).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-4"
         ],
         "quotes": [
-          "in clan eyes for the 5th one take out say activation is controllable but not for the trio and for the 6th one  the characters are completely aware if they have control but the trio not yet."
+          "and make a donate text with cash app user $WOTWM"
         ]
       },
       "acceptanceCriteria": [
-        "`animeSiteConfig.worldbuilding.clanEyeRules` contains 6 items.",
-        "The 5th item communicates: activation is controllable, but not for the trio yet.",
-        "The 6th item communicates: characters who have control are completely aware of activation, but the trio is not yet.",
-        "The Worldbuilding section 'Clan Eyes' bullet list renders all 6 rules in order."
+        "The footer displays a donation line on all pages/sections where the footer is shown.",
+        "The donation line includes the exact text “$WOTWM” (including the leading $).",
+        "The footer layout remains readable and centered on both mobile and desktop (no overflow or broken spacing)."
       ]
     }
   ],
   "constraints": [
-    "Do not edit any files under `frontend/src/components/ui`.",
-    "Do not change any files listed in `frontend.immutablePaths` in SYSTEM_CONTEXT."
+    "Do not edit files in `frontend/src/hooks/*` listed as immutable system paths.",
+    "Keep changes within the existing React + Tailwind + shadcn UI patterns already used in the project."
   ],
   "nonGoals": [
-    "Do not change layout/styling of the Worldbuilding section.",
-    "Do not add new backend functionality or persistence changes."
+    "Implementing payment processing, checkout flows, or backend donation tracking.",
+    "Adding third-party payment integrations or account linking."
   ],
   "imageRequirements": {
     "required": [],

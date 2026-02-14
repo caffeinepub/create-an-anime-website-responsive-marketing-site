@@ -1,15 +1,27 @@
 export const animeSiteConfig = {
   title: 'Whispers of the White Moon',
-  tagline: 'A journey through clans, destiny, and the power of awakening',
-  synopsis: `In a world divided into six powerful clans—Sun, Moon, Earth, Fire, Water, and Lightning—each possessing unique clan eyes and abilities, a young warrior begins an unexpected journey.
+  tagline: 'Discover your clan. Find your character. Awaken your destiny.',
+  synopsis: `Take the Clan Personality Quiz to discover which of the six powerful clans you belong to—Sun, Moon, Earth, Fire, Water, or Lightning. Your instincts, emotional reactions, and moral decisions will reveal your true nature.
 
-The trio of young fighters relies on weapons, basic combat, and teamwork as they have not yet awakened their powers. Their clan eyes activate briefly and instinctively only in the most intense battles, completely unknown to them.
+Then, dive deeper with the Character Match System. Are you a natural leader like Kazeyori? Do you share Sankei's fiery determination? Or perhaps Haruna's unwavering support? Future characters like Volt await discovery as well.
 
-As they navigate a world connected by Moon Rock portals and face threats from the past, they must grow stronger to protect what matters most.`,
+Every result ends with a single truth: "Your Eye has begun to flicker…"`,
   
   ctaButtons: {
     primary: 'Discover the Story',
     secondary: 'Meet the Characters'
+  },
+
+  intro: {
+    videoUrl: '/assets/Whispers Of The White Moon intro-1.mp4',
+    fallbackUrl: '/assets/Whispers Of The White Moon intro-1.mp4'
+  },
+
+  video: {
+    title: 'Video Player',
+    sourceUrl: 'https://example.com/video.mp4',
+    fallbackUrl: 'https://example.com/video',
+    fallbackText: 'Open video in new tab'
   },
 
   worldbuilding: {
@@ -19,7 +31,7 @@ As they navigate a world connected by Moon Rock portals and face threats from th
       { name: 'Earth Clan', eye: 'Chikyonome' },
       { name: 'Fire Clan', eye: 'Hinome' },
       { name: 'Water Clan', eye: 'Mizunome' },
-      { name: 'Lightning Clan', eye: 'Inazumanome' }
+      { name: 'Lightning Clan', eye: 'Denkinome' }
     ],
     clanEyeRules: [
       'The trio has their clan eyes but do not know how to use them',
@@ -57,10 +69,6 @@ As they navigate a world connected by Moon Rock portals and face threats from th
         name: 'Ayame Shiranagi',
         details: 'No powers. Killed by the Sunseekers when Kazeyori was 7.'
       }
-    },
-    moonRock: {
-      title: 'Moon Rock',
-      description: 'A special rock that allows portals between villages, used for travel between clan territories.'
     }
   },
 
@@ -87,7 +95,7 @@ As they navigate a world connected by Moon Rock portals and face threats from th
       personality: 'Energetic and determined',
       weapon: 'Black sword with fire patterns and red handle',
       powerState: 'No techniques, no awakened power. Has Hinome (inactive, unknown to him)',
-      bio: 'A strong-willed warrior from the Fire Clan who visits the Moon Village seeking Moon Rock and becomes fast friends with Kazeyori.'
+      bio: 'A strong-willed warrior from the Fire Clan who visits the Moon Village and becomes fast friends with Kazeyori.'
     },
     {
       name: 'Haruna Hishigawa',
@@ -102,6 +110,18 @@ As they navigate a world connected by Moon Rock portals and face threats from th
       bio: 'A skilled fighter from the Earth Clan who travels with Sankei and quickly bonds with Kazeyori during their visit to the Moon Village.'
     },
     {
+      name: 'Iwagami Sekien',
+      clan: 'Moon Clan',
+      age: 'Unknown',
+      height: '5\'10"',
+      rank: 3,
+      design: 'Wise appearance with traditional robes, calm demeanor',
+      personality: 'Patient and knowledgeable',
+      weapon: 'Ancient staff',
+      powerState: 'Master of Moon Clan techniques. Has fully awakened Tsukinome',
+      bio: 'A legendary sensei from the Moon Clan who possesses deep knowledge of the ancient arts. His wisdom and mastery of the Tsukinome make him a formidable mentor for those seeking to unlock their true potential.'
+    },
+    {
       name: 'Aurelian',
       clan: 'Sun Clan',
       age: 'Unknown',
@@ -114,43 +134,37 @@ As they navigate a world connected by Moon Rock portals and face threats from th
       bio: 'Leader of the Sunseekers and the ultimate threat. Appears at the end of the anime as an overwhelmingly powerful adversary.'
     },
     {
-      name: 'Kuroshi Shirogane',
-      clan: 'Moon Clan',
-      height: '5\'8"',
-      rank: 5,
-      design: 'Silver-white hair, lean athletic build, dark blue kimono with moon patterns, black combat boots',
-      personality: 'Mysterious and calculating',
-      weapon: 'Twin silver daggers with crescent moon engravings',
-      powerState: 'No techniques, no awakened power. Has Tsukinome (inactive, unknown to him)',
-      bio: 'A skilled fighter from the Moon Clan with a mysterious past. Known for his strategic mind and swift combat style.'
+      name: 'Suma',
+      clan: 'Sun Clan',
+      age: 'Unknown',
+      height: '5\'4"',
+      rank: 'Unknown',
+      design: 'Fierce appearance with sun-themed attire, confident stance',
+      personality: 'Aggressive and formidable',
+      weapon: 'Solar whip',
+      powerState: 'Skilled warrior with mastery of her solar whip. Has Taiyonome (Sun Clan eye)',
+      bio: 'A fierce warrior from the Sun Clan who confronts the trio on their journey. Wielding her solar whip with deadly precision, she presents a formidable challenge that will test the limits of Sankei, Haruna, and Kazeyori\'s teamwork and combat abilities.'
     }
-    // ============================================================
-    // TEMPLATE FOR NEXT CHARACTER - Uncomment and fill in when ready
-    // ============================================================
-    // {
-    //   name: '[Character Name]',
-    //   clan: '[Sun/Moon/Earth/Fire/Water/Lightning] Clan',
-    //   age: 0,
-    //   height: '[Height in feet/inches]',
-    //   rank: 0,
-    //   design: '[Physical appearance, clothing, distinctive features]',
-    //   personality: '[Key personality traits]',
-    //   weapon: '[Weapon description or "None specified"]',
-    //   powerState: '[Current power status, techniques, clan eye status]',
-    //   bio: '[Character background and story role]'
-    // }
   ],
 
   episodes: [
     {
       number: 1,
       title: 'The Boy from the Moon Village',
-      synopsis: 'The story begins with Kazeyori Shiranagi, a quiet and lonely boy living in the Moon Village. We follow his daily life, witnessing his struggles with weakness and isolation. No battles occur, and no sensei appears—just a glimpse into the life of a boy who doesn\'t yet know his destiny.'
+      synopsis: 'The story begins with Kazeyori Shiranagi, a quiet and lonely boy living in the Moon Village. We follow his daily life, witnessing his struggles with weakness and isolation. No battles occur—just a glimpse into the life of a boy who doesn\'t yet know his destiny.',
+      videoSourceUrl: undefined
     },
     {
       number: 2,
       title: 'The Visitors of the Moon Village',
-      synopsis: 'Sankei and Haruna arrive in the Moon Village searching for Moon Rock. They meet Kazeyori and ask for directions, leading to introductions and a natural friendship forming. After they leave, Kazeyori eats at a local restaurant while Sankei and Haruna discuss him extensively on their journey back.'
+      synopsis: 'Sankei and Haruna arrive in the Moon Village and meet Kazeyori, asking for directions. Introductions lead to a natural friendship forming. After they leave, Kazeyori eats at a local restaurant while Sankei and Haruna discuss him extensively on their journey back.',
+      videoSourceUrl: undefined
+    },
+    {
+      number: 3,
+      title: 'The Sun\'s First Shadow',
+      synopsis: 'Sankei and Haruna return to the Moon Village to find Kazeyori and invite him to train together with the goal of becoming the strongest in the world. Kazeyori agrees, and the trio sets out to travel to different villages. On their journey, they are confronted by Suma, a fierce warrior from the Sun Clan wielding a solar whip. The trio must face their first real battle together, and it won\'t be easy.',
+      videoSourceUrl: undefined
     }
   ]
 };

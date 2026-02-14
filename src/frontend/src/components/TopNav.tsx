@@ -30,6 +30,8 @@ export function TopNav() {
 
   const navLinks = [
     { label: 'Home', id: 'hero' },
+    { label: 'Intro', id: 'intro' },
+    { label: 'Video', id: 'video' },
     { label: 'About', id: 'about' },
     { label: 'Characters', id: 'characters' },
     { label: 'Worldbuilding', id: 'worldbuilding' },

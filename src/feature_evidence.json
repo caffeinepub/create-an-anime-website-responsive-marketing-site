@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-clan-eyes-rules-content-in-frontend-src-content-animesiteconfig-ts-so-that-the-5th-rule-states-that-activation-is-controllable-but-not-for-the-trio-yet-and-add-a-6th-rule-stating-that-characters-are-completely-aware-when-they-have-control-but-the-trio-is-not-yet",
-      "featureTitle": "Update the 'Clan Eyes' rules content in `frontend/src/content/animeSiteConfig.ts` so that the 5th rule states that activation is controllable, but not for the trio yet, and add a 6th rule stating that characters are completely aware when they have control, but the trio is not yet.",
+      "featureId": "feature-add-a-visible-donation-line-to-the-site-ui-that-includes-the-exact-cash-app-handle-wotwm-place-it-in-the-global-footer-frontend-src-components-footer-tsx-beneath-the-existing-youtube-subscription-line-using-clear-english-wording-e-g-donate-cash-app-wotwm",
+      "featureTitle": "Add a visible donation line to the site UI that includes the exact Cash App handle “$WOTWM”. Place it in the global footer (`frontend/src/components/Footer.tsx`) beneath the existing YouTube subscription line, using clear English wording (e.g., “Donate: Cash App $WOTWM”).",
       "files": [
-        "frontend/src/content/animeSiteConfig.ts"
+        "frontend/src/components/Footer.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -16,7 +16,7 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-4"
+        "REQ-1"
       ],
       "confidence": "high"
     }

@@ -22,6 +22,15 @@ export function Footer() {
               </a>
             </p>
           </div>
+
+          <div className="text-center">
+            <p className="text-base">
+              Donate: Cash App{' '}
+              <span className="text-accent font-medium">
+                $WOTWM
+              </span>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

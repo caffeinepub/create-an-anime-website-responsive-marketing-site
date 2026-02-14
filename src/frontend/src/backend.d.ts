@@ -21,6 +21,10 @@ export interface ContactRequest {
     processed: boolean;
 }
 export type Time = bigint;
+export interface UserProfile {
+    name: string;
+    email?: string;
+}
 export enum Topics {
     businessPartnerships = "businessPartnerships",
     interviewRequests = "interviewRequests",
@@ -38,10 +42,14 @@ export enum UserRole {
 export interface backendInterface {
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     getAllRequests(): Promise<Array<ContactRequest>>;
+    getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getRequestsByStatus(processed: boolean): Promise<Array<ContactRequest>>;
     getRequestsByTopic(requestedTopic: Topics): Promise<Array<ContactRequest>>;
+    getUserProfile(user: Principal): Promise<UserProfile | null>;
+    grantAdminRole(userPrincipal: Principal): Promise<void>;
     isCallerAdmin(): Promise<boolean>;
+    saveCallerUserProfile(profile: UserProfile): Promise<void>;
     submitRequest(input: NewRequest): Promise<string>;
     updateRequestStatus(requestId: string, processed: boolean): Promise<void>;
 }

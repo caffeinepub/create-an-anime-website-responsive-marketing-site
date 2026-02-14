@@ -85,12 +85,6 @@ export function WorldbuildingSection() {
             </div>
           </div>
 
-          {/* Moon Rock */}
-          <div className="bg-card border-2 border-foreground/20 rounded-lg p-6">
-            <h3 className="text-2xl font-bold text-accent mb-4">{worldbuilding.moonRock.title}</h3>
-            <p className="text-foreground/80">{worldbuilding.moonRock.description}</p>
-          </div>
-
         </div>
       </div>
     </section>

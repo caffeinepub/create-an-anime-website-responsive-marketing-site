@@ -31,6 +31,7 @@ export type Topics = { 'businessPartnerships' : null } |
   { 'advertisingInquiries' : null } |
   { 'challengesAndBounties' : null } |
   { 'generalInquiries' : null };
+export interface UserProfile { 'name' : string, 'email' : [] | [string] }
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
@@ -38,10 +39,14 @@ export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'getAllRequests' : ActorMethod<[], Array<ContactRequest>>,
+  'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getRequestsByStatus' : ActorMethod<[boolean], Array<ContactRequest>>,
   'getRequestsByTopic' : ActorMethod<[Topics], Array<ContactRequest>>,
+  'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'grantAdminRole' : ActorMethod<[Principal], undefined>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'submitRequest' : ActorMethod<[NewRequest], string>,
   'updateRequestStatus' : ActorMethod<[string, boolean], undefined>,
 }
