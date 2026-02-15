@@ -1,71 +1,35 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T02:41:11.711Z",
+  "generatedAt": "2026-02-15T02:56:49.784Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 4,
-    "implemented": 4,
+    "total": 2,
+    "implemented": 2,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Create a new page section with id=\"clans\" and a visible section header titled \"Clans\" that contains the provided intro paragraph and the seven clan entries (Moon, Sun, Fire, Water, Lightning, Earth, Balance) with their exact provided descriptions.",
+        "summary": "Replace all existing content in the Donation section (section id=\"donations\", currently implemented by `frontend/src/components/RewardsSection.tsx`) with the provided Donation copy for “Support Whispers Of The White Moon”, including the intro text, the Cash App donation block with handle “$WOTWM”, and the “Rewards” heading.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/ClansSection.tsx"
+          "frontend/src/components/RewardsSection.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/ClansSection.tsx"
+          "frontend/src/components/RewardsSection.tsx"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Add the new \"Clans\" section into the main page flow in frontend/src/App.tsx so it appears as its own standalone section (not nested inside the existing Worldbuilding section).",
+        "summary": "Render the reward tiers list in the Donation section using the existing `animeSiteConfig.rewards.tiers` data (`frontend/src/content/animeSiteConfig.ts`), showing each tier’s icon, name, donation range, and perks as bullet points, in the same order as in the config.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/App.tsx"
+          "frontend/src/components/RewardsSection.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/App.tsx"
-        ]
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Update the top navigation (frontend/src/components/TopNav.tsx) to include a \"Clans\" nav link that smooth-scrolls to the new section id=\"clans\" on both desktop and mobile menus.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/TopNav.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/TopNav.tsx"
-        ]
-      },
-      {
-        "id": "REQ-4",
-        "summary": "Add sigil image rendering for each clan entry in the Clans section using generated static assets stored under frontend/public/assets/generated, with appropriate alt text (e.g., \"Moon Clan sigil\").",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/public/assets/generated/moon-clan-sigil.dim_512x512.png",
-          "frontend/public/assets/generated/sun-clan-sigil.dim_512x512.png",
-          "frontend/public/assets/generated/fire-clan-sigil.dim_512x512.png",
-          "frontend/public/assets/generated/water-clan-sigil.dim_512x512.png",
-          "frontend/public/assets/generated/lightning-clan-sigil.dim_512x512.png",
-          "frontend/public/assets/generated/earth-clan-sigil.dim_512x512.png",
-          "frontend/public/assets/generated/balance-clan-sigil.dim_512x512.png",
-          "frontend/src/components/ClansSection.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/public/assets/generated/moon-clan-sigil.dim_512x512.png",
-          "frontend/public/assets/generated/sun-clan-sigil.dim_512x512.png",
-          "frontend/public/assets/generated/fire-clan-sigil.dim_512x512.png",
-          "frontend/public/assets/generated/water-clan-sigil.dim_512x512.png",
-          "frontend/public/assets/generated/lightning-clan-sigil.dim_512x512.png",
-          "frontend/public/assets/generated/earth-clan-sigil.dim_512x512.png",
-          "frontend/public/assets/generated/balance-clan-sigil.dim_512x512.png",
-          "frontend/src/components/ClansSection.tsx"
+          "frontend/src/components/RewardsSection.tsx"
         ]
       }
     ]
@@ -75,16 +39,7 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/public/assets/generated/balance-clan-sigil.dim_512x512.png",
-    "frontend/public/assets/generated/earth-clan-sigil.dim_512x512.png",
-    "frontend/public/assets/generated/fire-clan-sigil.dim_512x512.png",
-    "frontend/public/assets/generated/lightning-clan-sigil.dim_512x512.png",
-    "frontend/public/assets/generated/moon-clan-sigil.dim_512x512.png",
-    "frontend/public/assets/generated/sun-clan-sigil.dim_512x512.png",
-    "frontend/public/assets/generated/water-clan-sigil.dim_512x512.png",
-    "frontend/src/App.tsx",
-    "frontend/src/components/ClansSection.tsx",
-    "frontend/src/components/TopNav.tsx",
+    "frontend/src/components/RewardsSection.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

@@ -1,103 +1,56 @@
 {
   "kind": "build_request",
-  "title": "Add dedicated Clans section with clan lore and sigil images",
+  "title": "Replace Donation section with new Whispers Of The White Moon copy and reward tiers",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Create a new page section with id=\"clans\" and a visible section header titled \"Clans\" that contains the provided intro paragraph and the seven clan entries (Moon, Sun, Fire, Water, Lightning, Earth, Balance) with their exact provided descriptions.",
+      "text": "Replace all existing content in the Donation section (section id=\"donations\", currently implemented by `frontend/src/components/RewardsSection.tsx`) with the provided Donation copy for “Support Whispers Of The White Moon”, including the intro text, the Cash App donation block with handle “$WOTWM”, and the “Rewards” heading.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-4"
         ],
         "quotes": [
-          "make a section called clans and put this"
+          "take everything out of donation and put this Donation\n🌙\nSupport Whispers Of The White Moon\nHelp bring the story, animation, and characters to life.\nEvery donation helps support development, voice acting, art, and future episodes.\n\nEvery supporter becomes part of the Whispers Of The White Moon journey.\nChoose your tier and help shape the story.\n\n🔥\nDonate Via Cash App\nSend support to:\n$WOTWM\nThank you for your support! 💙\n\nRewards\n🌑\nMoon Clan Supporter\n$1 to $5\n•\nOfficial Moon Clan Supporter title\n🔥\nFlame Warrior Supporter\n$6 to $15\n•\nEverything from Moon Clan tier\n•\nQuicker contact responds\n•\nOfficial Fire Clan Supporter title\n🌊\nWater Guardian Supporter\n$16 to $30\n•\nUser-Name secretly added to Anime\n•\nOfficial Water Clan Supporter title\n☀️\nRoyal Sun Supporter\n$31 to $75\n•\nEverything from previous tiers\n•\nUser-Name listed in episode credits (Supporter Section)\n•\nAdded to anime (own Character)\n👑\nLegendary Balance Supporter\n$76+\n•\nEverything from previous tiers\n•\nSpecial thank-you message from the creator team\n•\nChance to have an important Anime character\n•\nUltimate supporter recognition"
         ]
       },
       "acceptanceCriteria": [
-        "A new section exists in the main page markup with id=\"clans\" and a header reading \"Clans\".",
-        "The section includes the intro text: \"Each clan wields unique elemental powers passed down through generations. Discover their strengths, their legends, and their role in the coming war.\"",
-        "The section renders seven clan blocks titled: Moon Clan, Sun Clan, Fire Clan, Water Clan, Lightning Clan, Earth Clan, Balance Clan.",
-        "Each clan block displays the exact corresponding description text from the user request (verbatim, including punctuation)."
+        "Visiting the page and scrolling to the Donation section shows the header and body text matching the provided copy, including the 🌙 and 🔥 and 💙 emoji shown in the user-provided content.",
+        "The Cash App block displays “Donate Via Cash App”, “Send support to:”, and “$WOTWM” in the Donation section.",
+        "A visible “Rewards” heading appears in the Donation section above the tier list."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Add the new \"Clans\" section into the main page flow in frontend/src/App.tsx so it appears as its own standalone section (not nested inside the existing Worldbuilding section).",
+      "text": "Render the reward tiers list in the Donation section using the existing `animeSiteConfig.rewards.tiers` data (`frontend/src/content/animeSiteConfig.ts`), showing each tier’s icon, name, donation range, and perks as bullet points, in the same order as in the config.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-4"
         ],
         "quotes": [
-          "make a section called clans"
+          "Rewards\n🌑\nMoon Clan Supporter\n$1 to $5\n•\nOfficial Moon Clan Supporter title\n🔥\nFlame Warrior Supporter\n$6 to $15\n•\nEverything from Moon Clan tier\n•\nQuicker contact responds\n•\nOfficial Fire Clan Supporter title\n🌊\nWater Guardian Supporter\n$16 to $30\n•\nUser-Name secretly added to Anime\n•\nOfficial Water Clan Supporter title\n☀️\nRoyal Sun Supporter\n$31 to $75\n•\nEverything from previous tiers\n•\nUser-Name listed in episode credits (Supporter Section)\n•\nAdded to anime (own Character)\n👑\nLegendary Balance Supporter\n$76+\n•\nEverything from previous tiers\n•\nSpecial thank-you message from the creator team\n•\nChance to have an important Anime character\n•\nUltimate supporter recognition"
         ]
       },
       "acceptanceCriteria": [
-        "The Clans section is rendered as a sibling section alongside the other top-level sections in App.tsx.",
-        "The existing Worldbuilding section remains present and continues to render as before."
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Update the top navigation (frontend/src/components/TopNav.tsx) to include a \"Clans\" nav link that smooth-scrolls to the new section id=\"clans\" on both desktop and mobile menus.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-6"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Top navigation includes a \"Clans\" item.",
-        "Clicking \"Clans\" scrolls to the section with id=\"clans\" with the same offset behavior as other links.",
-        "Mobile menu closes after selecting \"Clans\" (matching existing behavior)."
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Add sigil image rendering for each clan entry in the Clans section using generated static assets stored under frontend/public/assets/generated, with appropriate alt text (e.g., \"Moon Clan sigil\").",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-6"
-        ],
-        "quotes": [
-          "Moon Clan sigil",
-          "Sun Clan sigil",
-          "Fire Clan sigil",
-          "Water Clan sigil",
-          "Lightning Clan sigil",
-          "Earth Clan sigil",
-          "Balance Clan sigil"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Each of the seven clan entries displays a sigil image loaded from /assets/generated/*.png.",
-        "Each sigil image includes non-empty alt text matching the pattern \"<Clan Name> sigil\" (e.g., \"Balance Clan sigil\").",
-        "The Clans section layout remains readable and responsive from mobile to desktop (no overflow or broken grid)."
+        "All five tiers from `animeSiteConfig.rewards.tiers` are displayed in the Donation section.",
+        "Each tier shows: icon (e.g., 🌑), tier name, donation range (e.g., “$1 to $5”), and all perks as bullet points.",
+        "Tier ordering matches the config (Moon Clan Supporter → Legendary Balance Supporter)."
       ]
     }
   ],
   "constraints": [
-    "Do not edit any files under frontend/src/components/ui (compose them instead).",
-    "Do not modify files in frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, or frontend/src/main.tsx."
+    "Do not modify files under `frontend/src/components/ui` (read-only UI components).",
+    "Do not edit any frontend paths listed as immutable in SYSTEM_CONTEXT (e.g., `frontend/src/main.tsx`, Internet Identity and actor hooks).",
+    "Use English for any user-facing text in the build request."
   ],
   "nonGoals": [
-    "No backend (Motoko) changes.",
-    "No changes to the existing Worldbuilding section content or structure beyond adding a separate Clans section elsewhere on the page.",
-    "No implementation of quiz, character match system, or other new interactive features."
+    "Add payment processing, checkout flows, or any third-party payment integrations (Cash App remains informational only).",
+    "Backend changes to store donations or supporter data."
   ],
   "imageRequirements": {
-    "required": [
-      "Moon Clan sigil, monochrome emblem with lunar crescent motif (moon-clan-sigil.dim_512x512.png)",
-      "Sun Clan sigil, radiant emblem with sunburst and halo shapes (sun-clan-sigil.dim_512x512.png)",
-      "Fire Clan sigil, emblem featuring flame/volcanic shapes and sharp angular marks (fire-clan-sigil.dim_512x512.png)",
-      "Water Clan sigil, emblem featuring wave forms and flowing circular lines (water-clan-sigil.dim_512x512.png)",
-      "Lightning Clan sigil, emblem featuring lightning bolt geometry and storm-like arcs (lightning-clan-sigil.dim_512x512.png)",
-      "Earth Clan sigil, emblem featuring mountain/stone shapes with grounded symmetry (earth-clan-sigil.dim_512x512.png)",
-      "Balance Clan sigil, emblem featuring intertwined elements in symmetrical harmony (balance-clan-sigil.dim_512x512.png)"
-    ],
+    "required": [],
     "edits": []
   },
   "userProfileUpdate": {

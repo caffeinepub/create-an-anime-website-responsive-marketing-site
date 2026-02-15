@@ -10,7 +10,7 @@
   "frontend/src/components/ContactSection.tsx": "Fully functional contact form with validation, topic selection, backend submission via React Query, success/error states with toast notifications, and character counter.",
   "frontend/src/components/SectionHeader.tsx": "Reusable section header component with consistent title styling and decorative accent underline.",
   "frontend/src/components/Footer.tsx": "Footer component with copyright notice, YouTube channel subscription link, and Cash App donation line displaying $WOTWM handle.",
-  "frontend/src/content/animeSiteConfig.ts": "Central configuration file containing all site content including the new rewards.tiers array with five supporter tiers (Moon Clan, Flame Warrior, Water Guardian, Royal Sun, Legendary Balance) with exact donation ranges, emoji icons, and perks matching the user's provided text.",
+  "frontend/src/content/animeSiteConfig.ts": "Central configuration file containing all site content including the updated series synopsis describing the three low-ranked kids with clan eyes, their journey between villages, and Kazeyori's mysterious Moon Clan inheritance, along with character profiles, episodes, worldbuilding lore, and supporter tier information.",
   "frontend/src/index.css": "Global styles with manga/ink-on-paper OKLCH color theme (cream background, ink black text, red accents), custom fonts (Noto Serif JP for headings, Inter for body), and custom scrollbar styling.",
   "frontend/tailwind.config.js": "Tailwind configuration extended with manga-inspired design tokens, custom font families, and additional shadow utilities.",
   "frontend/src/hooks/useQueries.ts": "React Query hooks for contact requests (submit, fetch all, update status), admin check (isCallerAdmin), and admin promotion (grantAdminRole with principal validation).",
@@ -22,6 +22,6 @@
   "frontend/src/components/VideoSection.tsx": "Video player section that displays selected episode title and loads episode-specific video sources when available, with error handling that shows appropriate fallback messages for unavailable episode videos or loading errors.",
   "frontend/src/utils/scrollToSection.ts": "Utility helper function for smooth scrolling to a section by ID with configurable offset to account for fixed headers.",
   "frontend/src/utils/normalizeIntroEmbedUrl.ts": "Utility function that normalizes video URLs for iframe embedding by converting common share URLs (YouTube, Vimeo) to embed-friendly formats while leaving direct video file URLs unchanged.",
-  "frontend/src/components/RewardsSection.tsx": "Donations section component displaying Cash App donation information with fire and heart emojis in a centered card layout.",
+  "frontend/src/components/RewardsSection.tsx": "Donation section displaying \"Support Whispers Of The White Moon\" intro text with 🌙 emoji, Cash App donation block ($WOTWM) with 🔥 and 💙 emojis, and all five reward tiers from animeSiteConfig rendered with icons, names, donation ranges, and perks as bullet points.",
   "frontend/src/components/ClansSection.tsx": "New section component displaying seven elemental clans (Moon, Sun, Fire, Water, Lightning, Earth, Balance) with sigil images and verbatim lore descriptions in a responsive grid layout."
 }

@@ -1,41 +1,24 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Content-focused app/site featuring lore sections; add a dedicated \"Clans\" section describing elemental clans and their legends.",
+  "summary": "Website/content project for \"Whispers Of The White Moon\"; update the Donation section content and reward tiers.",
   "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Moon Clan sigil, monochrome emblem with lunar crescent motif (moon-clan-sigil.dim_512x512.png)\n- Sun Clan sigil, radiant emblem with sunburst and halo shapes (sun-clan-sigil.dim_512x512.png)\n- Fire Clan sigil, emblem featuring flame/volcanic shapes and sharp angular marks (fire-clan-sigil.dim_512x512.png)\n- Water Clan sigil, emblem featuring wave forms and flowing circular lines (water-clan-sigil.dim_512x512.png)\n- Lightning Clan sigil, emblem featuring lightning bolt geometry and storm-like arcs (lightning-clan-sigil.dim_512x512.png)\n- Earth Clan sigil, emblem featuring mountain/stone shapes with grounded symmetry (earth-clan-sigil.dim_512x512.png)\n- Balance Clan sigil, emblem featuring intertwined elements in symmetrical harmony (balance-clan-sigil.dim_512x512.png)",
   "existing_features": [
     {
-      "id": "feature-create-a-new-page-section-with-id-clans-and-a-visible-section-header-titled-clans-that-contains-the-provided-intro-paragraph-and-the-seven-clan-entries-moon-sun-fire-water-lightning-earth-balance-with-their-exact-provided-descriptions",
-      "title": "Create a new page section with id=\"clans\" and a visible section header titled \"Clans\" that contains the provided intro paragraph and the seven clan entries (Moon, Sun, Fire, Water, Lightning, Earth, Balance) with their exact provided descriptions.",
+      "id": "feature-replace-all-existing-content-in-the-donation-section-section-id-donations-currently-implemented-by-frontend-src-components-rewardssection-tsx-with-the-provided-donation-copy-for-support-whispers-of-the-white-moon-including-the-intro-text-the-cash-app-donation-block-with-handle-wotwm-and-the-rewards-heading",
+      "title": "Replace all existing content in the Donation section (section id=\"donations\", currently implemented by `frontend/src/components/RewardsSection.tsx`) with the provided Donation copy for “Support Whispers Of The White Moon”, including the intro text, the Cash App donation block with handle “$WOTWM”, and the “Rewards” heading.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-add-the-new-clans-section-into-the-main-page-flow-in-frontend-src-app-tsx-so-it-appears-as-its-own-standalone-section-not-nested-inside-the-existing-worldbuilding-section",
-      "title": "Add the new \"Clans\" section into the main page flow in frontend/src/App.tsx so it appears as its own standalone section (not nested inside the existing Worldbuilding section).",
+      "id": "feature-render-the-reward-tiers-list-in-the-donation-section-using-the-existing-animesiteconfig-rewards-tiers-data-frontend-src-content-animesiteconfig-ts-showing-each-tier-s-icon-name-donation-range-and-perks-as-bullet-points-in-the-same-order-as-in-the-config",
+      "title": "Render the reward tiers list in the Donation section using the existing `animeSiteConfig.rewards.tiers` data (`frontend/src/content/animeSiteConfig.ts`), showing each tier’s icon, name, donation range, and perks as bullet points, in the same order as in the config.",
       "reqIds": [
         "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-top-navigation-frontend-src-components-topnav-tsx-to-include-a-clans-nav-link-that-smooth-scrolls-to-the-new-section-id-clans-on-both-desktop-and-mobile-menus",
-      "title": "Update the top navigation (frontend/src/components/TopNav.tsx) to include a \"Clans\" nav link that smooth-scrolls to the new section id=\"clans\" on both desktop and mobile menus.",
-      "reqIds": [
-        "REQ-3"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-sigil-image-rendering-for-each-clan-entry-in-the-clans-section-using-generated-static-assets-stored-under-frontend-public-assets-generated-with-appropriate-alt-text-e-g-moon-clan-sigil",
-      "title": "Add sigil image rendering for each clan entry in the Clans section using generated static assets stored under frontend/public/assets/generated, with appropriate alt text (e.g., \"Moon Clan sigil\").",
-      "reqIds": [
-        "REQ-4"
       ],
       "version": 1
     }
@@ -43,12 +26,13 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Create a \"Clans\" section and populate it with the provided clan descriptions (Moon, Sun, Fire, Water, Lightning, Earth, Balance) and associated sigil placeholders.",
+      "summary": "Replace all existing Donation section content with the provided \"Support Whispers Of The White Moon\" donation copy, Cash App info ($WOTWM), and reward tier list.",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Add dedicated Clans section with clan lore and sigil images",
+  "gameProjectType": "none",
+  "projectName": "Whispers Of The White Moon",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

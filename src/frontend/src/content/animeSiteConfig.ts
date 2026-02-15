@@ -1,11 +1,15 @@
 export const animeSiteConfig = {
   title: 'Whispers of the White Moon',
   tagline: 'Discover your clan. Find your character. Awaken your destiny.',
-  synopsis: `Take the Clan Personality Quiz to discover which of the six powerful clans you belong to—Sun, Moon, Earth, Fire, Water, or Lightning. Your instincts, emotional reactions, and moral decisions will reveal your true nature.
+  synopsis: `Whispers of the White Moon follows three low-ranked kids from different clans who dream of becoming the strongest in the world.
 
-Then, dive deeper with the Character Match System. Are you a natural leader like Kazeyori? Do you share Sankei's fiery determination? Or perhaps Haruna's unwavering support? Future characters like Volt await discovery as well.
+They possess powerful clan eyes that activate in danger — but they don't even realize it.
 
-Every result ends with a single truth: "Your Eye has begun to flicker…"`,
+As they travel between villages, they slowly uncover secrets about their clans and hidden legacies.
+
+Kazeyori carries a mysterious inheritance tied to the Moon Clan and his fallen father.
+
+It's a story about hidden potential, friendship, and rising from the weakest rank to challenge the balance of the world. 🌙`,
   
   ctaButtons: {
     primary: 'Discover the Story',

@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-create-a-new-page-section-with-id-clans-and-a-visible-section-header-titled-clans-that-contains-the-provided-intro-paragraph-and-the-seven-clan-entries-moon-sun-fire-water-lightning-earth-balance-with-their-exact-provided-descriptions",
-      "featureTitle": "Create a new page section with id=\"clans\" and a visible section header titled \"Clans\" that contains the provided intro paragraph and the seven clan entries (Moon, Sun, Fire, Water, Lightning, Earth, Balance) with their exact provided descriptions.",
+      "featureId": "feature-replace-all-existing-content-in-the-donation-section-section-id-donations-currently-implemented-by-frontend-src-components-rewardssection-tsx-with-the-provided-donation-copy-for-support-whispers-of-the-white-moon-including-the-intro-text-the-cash-app-donation-block-with-handle-wotwm-and-the-rewards-heading",
+      "featureTitle": "Replace all existing content in the Donation section (section id=\"donations\", currently implemented by `frontend/src/components/RewardsSection.tsx`) with the provided Donation copy for “Support Whispers Of The White Moon”, including the intro text, the Cash App donation block with handle “$WOTWM”, and the “Rewards” heading.",
       "files": [
-        "frontend/src/components/ClansSection.tsx"
+        "frontend/src/components/RewardsSection.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -21,10 +21,10 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-the-new-clans-section-into-the-main-page-flow-in-frontend-src-app-tsx-so-it-appears-as-its-own-standalone-section-not-nested-inside-the-existing-worldbuilding-section",
-      "featureTitle": "Add the new \"Clans\" section into the main page flow in frontend/src/App.tsx so it appears as its own standalone section (not nested inside the existing Worldbuilding section).",
+      "featureId": "feature-render-the-reward-tiers-list-in-the-donation-section-using-the-existing-animesiteconfig-rewards-tiers-data-frontend-src-content-animesiteconfig-ts-showing-each-tier-s-icon-name-donation-range-and-perks-as-bullet-points-in-the-same-order-as-in-the-config",
+      "featureTitle": "Render the reward tiers list in the Donation section using the existing `animeSiteConfig.rewards.tiers` data (`frontend/src/content/animeSiteConfig.ts`), showing each tier’s icon, name, donation range, and perks as bullet points, in the same order as in the config.",
       "files": [
-        "frontend/src/App.tsx"
+        "frontend/src/components/RewardsSection.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -36,44 +36,6 @@
       ],
       "testIds": [
         "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-the-top-navigation-frontend-src-components-topnav-tsx-to-include-a-clans-nav-link-that-smooth-scrolls-to-the-new-section-id-clans-on-both-desktop-and-mobile-menus",
-      "featureTitle": "Update the top navigation (frontend/src/components/TopNav.tsx) to include a \"Clans\" nav link that smooth-scrolls to the new section id=\"clans\" on both desktop and mobile menus.",
-      "files": [
-        "frontend/src/components/TopNav.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-3"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-sigil-image-rendering-for-each-clan-entry-in-the-clans-section-using-generated-static-assets-stored-under-frontend-public-assets-generated-with-appropriate-alt-text-e-g-moon-clan-sigil",
-      "featureTitle": "Add sigil image rendering for each clan entry in the Clans section using generated static assets stored under frontend/public/assets/generated, with appropriate alt text (e.g., \"Moon Clan sigil\").",
-      "files": [
-        "frontend/src/components/ClansSection.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-4"
       ],
       "confidence": "high"
     }
