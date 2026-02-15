@@ -1,6 +1,6 @@
 {
-  "frontend/src/App.tsx": "Main application component wrapped with QueryClientProvider and Toaster, managing selected episode state and passing it to VideoSection and EpisodesSection components, rendering all sections in single-page layout.",
-  "frontend/src/components/TopNav.tsx": "Fixed navigation header with smooth scroll links to all sections including the new Video link positioned after Intro, mobile menu toggle, and scroll-based styling changes.",
+  "frontend/src/App.tsx": "Main application component wrapped with QueryClientProvider and Toaster, managing selected episode state and rendering all sections including the new RewardsSection in single-page layout.",
+  "frontend/src/components/TopNav.tsx": "Fixed navigation header with smooth scroll links to all sections including the renamed Donations link, mobile menu toggle, and scroll-based styling changes.",
   "frontend/src/components/HeroSection.tsx": "Full-screen hero section with the restored previous background image (anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png featuring moon, waterfall, volcano, and sun), anime title, tagline, CTA buttons, and animated scroll indicator.",
   "frontend/src/components/AboutSection.tsx": "About section displaying the anime synopsis with centered layout and readable typography.",
   "frontend/src/components/CharactersSection.tsx": "Responsive grid of character cards displaying comprehensive details from config including optional top-of-card images (via imageSrc) and optional bio-area images (via bioImageSrc), with bio portrait rendering explicitly disabled for Kazeyori Shiranagi while maintaining existing behavior for all other characters.",
@@ -10,7 +10,7 @@
   "frontend/src/components/ContactSection.tsx": "Fully functional contact form with validation, topic selection, backend submission via React Query, success/error states with toast notifications, and character counter.",
   "frontend/src/components/SectionHeader.tsx": "Reusable section header component with consistent title styling and decorative accent underline.",
   "frontend/src/components/Footer.tsx": "Footer component with copyright notice, YouTube channel subscription link, and Cash App donation line displaying $WOTWM handle.",
-  "frontend/src/content/animeSiteConfig.ts": "Central configuration file containing all site content including updated title/tagline/synopsis describing the Clan Personality Quiz (Sun, Moon, Earth, Fire, Water, Lightning) and Character Match System (Kazeyori, Sankei, Haruna, future characters like Volt) with the exact line \"Your Eye has begun to flicker…\", plus intro video configuration, worldbuilding data with 6 Clan Eyes rules, six main characters, and three episodes.",
+  "frontend/src/content/animeSiteConfig.ts": "Central configuration file containing all site content including the new rewards.tiers array with five supporter tiers (Moon Clan, Flame Warrior, Water Guardian, Royal Sun, Legendary Balance) with exact donation ranges, emoji icons, and perks matching the user's provided text.",
   "frontend/src/index.css": "Global styles with manga/ink-on-paper OKLCH color theme (cream background, ink black text, red accents), custom fonts (Noto Serif JP for headings, Inter for body), and custom scrollbar styling.",
   "frontend/tailwind.config.js": "Tailwind configuration extended with manga-inspired design tokens, custom font families, and additional shadow utilities.",
   "frontend/src/hooks/useQueries.ts": "React Query hooks for contact requests (submit, fetch all, update status), admin check (isCallerAdmin), and admin promotion (grantAdminRole with principal validation).",
@@ -21,5 +21,6 @@
   "frontend/src/components/IntroSection.tsx": "Anchored section with id=\"intro\" that displays the intro video from animeSiteConfig using either a native HTML5 video player for direct .mp4 files or an iframe for external embeds, provides a prominent \"Watch Intro\" button as fallback, and displays the anime tagline and first paragraph of the synopsis below the video with responsive typography and spacing.",
   "frontend/src/components/VideoSection.tsx": "Video player section that displays selected episode title and loads episode-specific video sources when available, with error handling that shows appropriate fallback messages for unavailable episode videos or loading errors.",
   "frontend/src/utils/scrollToSection.ts": "Utility helper function for smooth scrolling to a section by ID with configurable offset to account for fixed headers.",
-  "frontend/src/utils/normalizeIntroEmbedUrl.ts": "Utility function that normalizes video URLs for iframe embedding by converting common share URLs (YouTube, Vimeo) to embed-friendly formats while leaving direct video file URLs unchanged."
+  "frontend/src/utils/normalizeIntroEmbedUrl.ts": "Utility function that normalizes video URLs for iframe embedding by converting common share URLs (YouTube, Vimeo) to embed-friendly formats while leaving direct video file URLs unchanged.",
+  "frontend/src/components/RewardsSection.tsx": "Donations section component displaying Cash App donation information with fire and heart emojis in a centered card layout."
 }

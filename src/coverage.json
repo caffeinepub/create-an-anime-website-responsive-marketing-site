@@ -1,24 +1,37 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-14T22:37:44.081Z",
+  "generatedAt": "2026-02-15T02:02:49.942Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 1,
+    "total": 2,
+    "implemented": 2,
     "items": [
       {
-        "id": "REQ-1",
-        "summary": "Add a visible donation line to the site UI that includes the exact Cash App handle “$WOTWM”. Place it in the global footer (`frontend/src/components/Footer.tsx`) beneath the existing YouTube subscription line, using clear English wording (e.g., “Donate: Cash App $WOTWM”).",
+        "id": "REQ-4",
+        "summary": "Update the existing Rewards section UI to display the provided Cash App donation message content in the section body.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/Footer.tsx"
+          "frontend/src/components/RewardsSection.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/Footer.tsx"
+          "frontend/src/components/RewardsSection.tsx"
+        ]
+      },
+      {
+        "id": "REQ-5",
+        "summary": "Rename the existing \"Rewards\" section to \"Donations\" across the UI, including the section header and the TopNav navigation link, and ensure the TopNav link scrolls to the renamed section.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/RewardsSection.tsx",
+          "frontend/src/components/TopNav.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/RewardsSection.tsx",
+          "frontend/src/components/TopNav.tsx"
         ]
       }
     ]
@@ -28,7 +41,8 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/Footer.tsx",
+    "frontend/src/components/RewardsSection.tsx",
+    "frontend/src/components/TopNav.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

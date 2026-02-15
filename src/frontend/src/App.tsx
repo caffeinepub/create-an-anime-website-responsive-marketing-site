@@ -7,6 +7,7 @@ import { AboutSection } from './components/AboutSection';
 import { CharactersSection } from './components/CharactersSection';
 import { WorldbuildingSection } from './components/WorldbuildingSection';
 import { EpisodesSection } from './components/EpisodesSection';
+import { RewardsSection } from './components/RewardsSection';
 import { ContactSection } from './components/ContactSection';
 import { AdminSection } from './components/AdminSection';
 import { TopNav } from './components/TopNav';
@@ -43,6 +44,7 @@ function App() {
           <CharactersSection />
           <WorldbuildingSection />
           <EpisodesSection onEpisodeSelect={setSelectedEpisode} />
+          <RewardsSection />
           <ContactSection />
           <AdminSection />
         </main>

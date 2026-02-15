@@ -24,6 +24,59 @@ Every result ends with a single truth: "Your Eye has begun to flicker…"`,
     fallbackText: 'Open video in new tab'
   },
 
+  rewards: {
+    tiers: [
+      {
+        name: 'Moon Clan Supporter',
+        icon: '🌑',
+        donationRange: '$1 to $5',
+        perks: [
+          'Official Moon Clan Supporter title'
+        ]
+      },
+      {
+        name: 'Flame Warrior Supporter',
+        icon: '🔥',
+        donationRange: '$6 to $15',
+        perks: [
+          'Everything from Moon Clan tier',
+          'Quicker contact responds',
+          'Official Fire Clan Supporter title'
+        ]
+      },
+      {
+        name: 'Water Guardian Supporter',
+        icon: '🌊',
+        donationRange: '$16 to $30',
+        perks: [
+          'User-Name secretly added to Anime',
+          'Official Water Clan Supporter title'
+        ]
+      },
+      {
+        name: 'Royal Sun Supporter',
+        icon: '☀️',
+        donationRange: '$31 to $75',
+        perks: [
+          'Everything from previous tiers',
+          'User-Name listed in episode credits (Supporter Section)',
+          'Added to anime (own Character)'
+        ]
+      },
+      {
+        name: 'Legendary Balance Supporter',
+        icon: '👑',
+        donationRange: '$76+',
+        perks: [
+          'Everything from previous tiers',
+          'Special thank-you message from the creator team',
+          'Chance to have an important Anime character',
+          'Ultimate supporter recognition'
+        ]
+      }
+    ]
+  },
+
   worldbuilding: {
     clans: [
       { name: 'Sun Clan', eye: 'Taiyonome' },

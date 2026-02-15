@@ -1,21 +1,41 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add Cash App donation line to global footer",
+  "title": "Rename Rewards section to Donations and display Cash App donation message",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Add a centered donation line with the exact Cash App handle “$WOTWM” beneath the existing YouTube subscription line in the global footer.",
+      "id": "REQ-4",
+      "summary": "Replace the Rewards tiers content with the provided Cash App donation message inside the existing section body area.",
       "acceptanceCriteria": [
-        "The footer displays a donation line on all pages/sections where the footer is shown.",
-        "The donation line includes the exact text “$WOTWM” (including the leading $).",
-        "The footer layout remains readable and centered on both mobile and desktop (no overflow or broken spacing)."
+        "The section body includes the lines: \"Donate Via Cash App\", \"Send support to:\", \"$WOTWM\", and \"Thank you for your support!\" (including the 🔥 and 💙 emojis as provided).",
+        "The donation content is rendered in the existing section area currently occupied by the Rewards tiers."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/Footer.tsx",
+          "path": "frontend/src/components/RewardsSection.tsx",
           "operation": "modify",
-          "description": "Insert a new, clearly worded donation line (e.g., “Donate: Cash App $WOTWM”) directly beneath the existing YouTube subscription line, keeping the footer’s centered layout and responsive spacing consistent with the current Tailwind styling."
+          "description": "Replace the current tiers list rendering with the exact provided multi-line Cash App donation message (including 🔥 and 💙) rendered as the section body content in the same section layout area; remove reliance on rewards tiers data if no longer needed."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Rename the Rewards section to Donations across the UI and ensure the TopNav link scrolls to the renamed section.",
+      "acceptanceCriteria": [
+        "The section header displays \"Donations\" instead of \"Rewards\".",
+        "Top navigation displays \"Donations\" instead of \"Rewards\".",
+        "Clicking the \"Donations\" TopNav item scrolls to the Donations section reliably on desktop and mobile."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/RewardsSection.tsx",
+          "operation": "modify",
+          "description": "Update the section header title from \"Rewards\" to \"Donations\" and change the section id from \"rewards\" to \"donations\" so in-page navigation targets the renamed section."
+        },
+        {
+          "path": "frontend/src/components/TopNav.tsx",
+          "operation": "modify",
+          "description": "Rename the nav link label from \"Rewards\" to \"Donations\" and update its target id from \"rewards\" to \"donations\"; ensure the click handler closes the mobile menu and performs smooth scrolling to the renamed section reliably."
         }
       ]
     }

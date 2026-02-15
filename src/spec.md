@@ -1,10 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Add a clear donation line with the Cash App handle “$WOTWM” to the global site footer.
+**Goal:** Replace the existing Rewards section with a Donations section that displays Cash App donation text.
 
 **Planned changes:**
-- Update `frontend/src/components/Footer.tsx` to render a new donation line beneath the existing YouTube subscription line with wording like “Donate: Cash App $WOTWM”.
-- Ensure the footer text remains centered and readable across mobile and desktop without spacing/overflow issues.
+- Update the current Rewards section content area to render the provided Cash App donation message (including the 🔥 and 💙 emojis).
+- Rename “Rewards” to “Donations” in the section header and in the TopNav link.
+- Ensure the “Donations” TopNav link scrolls reliably to the renamed section on desktop and mobile.
 
-**User-visible outcome:** Visitors see a donation prompt in the footer on all pages/sections where the footer appears, including the exact Cash App handle “$WOTWM”.
+**User-visible outcome:** Users see a “Donations” section with the Cash App donation message, and can click “Donations” in the top navigation to scroll to it.

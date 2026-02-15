@@ -1,16 +1,24 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Add a donation text section including Cash App handle $WOTWM.",
+  "summary": "New project",
   "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-add-a-visible-donation-line-to-the-site-ui-that-includes-the-exact-cash-app-handle-wotwm-place-it-in-the-global-footer-frontend-src-components-footer-tsx-beneath-the-existing-youtube-subscription-line-using-clear-english-wording-e-g-donate-cash-app-wotwm",
-      "title": "Add a visible donation line to the site UI that includes the exact Cash App handle “$WOTWM”. Place it in the global footer (`frontend/src/components/Footer.tsx`) beneath the existing YouTube subscription line, using clear English wording (e.g., “Donate: Cash App $WOTWM”).",
+      "id": "feature-update-the-existing-rewards-section-ui-to-display-the-provided-cash-app-donation-message-content-in-the-section-body",
+      "title": "Update the existing Rewards section UI to display the provided Cash App donation message content in the section body.",
       "reqIds": [
-        "REQ-1"
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-rename-the-existing-rewards-section-to-donations-across-the-ui-including-the-section-header-and-the-topnav-navigation-link-and-ensure-the-topnav-link-scrolls-to-the-renamed-section",
+      "title": "Rename the existing \"Rewards\" section to \"Donations\" across the UI, including the section header and the TopNav navigation link, and ensure the TopNav link scrolls to the renamed section.",
+      "reqIds": [
+        "REQ-5"
       ],
       "version": 1
     }
@@ -18,12 +26,13 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add donate text including Cash App user $WOTWM",
+      "summary": "Update the Rewards section content with Cash App donation text and rename the section to “Donations”.",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Add donate text with Cash App handle in footer",
+  "gameProjectType": "none",
+  "projectName": "Rename Rewards section to Donations and show Cash App donation text",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }
