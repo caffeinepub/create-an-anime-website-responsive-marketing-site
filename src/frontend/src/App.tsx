@@ -6,6 +6,7 @@ import { VideoSection } from './components/VideoSection';
 import { AboutSection } from './components/AboutSection';
 import { CharactersSection } from './components/CharactersSection';
 import { WorldbuildingSection } from './components/WorldbuildingSection';
+import { ClansSection } from './components/ClansSection';
 import { EpisodesSection } from './components/EpisodesSection';
 import { RewardsSection } from './components/RewardsSection';
 import { ContactSection } from './components/ContactSection';
@@ -43,6 +44,7 @@ function App() {
           <AboutSection />
           <CharactersSection />
           <WorldbuildingSection />
+          <ClansSection />
           <EpisodesSection onEpisodeSelect={setSelectedEpisode} />
           <RewardsSection />
           <ContactSection />

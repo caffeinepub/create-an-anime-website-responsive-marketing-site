@@ -1,24 +1,41 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
+  "summary": "Content-focused app/site featuring lore sections; add a dedicated \"Clans\" section describing elemental clans and their legends.",
   "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Moon Clan sigil, monochrome emblem with lunar crescent motif (moon-clan-sigil.dim_512x512.png)\n- Sun Clan sigil, radiant emblem with sunburst and halo shapes (sun-clan-sigil.dim_512x512.png)\n- Fire Clan sigil, emblem featuring flame/volcanic shapes and sharp angular marks (fire-clan-sigil.dim_512x512.png)\n- Water Clan sigil, emblem featuring wave forms and flowing circular lines (water-clan-sigil.dim_512x512.png)\n- Lightning Clan sigil, emblem featuring lightning bolt geometry and storm-like arcs (lightning-clan-sigil.dim_512x512.png)\n- Earth Clan sigil, emblem featuring mountain/stone shapes with grounded symmetry (earth-clan-sigil.dim_512x512.png)\n- Balance Clan sigil, emblem featuring intertwined elements in symmetrical harmony (balance-clan-sigil.dim_512x512.png)",
   "existing_features": [
     {
-      "id": "feature-update-the-existing-rewards-section-ui-to-display-the-provided-cash-app-donation-message-content-in-the-section-body",
-      "title": "Update the existing Rewards section UI to display the provided Cash App donation message content in the section body.",
+      "id": "feature-create-a-new-page-section-with-id-clans-and-a-visible-section-header-titled-clans-that-contains-the-provided-intro-paragraph-and-the-seven-clan-entries-moon-sun-fire-water-lightning-earth-balance-with-their-exact-provided-descriptions",
+      "title": "Create a new page section with id=\"clans\" and a visible section header titled \"Clans\" that contains the provided intro paragraph and the seven clan entries (Moon, Sun, Fire, Water, Lightning, Earth, Balance) with their exact provided descriptions.",
       "reqIds": [
-        "REQ-4"
+        "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-rename-the-existing-rewards-section-to-donations-across-the-ui-including-the-section-header-and-the-topnav-navigation-link-and-ensure-the-topnav-link-scrolls-to-the-renamed-section",
-      "title": "Rename the existing \"Rewards\" section to \"Donations\" across the UI, including the section header and the TopNav navigation link, and ensure the TopNav link scrolls to the renamed section.",
+      "id": "feature-add-the-new-clans-section-into-the-main-page-flow-in-frontend-src-app-tsx-so-it-appears-as-its-own-standalone-section-not-nested-inside-the-existing-worldbuilding-section",
+      "title": "Add the new \"Clans\" section into the main page flow in frontend/src/App.tsx so it appears as its own standalone section (not nested inside the existing Worldbuilding section).",
       "reqIds": [
-        "REQ-5"
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-top-navigation-frontend-src-components-topnav-tsx-to-include-a-clans-nav-link-that-smooth-scrolls-to-the-new-section-id-clans-on-both-desktop-and-mobile-menus",
+      "title": "Update the top navigation (frontend/src/components/TopNav.tsx) to include a \"Clans\" nav link that smooth-scrolls to the new section id=\"clans\" on both desktop and mobile menus.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-sigil-image-rendering-for-each-clan-entry-in-the-clans-section-using-generated-static-assets-stored-under-frontend-public-assets-generated-with-appropriate-alt-text-e-g-moon-clan-sigil",
+      "title": "Add sigil image rendering for each clan entry in the Clans section using generated static assets stored under frontend/public/assets/generated, with appropriate alt text (e.g., \"Moon Clan sigil\").",
+      "reqIds": [
+        "REQ-4"
       ],
       "version": 1
     }
@@ -26,13 +43,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Update the Rewards section content with Cash App donation text and rename the section to “Donations”.",
+      "summary": "Create a \"Clans\" section and populate it with the provided clan descriptions (Moon, Sun, Fire, Water, Lightning, Earth, Balance) and associated sigil placeholders.",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "gameProjectType": "none",
-  "projectName": "Rename Rewards section to Donations and show Cash App donation text",
+  "projectName": "Add dedicated Clans section with clan lore and sigil images",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

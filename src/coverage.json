@@ -1,37 +1,71 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T02:02:49.942Z",
+  "generatedAt": "2026-02-15T02:41:11.711Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 4,
+    "implemented": 4,
     "items": [
       {
-        "id": "REQ-4",
-        "summary": "Update the existing Rewards section UI to display the provided Cash App donation message content in the section body.",
+        "id": "REQ-1",
+        "summary": "Create a new page section with id=\"clans\" and a visible section header titled \"Clans\" that contains the provided intro paragraph and the seven clan entries (Moon, Sun, Fire, Water, Lightning, Earth, Balance) with their exact provided descriptions.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/RewardsSection.tsx"
+          "frontend/src/components/ClansSection.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/RewardsSection.tsx"
+          "frontend/src/components/ClansSection.tsx"
         ]
       },
       {
-        "id": "REQ-5",
-        "summary": "Rename the existing \"Rewards\" section to \"Donations\" across the UI, including the section header and the TopNav navigation link, and ensure the TopNav link scrolls to the renamed section.",
+        "id": "REQ-2",
+        "summary": "Add the new \"Clans\" section into the main page flow in frontend/src/App.tsx so it appears as its own standalone section (not nested inside the existing Worldbuilding section).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/RewardsSection.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Update the top navigation (frontend/src/components/TopNav.tsx) to include a \"Clans\" nav link that smooth-scrolls to the new section id=\"clans\" on both desktop and mobile menus.",
+        "status": "implemented",
+        "plannedFiles": [
           "frontend/src/components/TopNav.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/RewardsSection.tsx",
           "frontend/src/components/TopNav.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Add sigil image rendering for each clan entry in the Clans section using generated static assets stored under frontend/public/assets/generated, with appropriate alt text (e.g., \"Moon Clan sigil\").",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/public/assets/generated/moon-clan-sigil.dim_512x512.png",
+          "frontend/public/assets/generated/sun-clan-sigil.dim_512x512.png",
+          "frontend/public/assets/generated/fire-clan-sigil.dim_512x512.png",
+          "frontend/public/assets/generated/water-clan-sigil.dim_512x512.png",
+          "frontend/public/assets/generated/lightning-clan-sigil.dim_512x512.png",
+          "frontend/public/assets/generated/earth-clan-sigil.dim_512x512.png",
+          "frontend/public/assets/generated/balance-clan-sigil.dim_512x512.png",
+          "frontend/src/components/ClansSection.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/public/assets/generated/moon-clan-sigil.dim_512x512.png",
+          "frontend/public/assets/generated/sun-clan-sigil.dim_512x512.png",
+          "frontend/public/assets/generated/fire-clan-sigil.dim_512x512.png",
+          "frontend/public/assets/generated/water-clan-sigil.dim_512x512.png",
+          "frontend/public/assets/generated/lightning-clan-sigil.dim_512x512.png",
+          "frontend/public/assets/generated/earth-clan-sigil.dim_512x512.png",
+          "frontend/public/assets/generated/balance-clan-sigil.dim_512x512.png",
+          "frontend/src/components/ClansSection.tsx"
         ]
       }
     ]
@@ -41,7 +75,15 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/RewardsSection.tsx",
+    "frontend/public/assets/generated/balance-clan-sigil.dim_512x512.png",
+    "frontend/public/assets/generated/earth-clan-sigil.dim_512x512.png",
+    "frontend/public/assets/generated/fire-clan-sigil.dim_512x512.png",
+    "frontend/public/assets/generated/lightning-clan-sigil.dim_512x512.png",
+    "frontend/public/assets/generated/moon-clan-sigil.dim_512x512.png",
+    "frontend/public/assets/generated/sun-clan-sigil.dim_512x512.png",
+    "frontend/public/assets/generated/water-clan-sigil.dim_512x512.png",
+    "frontend/src/App.tsx",
+    "frontend/src/components/ClansSection.tsx",
     "frontend/src/components/TopNav.tsx",
     "project_state.json",
     "scratch/component-selection.json",

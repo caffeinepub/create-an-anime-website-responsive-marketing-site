@@ -1,41 +1,104 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Rename Rewards section to Donations and display Cash App donation message",
+  "title": "Add dedicated Clans section with lore and sigil images",
   "requirements": [
     {
-      "id": "REQ-4",
-      "summary": "Replace the Rewards tiers content with the provided Cash App donation message inside the existing section body area.",
+      "id": "REQ-1",
+      "summary": "Implement a new standalone Clans section (id=\"clans\") with the required header, intro paragraph, and seven clan lore entries with verbatim descriptions.",
       "acceptanceCriteria": [
-        "The section body includes the lines: \"Donate Via Cash App\", \"Send support to:\", \"$WOTWM\", and \"Thank you for your support!\" (including the 🔥 and 💙 emojis as provided).",
-        "The donation content is rendered in the existing section area currently occupied by the Rewards tiers."
+        "A new section exists in the main page markup with id=\"clans\" and a header reading \"Clans\".",
+        "The section includes the intro text: \"Each clan wields unique elemental powers passed down through generations. Discover their strengths, their legends, and their role in the coming war.\"",
+        "The section renders seven clan blocks titled: Moon Clan, Sun Clan, Fire Clan, Water Clan, Lightning Clan, Earth Clan, Balance Clan.",
+        "Each clan block displays the exact corresponding description text from the user request (verbatim, including punctuation)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/RewardsSection.tsx",
-          "operation": "modify",
-          "description": "Replace the current tiers list rendering with the exact provided multi-line Cash App donation message (including 🔥 and 💙) rendered as the section body content in the same section layout area; remove reliance on rewards tiers data if no longer needed."
+          "path": "frontend/src/components/ClansSection.tsx",
+          "operation": "create",
+          "description": "Create a new React section component rendering a <section id=\"clans\"> with a visible \"Clans\" header (compose the existing SectionHeader component), the required intro paragraph, and seven clan entry blocks (Moon/Sun/Fire/Water/Lightning/Earth/Balance) containing the exact descriptions from the user request (verbatim). Ensure layout is responsive (e.g., stacked on mobile, multi-column on larger screens) and readable."
         }
       ]
     },
     {
-      "id": "REQ-5",
-      "summary": "Rename the Rewards section to Donations across the UI and ensure the TopNav link scrolls to the renamed section.",
+      "id": "REQ-2",
+      "summary": "Wire the Clans section into the main page flow in App.tsx as a top-level sibling section (not inside Worldbuilding).",
       "acceptanceCriteria": [
-        "The section header displays \"Donations\" instead of \"Rewards\".",
-        "Top navigation displays \"Donations\" instead of \"Rewards\".",
-        "Clicking the \"Donations\" TopNav item scrolls to the Donations section reliably on desktop and mobile."
+        "The Clans section is rendered as a sibling section alongside the other top-level sections in App.tsx.",
+        "The existing Worldbuilding section remains present and continues to render as before."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/RewardsSection.tsx",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Update the section header title from \"Rewards\" to \"Donations\" and change the section id from \"rewards\" to \"donations\" so in-page navigation targets the renamed section."
-        },
+          "description": "Import and render the new ClansSection as its own top-level section in the <main> flow (as a sibling to existing sections), ensuring WorldbuildingSection remains unchanged and still renders as before."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Add a Clans link to the top navigation that smooth-scrolls to id=\"clans\" and closes the mobile menu after selection.",
+      "acceptanceCriteria": [
+        "Top navigation includes a \"Clans\" item.",
+        "Clicking \"Clans\" scrolls to the section with id=\"clans\" with the same offset behavior as other links.",
+        "Mobile menu closes after selecting \"Clans\" (matching existing behavior)."
+      ],
+      "file_operations": [
         {
           "path": "frontend/src/components/TopNav.tsx",
           "operation": "modify",
-          "description": "Rename the nav link label from \"Rewards\" to \"Donations\" and update its target id from \"rewards\" to \"donations\"; ensure the click handler closes the mobile menu and performs smooth scrolling to the renamed section reliably."
+          "description": "Update the navLinks list to include a new { label: 'Clans', id: 'clans' } item (on both desktop and mobile menus). Keep the existing smooth-scroll + offset behavior consistent with other links and ensure selecting it closes the mobile menu (maintaining current behavior)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Render a sigil image for each clan entry using generated static assets under frontend/public/assets/generated with appropriate alt text.",
+      "acceptanceCriteria": [
+        "Each of the seven clan entries displays a sigil image loaded from /assets/generated/*.png.",
+        "Each sigil image includes non-empty alt text matching the pattern \"<Clan Name> sigil\" (e.g., \"Balance Clan sigil\").",
+        "The Clans section layout remains readable and responsive from mobile to desktop (no overflow or broken grid)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/moon-clan-sigil.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated static asset at the exact path frontend/public/assets/generated/moon-clan-sigil.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/sun-clan-sigil.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated static asset at the exact path frontend/public/assets/generated/sun-clan-sigil.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/fire-clan-sigil.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated static asset at the exact path frontend/public/assets/generated/fire-clan-sigil.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/water-clan-sigil.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated static asset at the exact path frontend/public/assets/generated/water-clan-sigil.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/lightning-clan-sigil.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated static asset at the exact path frontend/public/assets/generated/lightning-clan-sigil.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/earth-clan-sigil.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated static asset at the exact path frontend/public/assets/generated/earth-clan-sigil.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/balance-clan-sigil.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated static asset at the exact path frontend/public/assets/generated/balance-clan-sigil.dim_512x512.png."
+        },
+        {
+          "path": "frontend/src/components/ClansSection.tsx",
+          "operation": "modify",
+          "description": "Within the ClansSection, render each clan’s sigil image using the static asset paths: frontend/public/assets/generated/moon-clan-sigil.dim_512x512.png, frontend/public/assets/generated/sun-clan-sigil.dim_512x512.png, frontend/public/assets/generated/fire-clan-sigil.dim_512x512.png, frontend/public/assets/generated/water-clan-sigil.dim_512x512.png, frontend/public/assets/generated/lightning-clan-sigil.dim_512x512.png, frontend/public/assets/generated/earth-clan-sigil.dim_512x512.png, frontend/public/assets/generated/balance-clan-sigil.dim_512x512.png. Ensure each image has appropriate alt text matching \"<Clan Name> Clan sigil\" (e.g., \"Moon Clan sigil\"), and that the overall section remains responsive with no overflow/broken grid."
         }
       ]
     }

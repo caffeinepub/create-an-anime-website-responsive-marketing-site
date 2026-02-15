@@ -1,6 +1,6 @@
 {
-  "frontend/src/App.tsx": "Main application component wrapped with QueryClientProvider and Toaster, managing selected episode state and rendering all sections including the new RewardsSection in single-page layout.",
-  "frontend/src/components/TopNav.tsx": "Fixed navigation header with smooth scroll links to all sections including the renamed Donations link, mobile menu toggle, and scroll-based styling changes.",
+  "frontend/src/App.tsx": "Main application component wrapped with QueryClientProvider and Toaster, managing selected episode state and rendering all sections including the new ClansSection as a sibling to WorldbuildingSection in single-page layout.",
+  "frontend/src/components/TopNav.tsx": "Fixed navigation header with smooth scroll links to all sections including the new Clans link, mobile menu toggle, and scroll-based styling changes.",
   "frontend/src/components/HeroSection.tsx": "Full-screen hero section with the restored previous background image (anime-hero-bg-moon-waterfall-volcano-sun.dim_1920x1080.png featuring moon, waterfall, volcano, and sun), anime title, tagline, CTA buttons, and animated scroll indicator.",
   "frontend/src/components/AboutSection.tsx": "About section displaying the anime synopsis with centered layout and readable typography.",
   "frontend/src/components/CharactersSection.tsx": "Responsive grid of character cards displaying comprehensive details from config including optional top-of-card images (via imageSrc) and optional bio-area images (via bioImageSrc), with bio portrait rendering explicitly disabled for Kazeyori Shiranagi while maintaining existing behavior for all other characters.",
@@ -22,5 +22,6 @@
   "frontend/src/components/VideoSection.tsx": "Video player section that displays selected episode title and loads episode-specific video sources when available, with error handling that shows appropriate fallback messages for unavailable episode videos or loading errors.",
   "frontend/src/utils/scrollToSection.ts": "Utility helper function for smooth scrolling to a section by ID with configurable offset to account for fixed headers.",
   "frontend/src/utils/normalizeIntroEmbedUrl.ts": "Utility function that normalizes video URLs for iframe embedding by converting common share URLs (YouTube, Vimeo) to embed-friendly formats while leaving direct video file URLs unchanged.",
-  "frontend/src/components/RewardsSection.tsx": "Donations section component displaying Cash App donation information with fire and heart emojis in a centered card layout."
+  "frontend/src/components/RewardsSection.tsx": "Donations section component displaying Cash App donation information with fire and heart emojis in a centered card layout.",
+  "frontend/src/components/ClansSection.tsx": "New section component displaying seven elemental clans (Moon, Sun, Fire, Water, Lightning, Earth, Balance) with sigil images and verbatim lore descriptions in a responsive grid layout."
 }

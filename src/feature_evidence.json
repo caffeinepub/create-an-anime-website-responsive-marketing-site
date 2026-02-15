@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-existing-rewards-section-ui-to-display-the-provided-cash-app-donation-message-content-in-the-section-body",
-      "featureTitle": "Update the existing Rewards section UI to display the provided Cash App donation message content in the section body.",
+      "featureId": "feature-create-a-new-page-section-with-id-clans-and-a-visible-section-header-titled-clans-that-contains-the-provided-intro-paragraph-and-the-seven-clan-entries-moon-sun-fire-water-lightning-earth-balance-with-their-exact-provided-descriptions",
+      "featureTitle": "Create a new page section with id=\"clans\" and a visible section header titled \"Clans\" that contains the provided intro paragraph and the seven clan entries (Moon, Sun, Fire, Water, Lightning, Earth, Balance) with their exact provided descriptions.",
       "files": [
-        "frontend/src/components/RewardsSection.tsx"
+        "frontend/src/components/ClansSection.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -16,15 +16,33 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-4"
+        "REQ-1"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-rename-the-existing-rewards-section-to-donations-across-the-ui-including-the-section-header-and-the-topnav-navigation-link-and-ensure-the-topnav-link-scrolls-to-the-renamed-section",
-      "featureTitle": "Rename the existing \"Rewards\" section to \"Donations\" across the UI, including the section header and the TopNav navigation link, and ensure the TopNav link scrolls to the renamed section.",
+      "featureId": "feature-add-the-new-clans-section-into-the-main-page-flow-in-frontend-src-app-tsx-so-it-appears-as-its-own-standalone-section-not-nested-inside-the-existing-worldbuilding-section",
+      "featureTitle": "Add the new \"Clans\" section into the main page flow in frontend/src/App.tsx so it appears as its own standalone section (not nested inside the existing Worldbuilding section).",
       "files": [
-        "frontend/src/components/RewardsSection.tsx",
+        "frontend/src/App.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-top-navigation-frontend-src-components-topnav-tsx-to-include-a-clans-nav-link-that-smooth-scrolls-to-the-new-section-id-clans-on-both-desktop-and-mobile-menus",
+      "featureTitle": "Update the top navigation (frontend/src/components/TopNav.tsx) to include a \"Clans\" nav link that smooth-scrolls to the new section id=\"clans\" on both desktop and mobile menus.",
+      "files": [
         "frontend/src/components/TopNav.tsx"
       ],
       "components": [
@@ -36,7 +54,26 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-5"
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-sigil-image-rendering-for-each-clan-entry-in-the-clans-section-using-generated-static-assets-stored-under-frontend-public-assets-generated-with-appropriate-alt-text-e-g-moon-clan-sigil",
+      "featureTitle": "Add sigil image rendering for each clan entry in the Clans section using generated static assets stored under frontend/public/assets/generated, with appropriate alt text (e.g., \"Moon Clan sigil\").",
+      "files": [
+        "frontend/src/components/ClansSection.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
       ],
       "confidence": "high"
     }

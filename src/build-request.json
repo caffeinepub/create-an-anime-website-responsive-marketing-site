@@ -1,54 +1,113 @@
 {
   "kind": "build_request",
-  "title": "Rename Rewards section to Donations and show Cash App donation text",
+  "title": "Add dedicated Clans section with clan lore and sigil images",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-4",
-      "text": "Update the existing Rewards section UI to display the provided Cash App donation message content in the section body.",
+      "id": "REQ-1",
+      "text": "Create a new page section with id=\"clans\" and a visible section header titled \"Clans\" that contains the provided intro paragraph and the seven clan entries (Moon, Sun, Fire, Water, Lightning, Earth, Balance) with their exact provided descriptions.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-6"
         ],
         "quotes": [
-          "🔥\nDonate Via Cash App\nSend support to:\n$WOTWM\nThank you for your support! 💙 ( put that in rewards section and rename the rewards section to donations"
+          "make a section called clans and put this"
         ]
       },
       "acceptanceCriteria": [
-        "The section body includes the lines: \"Donate Via Cash App\", \"Send support to:\", \"$WOTWM\", and \"Thank you for your support!\" (including the 🔥 and 💙 emojis as provided).",
-        "The donation content is rendered in the existing section area currently occupied by the Rewards tiers."
+        "A new section exists in the main page markup with id=\"clans\" and a header reading \"Clans\".",
+        "The section includes the intro text: \"Each clan wields unique elemental powers passed down through generations. Discover their strengths, their legends, and their role in the coming war.\"",
+        "The section renders seven clan blocks titled: Moon Clan, Sun Clan, Fire Clan, Water Clan, Lightning Clan, Earth Clan, Balance Clan.",
+        "Each clan block displays the exact corresponding description text from the user request (verbatim, including punctuation)."
       ]
     },
     {
-      "id": "REQ-5",
-      "text": "Rename the existing \"Rewards\" section to \"Donations\" across the UI, including the section header and the TopNav navigation link, and ensure the TopNav link scrolls to the renamed section.",
+      "id": "REQ-2",
+      "text": "Add the new \"Clans\" section into the main page flow in frontend/src/App.tsx so it appears as its own standalone section (not nested inside the existing Worldbuilding section).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-6"
         ],
         "quotes": [
-          "rename the rewards section to donations"
+          "make a section called clans"
         ]
       },
       "acceptanceCriteria": [
-        "The section header displays \"Donations\" instead of \"Rewards\".",
-        "Top navigation displays \"Donations\" instead of \"Rewards\".",
-        "Clicking the \"Donations\" TopNav item scrolls to the Donations section reliably on desktop and mobile."
+        "The Clans section is rendered as a sibling section alongside the other top-level sections in App.tsx.",
+        "The existing Worldbuilding section remains present and continues to render as before."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Update the top navigation (frontend/src/components/TopNav.tsx) to include a \"Clans\" nav link that smooth-scrolls to the new section id=\"clans\" on both desktop and mobile menus.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Top navigation includes a \"Clans\" item.",
+        "Clicking \"Clans\" scrolls to the section with id=\"clans\" with the same offset behavior as other links.",
+        "Mobile menu closes after selecting \"Clans\" (matching existing behavior)."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Add sigil image rendering for each clan entry in the Clans section using generated static assets stored under frontend/public/assets/generated, with appropriate alt text (e.g., \"Moon Clan sigil\").",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "Moon Clan sigil",
+          "Sun Clan sigil",
+          "Fire Clan sigil",
+          "Water Clan sigil",
+          "Lightning Clan sigil",
+          "Earth Clan sigil",
+          "Balance Clan sigil"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Each of the seven clan entries displays a sigil image loaded from /assets/generated/*.png.",
+        "Each sigil image includes non-empty alt text matching the pattern \"<Clan Name> sigil\" (e.g., \"Balance Clan sigil\").",
+        "The Clans section layout remains readable and responsive from mobile to desktop (no overflow or broken grid)."
       ]
     }
   ],
   "constraints": [
-    "Do not edit any files under frontend/src/components/ui (read-only).",
-    "Do not edit any files listed in frontend.immutablePaths in SYSTEM_CONTEXT."
+    "Do not edit any files under frontend/src/components/ui (compose them instead).",
+    "Do not modify files in frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, or frontend/src/main.tsx."
   ],
   "nonGoals": [
-    "Implementing payment processing, checkout flows, or verifying donations.",
-    "Backend changes (no Motoko canister updates required)."
+    "No backend (Motoko) changes.",
+    "No changes to the existing Worldbuilding section content or structure beyond adding a separate Clans section elsewhere on the page.",
+    "No implementation of quiz, character match system, or other new interactive features."
   ],
   "imageRequirements": {
-    "required": [],
+    "required": [
+      "Moon Clan sigil, monochrome emblem with lunar crescent motif (moon-clan-sigil.dim_512x512.png)",
+      "Sun Clan sigil, radiant emblem with sunburst and halo shapes (sun-clan-sigil.dim_512x512.png)",
+      "Fire Clan sigil, emblem featuring flame/volcanic shapes and sharp angular marks (fire-clan-sigil.dim_512x512.png)",
+      "Water Clan sigil, emblem featuring wave forms and flowing circular lines (water-clan-sigil.dim_512x512.png)",
+      "Lightning Clan sigil, emblem featuring lightning bolt geometry and storm-like arcs (lightning-clan-sigil.dim_512x512.png)",
+      "Earth Clan sigil, emblem featuring mountain/stone shapes with grounded symmetry (earth-clan-sigil.dim_512x512.png)",
+      "Balance Clan sigil, emblem featuring intertwined elements in symmetrical harmony (balance-clan-sigil.dim_512x512.png)"
+    ],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

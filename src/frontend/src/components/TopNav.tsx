@@ -35,6 +35,7 @@ export function TopNav() {
     { label: 'About', id: 'about' },
     { label: 'Characters', id: 'characters' },
     { label: 'Worldbuilding', id: 'worldbuilding' },
+    { label: 'Clans', id: 'clans' },
     { label: 'Episodes', id: 'episodes' },
     { label: 'Donations', id: 'donations' },
     { label: 'Contact', id: 'contact' },
