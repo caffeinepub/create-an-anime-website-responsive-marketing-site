@@ -1,0 +1,189 @@
+{
+  "kind": "build_request",
+  "title": "Secure Admin Dashboard for Anime Content Management",
+  "projectName": "Whispers of the White Moon",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create a dedicated admin dashboard as a separate route/page (e.g., `/admin`) that is completely separate from the main public-facing website. The dashboard must require Internet Identity authentication and verify admin role before granting access. Non-admins who attempt to access the route must be redirected or shown an access-denied screen.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Create a secure admin dashboard separate from the main website"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Navigating to /admin does not render any of the main website sections (HeroSection, AboutSection, etc.)",
+        "Unauthenticated users are prompted to log in via Internet Identity",
+        "Users who are authenticated but not admins see an access-denied message",
+        "Admin users successfully authenticated can access the full dashboard"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Add backend support for managing episodes: create, read, update, and delete episode entries. Each episode record should store at minimum: id, title, description, video URL, thumbnail URL, episode number, and season number. Store episodes in stable backend state.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "manage anime content including episodes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin-only backend functions exist to create, update, and delete episodes",
+        "A public read function exists to list all episodes",
+        "Episode data persists across canister upgrades"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add backend support for managing characters: create, read, update, and delete character entries. Each character record should store at minimum: id, name, bio, image URL, weapon, power/ability, role, and trait tags. Store characters in stable backend state.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "manage anime content including episodes, characters"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin-only backend functions exist to create, update, and delete characters",
+        "A public read function exists to list all characters",
+        "Character data persists across canister upgrades"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Add an Episodes management panel inside the admin dashboard. The panel must display a table/list of all episodes and allow admins to: add a new episode (via a form), edit an existing episode's details, and delete an episode. Changes must persist via backend calls.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "manage anime content including episodes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin dashboard shows a list of all current episodes",
+        "Admins can open a form to create a new episode and submit it successfully",
+        "Admins can edit an existing episode's fields and save changes",
+        "Admins can delete an episode with a confirmation prompt",
+        "Episode list refreshes after create/update/delete actions"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add a Characters management panel inside the admin dashboard. The panel must display a table/list of all characters and allow admins to: add a new character (via a form), edit an existing character's details, and delete a character. Changes must persist via backend calls.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "manage anime content including episodes, characters"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin dashboard shows a list of all current characters",
+        "Admins can open a form to create a new character and submit it successfully",
+        "Admins can edit an existing character's fields and save changes",
+        "Admins can delete a character with a confirmation prompt",
+        "Character list refreshes after create/update/delete actions"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Add backend support for managing general site content items (e.g., announcements, worldbuilding lore entries, gallery images, or reward tiers). Each content record should store at minimum: id, type/category, title, body/description, and optional image URL. Store content in stable backend state with admin-only write access and public read access.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "manage anime content including episodes, characters, e.t.c."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin-only backend functions exist to create, update, and delete general content entries",
+        "A public read function lists all content entries, optionally filtered by category",
+        "Content entries persist across canister upgrades"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Add a General Content management panel inside the admin dashboard for managing site content items (announcements, lore entries, etc.). The panel must allow admins to create, edit, and delete content entries by category.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "manage anime content including episodes, characters, e.t.c."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin dashboard includes a panel for general content (announcements, lore, etc.)",
+        "Admins can add new content entries with type, title, body, and optional image URL",
+        "Admins can edit and delete existing entries with confirmation",
+        "Content list refreshes after mutations"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Migrate stable backend state to include the new episodes, characters, and general content stable variables introduced in REQ-2, REQ-3, and REQ-6, ensuring that existing contact request and admin role data is preserved during canister upgrade.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "migration.mo is generated that initialises new stable vars with empty defaults",
+        "Existing contact requests and admin role assignments remain intact after upgrade",
+        "No data loss on canister upgrade"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Design the admin dashboard with a professional, dark-themed control panel aesthetic: sidebar navigation (Episodes, Characters, Content, Contact Requests, Role Management), dark background with high-contrast text, accent colors distinct from the public site's manga/ink-on-paper theme, and clear section headers with action buttons.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin dashboard has a persistent sidebar with navigation links to each management section",
+        "Visual style is clearly distinct from the public website",
+        "Active sidebar section is highlighted",
+        "Layout is responsive and usable on tablet and desktop screen sizes"
+      ]
+    }
+  ],
+  "constraints": [
+    "All Motoko logic must remain in the single main actor (backend/main.mo)",
+    "Admin write operations (create, update, delete) must verify caller is an authorised admin before executing",
+    "Do not modify or break existing contact request submission, contact request management, or admin role management functionality",
+    "Frontend immutable paths (useInternetIdentity.ts, useActor.ts, main.tsx, components/ui) must not be edited",
+    "Internet Identity is the only supported authentication method"
+  ],
+  "nonGoals": [
+    "Public-facing website redesign or restructuring",
+    "External database or third-party CMS integration",
+    "Real-time collaborative editing",
+    "Email or push notifications for admin events",
+    "Mobile app or React Native version of the admin dashboard"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

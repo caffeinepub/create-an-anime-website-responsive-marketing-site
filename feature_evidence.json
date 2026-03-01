@@ -1,0 +1,110 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-create-a-dedicated-admin-dashboard-as-a-separate-route-page-e-g-admin-that-is-completely-separate-from-the-main-public-facing-website-the-dashboard-must-require-internet-identity-authentication-and-verify-admin-role-before-granting-access-non-admins-who-attempt-to-access-the-route-must-be-redirected-or-shown-an-access-denied-screen",
+      "featureTitle": "Create a dedicated admin dashboard as a separate route/page (e.g., `/admin`) that is completely separate from the main public-facing website. The dashboard must require Internet Identity authentication and verify admin role before granting access. Non-admins who attempt to access the route must be redirected or shown an access-denied screen.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/AdminDashboard.tsx",
+        "frontend/src/components/TopNav.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-an-episodes-management-panel-inside-the-admin-dashboard-the-panel-must-display-a-table-list-of-all-episodes-and-allow-admins-to-add-a-new-episode-via-a-form-edit-an-existing-episode-s-details-and-delete-an-episode-changes-must-persist-via-backend-calls",
+      "featureTitle": "Add an Episodes management panel inside the admin dashboard. The panel must display a table/list of all episodes and allow admins to: add a new episode (via a form), edit an existing episode's details, and delete an episode. Changes must persist via backend calls.",
+      "files": [
+        "frontend/src/components/AdminEpisodesPanel.tsx",
+        "frontend/src/components/EpisodeForm.tsx",
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-characters-management-panel-inside-the-admin-dashboard-the-panel-must-display-a-table-list-of-all-characters-and-allow-admins-to-add-a-new-character-via-a-form-edit-an-existing-character-s-details-and-delete-a-character-changes-must-persist-via-backend-calls",
+      "featureTitle": "Add a Characters management panel inside the admin dashboard. The panel must display a table/list of all characters and allow admins to: add a new character (via a form), edit an existing character's details, and delete a character. Changes must persist via backend calls.",
+      "files": [
+        "frontend/src/components/AdminCharactersPanel.tsx",
+        "frontend/src/components/CharacterForm.tsx",
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-general-content-management-panel-inside-the-admin-dashboard-for-managing-site-content-items-announcements-lore-entries-etc-the-panel-must-allow-admins-to-create-edit-and-delete-content-entries-by-category",
+      "featureTitle": "Add a General Content management panel inside the admin dashboard for managing site content items (announcements, lore entries, etc.). The panel must allow admins to create, edit, and delete content entries by category.",
+      "files": [
+        "frontend/src/components/AdminContentPanel.tsx",
+        "frontend/src/components/ContentForm.tsx",
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-design-the-admin-dashboard-with-a-professional-dark-themed-control-panel-aesthetic-sidebar-navigation-episodes-characters-content-contact-requests-role-management-dark-background-with-high-contrast-text-accent-colors-distinct-from-the-public-site-s-manga-ink-on-paper-theme-and-clear-section-headers-with-action-buttons",
+      "featureTitle": "Design the admin dashboard with a professional, dark-themed control panel aesthetic: sidebar navigation (Episodes, Characters, Content, Contact Requests, Role Management), dark background with high-contrast text, accent colors distinct from the public site's manga/ink-on-paper theme, and clear section headers with action buttons.",
+      "files": [
+        "frontend/src/components/AdminDashboard.tsx",
+        "frontend/src/components/AdminSidebar.tsx",
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

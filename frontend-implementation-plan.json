@@ -1,0 +1,154 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Secure Admin Dashboard for Anime Content Management",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Create a dedicated admin dashboard route with Internet Identity authentication and admin role verification",
+      "acceptanceCriteria": [
+        "Navigating to /admin does not render any of the main website sections (HeroSection, AboutSection, etc.)",
+        "Unauthenticated users are prompted to log in via Internet Identity",
+        "Users who are authenticated but not admins see an access-denied message",
+        "Admin users successfully authenticated can access the full dashboard"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add React Router and route logic to handle /admin route separately from the main website. When pathname is /admin, render only the AdminDashboard component. Otherwise, render the existing public sections. This ensures the admin dashboard is completely isolated from the main website sections."
+        },
+        {
+          "path": "frontend/src/components/AdminDashboard.tsx",
+          "operation": "create",
+          "description": "Create the main AdminDashboard component that checks authentication and admin role using the authorization component. Use useInternetIdentity to verify authentication and useIsCallerAdmin to verify admin role. Show a login prompt for unauthenticated users, an access-denied screen for non-admins, and the full dashboard layout (sidebar + content area) for verified admins. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/AccessDeniedScreen.tsx",
+          "operation": "create",
+          "description": "Create a reusable AccessDeniedScreen component that displays a clear access-denied message with a link back to the homepage. This component is shown to authenticated users who lack admin privileges when attempting to access /admin."
+        },
+        {
+          "path": "frontend/src/components/TopNav.tsx",
+          "operation": "modify",
+          "description": "Add a conditional Admin link to the navigation bar that is only visible to authenticated admin users. Use useIsCallerAdmin to determine visibility. The link should navigate to /admin."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Add Episodes management panel inside the admin dashboard with create, edit, delete, and list capabilities",
+      "acceptanceCriteria": [
+        "Admin dashboard shows a list of all current episodes",
+        "Admins can open a form to create a new episode and submit it successfully",
+        "Admins can edit an existing episode's fields and save changes",
+        "Admins can delete an episode with a confirmation prompt",
+        "Episode list refreshes after create/update/delete actions"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AdminEpisodesPanel.tsx",
+          "operation": "create",
+          "description": "Create the Episodes management panel component that displays a table of all episodes fetched via useGetAllEpisodes hook. Include action buttons for each episode (Edit, Delete) and an Add New Episode button. Display episode fields: episode number, season number, title, description, video URL, and thumbnail URL. Show loading and error states appropriately."
+        },
+        {
+          "path": "frontend/src/components/EpisodeForm.tsx",
+          "operation": "create",
+          "description": "Create a form component for creating and editing episodes with fields for title, description, videoUrl, thumbnailUrl, episodeNumber (number input), and seasonNumber (number input). Support both create and edit modes via props. Use React Hook Form for validation and form state management. Include Cancel and Save buttons."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add React Query hooks for episode management: useGetAllEpisodes (query), useCreateEpisode (mutation), useUpdateEpisode (mutation), and useDeleteEpisode (mutation). Each mutation should invalidate the episodes query cache on success. Map backend Episode and NewEpisode types correctly."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Add Characters management panel inside the admin dashboard with create, edit, delete, and list capabilities",
+      "acceptanceCriteria": [
+        "Admin dashboard shows a list of all current characters",
+        "Admins can open a form to create a new character and submit it successfully",
+        "Admins can edit an existing character's fields and save changes",
+        "Admins can delete a character with a confirmation prompt",
+        "Character list refreshes after create/update/delete actions"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AdminCharactersPanel.tsx",
+          "operation": "create",
+          "description": "Create the Characters management panel component that displays a table of all characters fetched via useGetAllCharacters hook. Include action buttons for each character (Edit, Delete) and an Add New Character button. Display character fields: name, role, bio, weapon, power, imageUrl, and traits (as comma-separated tags). Show loading and error states appropriately."
+        },
+        {
+          "path": "frontend/src/components/CharacterForm.tsx",
+          "operation": "create",
+          "description": "Create a form component for creating and editing characters with fields for name, bio, imageUrl, weapon, power, role, and traits (as a comma-separated text input or tag input). Support both create and edit modes via props. Use React Hook Form for validation and form state management. Include Cancel and Save buttons."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add React Query hooks for character management: useGetAllCharacters (query), useCreateCharacter (mutation), useUpdateCharacter (mutation), and useDeleteCharacter (mutation). Each mutation should invalidate the characters query cache on success. Map backend Character and NewCharacter types correctly, handling the traits array field."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Add General Content management panel inside the admin dashboard for managing site content items by category",
+      "acceptanceCriteria": [
+        "Admin dashboard includes a panel for general content (announcements, lore, etc.)",
+        "Admins can add new content entries with type, title, body, and optional image URL",
+        "Admins can edit and delete existing entries with confirmation",
+        "Content list refreshes after mutations"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AdminContentPanel.tsx",
+          "operation": "create",
+          "description": "Create the General Content management panel component that displays a table of all content entries fetched via useGetAllContents hook. Include action buttons for each entry (Edit, Delete) and an Add New Content button. Display content fields: type/category, title, body (truncated), and optional imageUrl. Show loading and error states appropriately."
+        },
+        {
+          "path": "frontend/src/components/ContentForm.tsx",
+          "operation": "create",
+          "description": "Create a form component for creating and editing general content entries with fields for contentType (select or text input for category), title, body (textarea), and optional imageUrl. Support both create and edit modes via props. Use React Hook Form for validation and form state management. Include Cancel and Save buttons."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add React Query hooks for content management: useGetAllContents (query), useCreateContent (mutation), useUpdateContent (mutation), and useDeleteContent (mutation). Each mutation should invalidate the contents query cache on success. Map backend Content and NewContent types correctly, handling the optional imageUrl field."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Design the admin dashboard with a professional dark-themed control panel aesthetic including sidebar navigation",
+      "acceptanceCriteria": [
+        "Admin dashboard has a persistent sidebar with navigation links to each management section",
+        "Visual style is clearly distinct from the public website",
+        "Active sidebar section is highlighted",
+        "Layout is responsive and usable on tablet and desktop screen sizes"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AdminDashboard.tsx",
+          "operation": "modify",
+          "description": "Implement the dashboard layout with a persistent sidebar (dark background, high-contrast text) containing navigation links for Episodes, Characters, Content, Contact Requests, and Role Management sections. Use a state variable to track the active section and conditionally render the corresponding panel component in the main content area. Highlight the active sidebar link. Ensure the layout is responsive (sidebar collapses on mobile or uses a toggle menu)."
+        },
+        {
+          "path": "frontend/src/components/AdminSidebar.tsx",
+          "operation": "create",
+          "description": "Create a reusable AdminSidebar component that renders navigation links for each admin section: Episodes, Characters, Content, Contact Requests, and Role Management. Accept activeSection and onSectionChange props. Apply distinct dark theme styling (use Tailwind dark variants or custom classes) with accent colors different from the public site's manga/ink theme. Highlight the active link with a different background or border."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Add CSS custom properties or Tailwind utility classes for the admin dashboard dark theme: define dark background colors, high-contrast text colors, and accent colors (e.g., blue or teal) that are visually distinct from the public site's manga/ink-on-paper theme. Scope these styles to .admin-dashboard or similar class to avoid affecting the public site."
+        },
+        {
+          "path": "frontend/src/components/AdminSection.tsx",
+          "operation": "modify",
+          "description": "Refactor the existing AdminSection component to become AdminContactRequestsPanel, focusing only on contact request management. Remove any unrelated UI elements. This component will be rendered when the Contact Requests section is active in the admin dashboard."
+        }
+      ]
+    }
+  ]
+}

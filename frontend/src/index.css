@@ -1,0 +1,370 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --radius: 0.5rem;
+        
+        /* Manga/Ink-on-Paper Theme - Light Mode */
+        --background: 0.98 0.015 85;  /* Warm cream paper */
+        --foreground: 0.15 0.02 30;   /* Deep ink black */
+        
+        --card: 0.99 0.01 85;
+        --card-foreground: 0.15 0.02 30;
+        
+        --popover: 0.99 0.01 85;
+        --popover-foreground: 0.15 0.02 30;
+        
+        --primary: 0.15 0.02 30;      /* Ink black */
+        --primary-foreground: 0.98 0.015 85;
+        
+        --secondary: 0.92 0.02 85;
+        --secondary-foreground: 0.15 0.02 30;
+        
+        --muted: 0.94 0.015 85;
+        --muted-foreground: 0.45 0.01 30;
+        
+        --accent: 0.55 0.22 25;       /* Traditional red accent */
+        --accent-foreground: 0.98 0.015 85;
+        
+        --destructive: 0.55 0.22 25;
+        --destructive-foreground: 0.98 0.015 85;
+        
+        --border: 0.15 0.02 30 / 20%;
+        --input: 0.15 0.02 30 / 20%;
+        --ring: 0.55 0.22 25;
+        
+        --chart-1: 0.55 0.22 25;
+        --chart-2: 0.45 0.15 200;
+        --chart-3: 0.60 0.18 150;
+        --chart-4: 0.50 0.20 50;
+        --chart-5: 0.40 0.12 280;
+    }
+
+    .dark {
+        /* Dark mode - Ink on dark paper */
+        --background: 0.18 0.02 30;   /* Dark charcoal */
+        --foreground: 0.95 0.015 85;  /* Off-white */
+        
+        --card: 0.22 0.02 30;
+        --card-foreground: 0.95 0.015 85;
+        
+        --popover: 0.22 0.02 30;
+        --popover-foreground: 0.95 0.015 85;
+        
+        --primary: 0.92 0.015 85;
+        --primary-foreground: 0.18 0.02 30;
+        
+        --secondary: 0.28 0.02 30;
+        --secondary-foreground: 0.95 0.015 85;
+        
+        --muted: 0.28 0.02 30;
+        --muted-foreground: 0.65 0.01 85;
+        
+        --accent: 0.60 0.24 25;       /* Brighter red for dark mode */
+        --accent-foreground: 0.95 0.015 85;
+        
+        --destructive: 0.60 0.24 25;
+        --destructive-foreground: 0.95 0.015 85;
+        
+        --border: 0.95 0.015 85 / 15%;
+        --input: 0.95 0.015 85 / 15%;
+        --ring: 0.60 0.24 25;
+        
+        --chart-1: 0.60 0.24 25;
+        --chart-2: 0.55 0.18 200;
+        --chart-3: 0.65 0.20 150;
+        --chart-4: 0.58 0.22 50;
+        --chart-5: 0.50 0.15 280;
+    }
+
+    * {
+        @apply border-border;
+    }
+    
+    body {
+        @apply bg-background text-foreground;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Noto Serif JP', serif;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+    }
+
+    /* Smooth scrolling */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: oklch(var(--background));
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: oklch(var(--accent));
+        border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: oklch(var(--accent) / 0.8);
+    }
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+/* ─── Admin Dashboard Theme ──────────────────────────────────────────────────
+   Scoped to .admin-dashboard to avoid affecting the public site.
+   Uses a professional dark control-panel aesthetic with teal accents.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.admin-dashboard {
+    background-color: oklch(0.13 0.015 240);
+    color: oklch(0.92 0.01 240);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+}
+
+.admin-dashboard h1,
+.admin-dashboard h2,
+.admin-dashboard h3,
+.admin-dashboard h4,
+.admin-dashboard h5,
+.admin-dashboard h6 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+/* Top bar */
+.admin-topbar {
+    background-color: oklch(0.16 0.015 240);
+    border-bottom: 1px solid oklch(0.25 0.015 240);
+}
+
+/* Sidebar */
+.admin-sidebar {
+    background-color: oklch(0.16 0.015 240);
+}
+
+.admin-sidebar-border {
+    border-color: oklch(0.25 0.015 240);
+}
+
+/* Main content area */
+.admin-main-bg {
+    background-color: oklch(0.13 0.015 240);
+}
+
+/* Cards */
+.admin-card {
+    background-color: oklch(0.17 0.015 240);
+    border: 1px solid oklch(0.25 0.015 240);
+}
+
+/* Surface (slightly lighter than card) */
+.admin-surface {
+    background-color: oklch(0.21 0.015 240);
+    border: 1px solid oklch(0.28 0.015 240);
+}
+
+/* Icon background */
+.admin-icon-bg {
+    background-color: oklch(0.55 0.14 195 / 0.15);
+}
+
+/* Accent color - teal */
+.admin-accent-text {
+    color: oklch(0.72 0.14 195);
+}
+
+.admin-accent-dot {
+    background-color: oklch(0.72 0.14 195);
+}
+
+/* Heading text */
+.admin-heading {
+    color: oklch(0.95 0.01 240);
+}
+
+/* Muted text */
+.admin-muted-text {
+    color: oklch(0.58 0.01 240);
+}
+
+/* Sidebar nav items */
+.admin-sidebar-item {
+    color: oklch(0.65 0.01 240);
+}
+
+.admin-sidebar-item-hover {
+    background-color: oklch(0.21 0.015 240);
+    color: oklch(0.85 0.01 240);
+}
+
+.admin-sidebar-active {
+    background-color: oklch(0.55 0.14 195 / 0.12);
+    color: oklch(0.95 0.01 240);
+    border: 1px solid oklch(0.55 0.14 195 / 0.25);
+}
+
+/* Buttons */
+.admin-btn-primary {
+    background-color: oklch(0.55 0.14 195);
+    color: oklch(0.98 0.005 240);
+    border: none;
+}
+
+.admin-btn-primary:hover:not(:disabled) {
+    background-color: oklch(0.62 0.14 195);
+}
+
+.admin-btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.admin-btn-ghost {
+    background-color: transparent;
+    color: oklch(0.65 0.01 240);
+    border: none;
+}
+
+.admin-btn-ghost:hover:not(:disabled) {
+    background-color: oklch(0.21 0.015 240);
+    color: oklch(0.85 0.01 240);
+}
+
+.admin-btn-outline {
+    background-color: transparent;
+    color: oklch(0.72 0.01 240);
+    border: 1px solid oklch(0.30 0.015 240);
+}
+
+.admin-btn-outline:hover:not(:disabled) {
+    background-color: oklch(0.21 0.015 240);
+    border-color: oklch(0.40 0.015 240);
+}
+
+.admin-btn-danger {
+    background-color: transparent;
+    color: oklch(0.65 0.01 240);
+    border: none;
+}
+
+.admin-btn-danger:hover:not(:disabled) {
+    background-color: oklch(0.55 0.18 25 / 0.15);
+    color: oklch(0.70 0.18 25);
+}
+
+/* Form inputs */
+.admin-input {
+    background-color: oklch(0.20 0.015 240) !important;
+    border: 1px solid oklch(0.28 0.015 240) !important;
+    color: oklch(0.92 0.01 240) !important;
+}
+
+.admin-input:focus {
+    border-color: oklch(0.55 0.14 195) !important;
+    outline: none;
+    box-shadow: 0 0 0 2px oklch(0.55 0.14 195 / 0.2) !important;
+}
+
+.admin-input::placeholder {
+    color: oklch(0.45 0.01 240) !important;
+}
+
+/* Labels */
+.admin-label {
+    color: oklch(0.75 0.01 240);
+    font-size: 0.8125rem;
+    font-weight: 500;
+}
+
+/* Table */
+.admin-table-header {
+    background-color: oklch(0.20 0.015 240);
+    border-bottom: 1px solid oklch(0.25 0.015 240);
+}
+
+.admin-table-divider {
+    border-color: oklch(0.22 0.015 240);
+}
+
+.admin-table-row:hover {
+    background-color: oklch(0.19 0.015 240);
+}
+
+/* Badges */
+.admin-badge-secondary {
+    background-color: oklch(0.25 0.015 240);
+    color: oklch(0.80 0.01 240);
+    border: 1px solid oklch(0.30 0.015 240);
+}
+
+.admin-badge-outline {
+    background-color: transparent;
+    color: oklch(0.65 0.01 240);
+    border: 1px solid oklch(0.30 0.015 240);
+}
+
+.admin-badge-success {
+    background-color: oklch(0.45 0.12 160 / 0.2);
+    color: oklch(0.72 0.14 160);
+    border: 1px solid oklch(0.45 0.12 160 / 0.3);
+}
+
+.admin-badge-warning {
+    background-color: oklch(0.65 0.15 75 / 0.15);
+    color: oklch(0.78 0.15 75);
+    border: 1px solid oklch(0.65 0.15 75 / 0.3);
+}
+
+/* Filter tabs */
+.admin-filter-active {
+    background-color: oklch(0.55 0.14 195 / 0.15);
+    color: oklch(0.72 0.14 195);
+    border: 1px solid oklch(0.55 0.14 195 / 0.3);
+}
+
+.admin-filter-inactive {
+    background-color: oklch(0.20 0.015 240);
+    color: oklch(0.58 0.01 240);
+    border: 1px solid oklch(0.25 0.015 240);
+}
+
+.admin-filter-inactive:hover {
+    background-color: oklch(0.23 0.015 240);
+    color: oklch(0.75 0.01 240);
+}
+
+/* Dialog overrides for admin */
+.admin-dialog {
+    background-color: oklch(0.17 0.015 240) !important;
+    border: 1px solid oklch(0.28 0.015 240) !important;
+    color: oklch(0.92 0.01 240) !important;
+}
+
+/* Select content overrides for admin */
+.admin-select-content {
+    background-color: oklch(0.20 0.015 240) !important;
+    border: 1px solid oklch(0.28 0.015 240) !important;
+    color: oklch(0.92 0.01 240) !important;
+}
+
+.admin-select-item:hover {
+    background-color: oklch(0.25 0.015 240) !important;
+}
