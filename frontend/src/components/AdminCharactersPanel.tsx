@@ -119,7 +119,7 @@ export function AdminCharactersPanel() {
         </div>
       )}
 
-      {/* Characters Grid */}
+      {/* Characters Table */}
       {!isLoading && !error && (characters ?? []).length > 0 && (
         <div className="admin-card rounded-xl overflow-hidden">
           <div className="overflow-x-auto">

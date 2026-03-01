@@ -1,146 +1,31 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-03-01T21:07:09.567Z",
+  "generatedAt": "2026-03-01T21:54:48.380Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 9,
-    "implemented": 5,
+    "total": 1,
+    "implemented": 0,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Create a dedicated admin dashboard as a separate route/page (e.g., `/admin`) that is completely separate from the main public-facing website. The dashboard must require Internet Identity authentication and verify admin role before granting access. Non-admins who attempt to access the route must be redirected or shown an access-denied screen.",
-        "status": "implemented",
+        "summary": "Deploy the current version 50 of the application (including the delete contact requests feature in the admin dashboard) to the Internet Computer mainnet.",
+        "status": "missing",
         "plannedFiles": [
-          "frontend/src/App.tsx",
-          "frontend/src/components/AdminDashboard.tsx",
-          "frontend/src/components/AccessDeniedScreen.tsx",
-          "frontend/src/components/TopNav.tsx"
+          "frontend/RUN-LOCAL-AND-DEPLOY-IC.md"
         ],
-        "matchedFiles": [
-          "frontend/src/App.tsx",
-          "frontend/src/components/AdminDashboard.tsx",
-          "frontend/src/components/TopNav.tsx"
-        ]
-      },
-      {
-        "id": "REQ-2",
-        "summary": "Add backend support for managing episodes: create, read, update, and delete episode entries. Each episode record should store at minimum: id, title, description, video URL, thumbnail URL, episode number, and season number. Store episodes in stable backend state.",
-        "status": "unknown",
-        "plannedFiles": [],
         "matchedFiles": []
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Add backend support for managing characters: create, read, update, and delete character entries. Each character record should store at minimum: id, name, bio, image URL, weapon, power/ability, role, and trait tags. Store characters in stable backend state.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-4",
-        "summary": "Add an Episodes management panel inside the admin dashboard. The panel must display a table/list of all episodes and allow admins to: add a new episode (via a form), edit an existing episode's details, and delete an episode. Changes must persist via backend calls.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/AdminEpisodesPanel.tsx",
-          "frontend/src/components/EpisodeForm.tsx",
-          "frontend/src/hooks/useQueries.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/AdminEpisodesPanel.tsx",
-          "frontend/src/components/EpisodeForm.tsx",
-          "frontend/src/hooks/useQueries.ts"
-        ]
-      },
-      {
-        "id": "REQ-5",
-        "summary": "Add a Characters management panel inside the admin dashboard. The panel must display a table/list of all characters and allow admins to: add a new character (via a form), edit an existing character's details, and delete a character. Changes must persist via backend calls.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/AdminCharactersPanel.tsx",
-          "frontend/src/components/CharacterForm.tsx",
-          "frontend/src/hooks/useQueries.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/AdminCharactersPanel.tsx",
-          "frontend/src/components/CharacterForm.tsx",
-          "frontend/src/hooks/useQueries.ts"
-        ]
-      },
-      {
-        "id": "REQ-6",
-        "summary": "Add backend support for managing general site content items (e.g., announcements, worldbuilding lore entries, gallery images, or reward tiers). Each content record should store at minimum: id, type/category, title, body/description, and optional image URL. Store content in stable backend state with admin-only write access and public read access.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-7",
-        "summary": "Add a General Content management panel inside the admin dashboard for managing site content items (announcements, lore entries, etc.). The panel must allow admins to create, edit, and delete content entries by category.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/AdminContentPanel.tsx",
-          "frontend/src/components/ContentForm.tsx",
-          "frontend/src/hooks/useQueries.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/AdminContentPanel.tsx",
-          "frontend/src/components/ContentForm.tsx",
-          "frontend/src/hooks/useQueries.ts"
-        ]
-      },
-      {
-        "id": "REQ-8",
-        "summary": "Migrate stable backend state to include the new episodes, characters, and general content stable variables introduced in REQ-2, REQ-3, and REQ-6, ensuring that existing contact request and admin role data is preserved during canister upgrade.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-9",
-        "summary": "Design the admin dashboard with a professional, dark-themed control panel aesthetic: sidebar navigation (Episodes, Characters, Content, Contact Requests, Role Management), dark background with high-contrast text, accent colors distinct from the public site's manga/ink-on-paper theme, and clear section headers with action buttons.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/AdminDashboard.tsx",
-          "frontend/src/components/AdminSidebar.tsx",
-          "frontend/src/index.css",
-          "frontend/src/components/AdminSection.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/AdminDashboard.tsx",
-          "frontend/src/components/AdminSidebar.tsx",
-          "frontend/src/index.css"
-        ]
       }
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/App.tsx",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/components/AdminCharactersPanel.tsx",
-    "frontend/src/components/AdminContactRequestsPanel.tsx",
-    "frontend/src/components/AdminContentPanel.tsx",
-    "frontend/src/components/AdminDashboard.tsx",
-    "frontend/src/components/AdminEpisodesPanel.tsx",
-    "frontend/src/components/AdminRolePanel.tsx",
-    "frontend/src/components/AdminSidebar.tsx",
-    "frontend/src/components/CharacterForm.tsx",
-    "frontend/src/components/ContentForm.tsx",
-    "frontend/src/components/EpisodeForm.tsx",
-    "frontend/src/components/TopNav.tsx",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/index.css",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

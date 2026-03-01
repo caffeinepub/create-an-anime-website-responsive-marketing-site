@@ -177,6 +177,7 @@ export interface backendInterface {
     createContent(newContent: NewContent): Promise<string>;
     createEpisode(newEpisode: NewEpisode): Promise<string>;
     deleteCharacter(characterId: string): Promise<void>;
+    deleteContactRequest(requestId: string): Promise<void>;
     deleteContent(contentId: string): Promise<void>;
     deleteEpisode(episodeId: string): Promise<void>;
     getAllCharacters(): Promise<Array<Character>>;
@@ -284,6 +285,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.deleteCharacter(arg0);
+            return result;
+        }
+    }
+    async deleteContactRequest(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteContactRequest(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteContactRequest(arg0);
             return result;
         }
     }

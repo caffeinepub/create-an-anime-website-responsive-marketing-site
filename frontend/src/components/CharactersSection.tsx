@@ -1,76 +1,94 @@
+import React from 'react';
 import { SectionHeader } from './SectionHeader';
-import { animeSiteConfig } from '../content/animeSiteConfig';
+import { useGetAllCharacters } from '../hooks/useQueries';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function CharactersSection() {
+  const { data: characters, isLoading, isError } = useGetAllCharacters();
+
   return (
     <section id="characters" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <SectionHeader title="Characters" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-          {animeSiteConfig.characters.map((character, index) => {
-            // Build metadata parts conditionally
-            const metadataParts = [character.clan];
-            if (typeof character.age === 'number' || (typeof character.age === 'string' && character.age !== '')) {
-              metadataParts.push(`Age ${character.age}`);
-            }
-            metadataParts.push(character.height);
-            metadataParts.push(`Rank ${character.rank}`);
 
-            // Check if character has a valid top-of-card image (exists and is non-empty after trimming)
-            const imageSrc = 'imageSrc' in character ? (character.imageSrc as string | undefined) : undefined;
-            const hasImage = imageSrc && typeof imageSrc === 'string' && imageSrc.trim() !== '';
+        {isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto mt-8">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="bg-card border-2 border-foreground/20 rounded-lg p-6 space-y-4">
+                <Skeleton className="h-48 w-full rounded-lg" />
+                <Skeleton className="h-7 w-2/3" />
+                <Skeleton className="h-4 w-1/3" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-4 w-1/2" />
+              </div>
+            ))}
+          </div>
+        )}
 
-            // Check if character has a valid bio/description-area image
-            // Disable bio portrait rendering for Kazeyori Shiranagi
-            const bioImageSrc = 'bioImageSrc' in character ? (character.bioImageSrc as string | undefined) : undefined;
-            const bioImageAlt = 'bioImageAlt' in character ? (character.bioImageAlt as string | undefined) : character.name;
-            const hasBioImage = character.name !== 'Kazeyori Shiranagi' && bioImageSrc && typeof bioImageSrc === 'string' && bioImageSrc.trim() !== '';
+        {isError && (
+          <div className="text-center py-16 text-foreground/50 max-w-6xl mx-auto">
+            <p className="text-lg">Failed to load characters. Please try again later.</p>
+          </div>
+        )}
 
-            return (
+        {!isLoading && !isError && (!characters || characters.length === 0) && (
+          <div className="text-center py-16 text-foreground/50 max-w-6xl mx-auto">
+            <p className="text-lg italic">No characters have been added yet.</p>
+            <p className="text-sm mt-2">Check back soon for character profiles.</p>
+          </div>
+        )}
+
+        {!isLoading && !isError && characters && characters.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+            {characters.map((character) => (
               <div
-                key={index}
+                key={character.id}
                 className="bg-card border-2 border-foreground/20 rounded-lg p-6 hover:border-accent hover:shadow-xl transition-all transform hover:-translate-y-1"
               >
-                {hasImage && (
+                {character.imageUrl && (
                   <div className="mb-4 flex justify-center">
                     <img
-                      src={imageSrc}
+                      src={character.imageUrl}
                       alt={character.name}
                       className="w-48 h-48 object-cover rounded-lg border-2 border-accent/30"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
                     />
                   </div>
                 )}
                 <h3 className="text-2xl font-bold text-foreground mb-2">{character.name}</h3>
-                <div className="space-y-2 mb-4">
-                  <p className="text-accent font-semibold">
-                    {metadataParts.join(' • ')}
-                  </p>
-                  <p className="text-foreground/70 text-sm italic">{character.design}</p>
-                </div>
-                
-                {hasBioImage && (
-                  <div className="mb-4 flex justify-center">
-                    <img
-                      src={bioImageSrc}
-                      alt={bioImageAlt}
-                      className="w-40 h-40 object-cover rounded-lg border-2 border-accent/20 shadow-md"
-                    />
-                  </div>
-                )}
-                
+                <p className="text-accent font-semibold mb-3">{character.role}</p>
                 <p className="text-foreground/80 leading-relaxed mb-3">{character.bio}</p>
-                {character.weapon && character.weapon !== 'None specified' && (
-                  <p className="text-sm text-foreground/70">
-                    <span className="font-semibold">Weapon:</span> {character.weapon}
-                  </p>
-                )}
-                <p className="text-sm text-foreground/70 mt-2">
-                  <span className="font-semibold">Power State:</span> {character.powerState}
-                </p>
+
+                <div className="space-y-1 border-t border-foreground/10 pt-3 mt-3">
+                  {character.weapon && (
+                    <p className="text-sm text-foreground/70">
+                      <span className="font-semibold">Weapon:</span> {character.weapon}
+                    </p>
+                  )}
+                  {character.power && (
+                    <p className="text-sm text-foreground/70">
+                      <span className="font-semibold">Power:</span> {character.power}
+                    </p>
+                  )}
+                  {character.traits && character.traits.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {character.traits.map((trait, idx) => (
+                        <span
+                          key={idx}
+                          className="text-xs bg-accent/10 text-accent px-2 py-0.5 rounded-full border border-accent/20"
+                        >
+                          {trait}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -15,7 +15,7 @@ const CONTENT_TYPES = [
   'lore',
   'news',
   'update',
-  'event',
+  'blog',
   'other',
 ];
 
@@ -58,7 +58,7 @@ export function ContentForm({ content, onClose }: ContentFormProps) {
 
     try {
       if (isEditing && content) {
-        await updateContent.mutateAsync({ contentId: content.id, content: payload });
+        await updateContent.mutateAsync({ contentId: content.id, updatedContent: payload });
         toast.success('Content updated successfully');
       } else {
         await createContent.mutateAsync(payload);

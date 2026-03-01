@@ -91,6 +91,7 @@ export interface _SERVICE {
   'createContent' : ActorMethod<[NewContent], string>,
   'createEpisode' : ActorMethod<[NewEpisode], string>,
   'deleteCharacter' : ActorMethod<[string], undefined>,
+  'deleteContactRequest' : ActorMethod<[string], undefined>,
   'deleteContent' : ActorMethod<[string], undefined>,
   'deleteEpisode' : ActorMethod<[string], undefined>,
   'getAllCharacters' : ActorMethod<[], Array<Character>>,

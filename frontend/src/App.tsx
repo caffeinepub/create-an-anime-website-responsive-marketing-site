@@ -11,11 +11,12 @@ import { ClansSection } from './components/ClansSection';
 import { EpisodesSection } from './components/EpisodesSection';
 import { RewardsSection } from './components/RewardsSection';
 import { ContactSection } from './components/ContactSection';
-import { AdminSection } from './components/AdminSection';
+import { ContentSection } from './components/ContentSection';
 import { AdminDashboard } from './components/AdminDashboard';
 import { TopNav } from './components/TopNav';
 import { Footer } from './components/Footer';
 import { Toaster } from './components/ui/sonner';
+import { Episode } from './backend';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,7 +36,7 @@ export type SelectedEpisode = {
 const isAdminRoute = window.location.pathname === '/admin';
 
 function App() {
-  const [selectedEpisode, setSelectedEpisode] = useState<SelectedEpisode | null>(null);
+  const [selectedEpisode, setSelectedEpisode] = useState<Episode | null>(null);
 
   if (isAdminRoute) {
     return (
@@ -60,9 +61,9 @@ function App() {
           <WorldbuildingSection />
           <ClansSection />
           <EpisodesSection onEpisodeSelect={setSelectedEpisode} />
+          <ContentSection />
           <RewardsSection />
           <ContactSection />
-          <AdminSection />
         </main>
         <Footer />
         <Toaster />

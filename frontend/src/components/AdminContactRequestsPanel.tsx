@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
-import { useGetAllRequests, useUpdateRequestStatus } from '../hooks/useQueries';
+import { useGetAllRequests, useUpdateRequestStatus, useDeleteContactRequest } from '../hooks/useQueries';
 import { ContactRequest, Topics } from '../backend';
 import {
   Mail, RefreshCw, Download, Loader2, AlertCircle,
-  Clock, CheckCircle, XCircle
+  Clock, CheckCircle, Trash2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 
 const TOPIC_LABELS: Record<string, string> = {
@@ -31,7 +42,9 @@ function formatDate(timestamp: bigint): string {
 export function AdminContactRequestsPanel() {
   const { data: requests, isLoading, error, refetch } = useGetAllRequests();
   const updateStatus = useUpdateRequestStatus();
+  const deleteRequest = useDeleteContactRequest();
   const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'processed'>('all');
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleToggleStatus = async (req: ContactRequest) => {
     try {
@@ -39,6 +52,18 @@ export function AdminContactRequestsPanel() {
       toast.success(`Request marked as ${!req.processed ? 'processed' : 'pending'}`);
     } catch (err: any) {
       toast.error(err?.message ?? 'Failed to update status');
+    }
+  };
+
+  const handleDelete = async (requestId: string) => {
+    setDeletingId(requestId);
+    try {
+      await deleteRequest.mutateAsync(requestId);
+      toast.success('Contact request deleted successfully');
+    } catch (err: any) {
+      toast.error(err?.message ?? 'Failed to delete contact request');
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -186,30 +211,77 @@ export function AdminContactRequestsPanel() {
                   </Badge>
                   <Badge className="admin-badge-outline text-xs">{topicLabel(req.topic)}</Badge>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleToggleStatus(req)}
-                  disabled={updateStatus.isPending}
-                  className="admin-btn-outline gap-1.5 shrink-0 text-xs"
-                >
-                  {updateStatus.isPending ? (
-                    <Loader2 className="w-3 h-3 animate-spin" />
-                  ) : req.processed ? (
-                    <><XCircle className="w-3 h-3" /> Mark Pending</>
-                  ) : (
-                    <><CheckCircle className="w-3 h-3" /> Mark Processed</>
-                  )}
-                </Button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleToggleStatus(req)}
+                    disabled={updateStatus.isPending || deletingId === req.id}
+                    className="admin-btn-outline gap-1.5 text-xs"
+                  >
+                    {updateStatus.isPending ? (
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                    ) : req.processed ? (
+                      <Clock className="w-3 h-3" />
+                    ) : (
+                      <CheckCircle className="w-3 h-3" />
+                    )}
+                    {req.processed ? 'Mark Pending' : 'Mark Processed'}
+                  </Button>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={deletingId === req.id || updateStatus.isPending}
+                        className="admin-btn-outline gap-1.5 text-xs text-red-400 hover:text-red-300 hover:border-red-500/50"
+                      >
+                        {deletingId === req.id ? (
+                          <Loader2 className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <Trash2 className="w-3 h-3" />
+                        )}
+                        <span className="hidden sm:inline">Delete</span>
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="admin-dashboard">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle className="admin-heading">Delete Contact Request</AlertDialogTitle>
+                        <AlertDialogDescription className="admin-muted-text">
+                          Are you sure you want to permanently delete this contact request from{' '}
+                          <span className="font-medium text-white">{req.email}</span>? This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="admin-btn-ghost">Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(req.id)}
+                          className="bg-red-600 hover:bg-red-700 text-white border-0"
+                        >
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </div>
-              <div className="flex items-center gap-2 mb-2">
-                <Mail className="w-3.5 h-3.5 admin-muted-text shrink-0" />
-                <span className="text-sm admin-heading">{req.email}</span>
+
+              {/* Request Details */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm mb-3">
+                <div>
+                  <span className="admin-muted-text text-xs uppercase tracking-wide">From</span>
+                  <p className="admin-heading font-medium mt-0.5">{req.email}</p>
+                </div>
+                <div>
+                  <span className="admin-muted-text text-xs uppercase tracking-wide">Received</span>
+                  <p className="admin-heading font-medium mt-0.5">{formatDate(req.timestamp)}</p>
+                </div>
               </div>
-              <p className="text-sm admin-muted-text leading-relaxed mb-3">{req.message}</p>
-              <div className="flex items-center gap-1.5 text-xs admin-muted-text">
-                <Clock className="w-3 h-3" />
-                {formatDate(req.timestamp)}
+
+              <div>
+                <span className="admin-muted-text text-xs uppercase tracking-wide">Message</span>
+                <p className="admin-heading text-sm mt-1 leading-relaxed whitespace-pre-wrap">{req.message}</p>
               </div>
             </div>
           ))}

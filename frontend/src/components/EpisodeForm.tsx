@@ -53,7 +53,7 @@ export function EpisodeForm({ episode, onClose }: EpisodeFormProps) {
 
     try {
       if (isEditing && episode) {
-        await updateEpisode.mutateAsync({ episodeId: episode.id, episode: payload });
+        await updateEpisode.mutateAsync({ episodeId: episode.id, updatedEpisode: payload });
         toast.success('Episode updated successfully');
       } else {
         await createEpisode.mutateAsync(payload);

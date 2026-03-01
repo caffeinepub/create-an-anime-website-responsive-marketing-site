@@ -145,7 +145,7 @@ export function AdminEpisodesPanel() {
                   <tr key={episode.id} className="admin-table-row transition-colors">
                     <td className="px-4 py-3">
                       <Badge className="admin-badge-secondary text-xs font-mono">
-                        S{String(episode.seasonNumber).padStart(2, '0')}E{String(episode.episodeNumber).padStart(2, '0')}
+                        S{String(Number(episode.seasonNumber)).padStart(2, '0')}E{String(Number(episode.episodeNumber)).padStart(2, '0')}
                       </Badge>
                     </td>
                     <td className="px-4 py-3">

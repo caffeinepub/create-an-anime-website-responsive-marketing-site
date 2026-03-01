@@ -61,7 +61,7 @@ export function CharacterForm({ character, onClose }: CharacterFormProps) {
 
     try {
       if (isEditing && character) {
-        await updateCharacter.mutateAsync({ characterId: character.id, character: payload });
+        await updateCharacter.mutateAsync({ characterId: character.id, updatedCharacter: payload });
         toast.success('Character updated successfully');
       } else {
         await createCharacter.mutateAsync(payload);

@@ -1,37 +1,26 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
 import { useInternetIdentity } from './useInternetIdentity';
-import { ContactRequest, Topics, UserProfile, Episode, NewEpisode, Character, NewCharacter, Content, NewContent } from '../backend';
+import type {
+  ContactRequest,
+  NewRequest,
+  Episode,
+  NewEpisode,
+  Character,
+  NewCharacter,
+  Content,
+  NewContent,
+  UserProfile,
+} from '../backend';
 import { Principal } from '@dfinity/principal';
 import { createActorWithConfig } from '../config';
 
-// Helper: create an authenticated actor directly, bypassing the broken
-// _initializeAccessControlWithSecret call inside useActor.
+// Helper: create an authenticated actor directly
 async function makeAuthenticatedActor(identity: any) {
   return createActorWithConfig({ agentOptions: { identity } });
 }
 
-// ─── Contact form (public) ────────────────────────────────────────────────────
-
-export function useSubmitRequest() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (input: { email: string; topic: Topics; message: string }) => {
-      if (!actor) throw new Error('Not connected to backend');
-      return actor.submitRequest(input);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['contactRequests'] });
-    },
-  });
-}
-
-// Alias kept for backward compatibility with ContactSection
-export const useSubmitContactRequest = useSubmitRequest;
-
-// ─── Admin: check if caller is admin ─────────────────────────────────────────
+// ─── Admin / Auth ─────────────────────────────────────────────────────────────
 
 export function useIsCallerAdmin() {
   const { identity } = useInternetIdentity();
@@ -52,66 +41,7 @@ export function useIsCallerAdmin() {
   });
 }
 
-// ─── Admin: get all contact requests ─────────────────────────────────────────
-
-export function useGetAllRequests() {
-  const { identity } = useInternetIdentity();
-
-  return useQuery<ContactRequest[]>({
-    queryKey: ['contactRequests', identity?.getPrincipal().toString()],
-    queryFn: async () => {
-      if (!identity) throw new Error('Not authenticated');
-      const actor = await makeAuthenticatedActor(identity);
-      return actor.getAllRequests();
-    },
-    enabled: !!identity,
-    retry: false,
-  });
-}
-
-// ─── Admin: update request status ────────────────────────────────────────────
-
-export function useUpdateRequestStatus() {
-  const { identity } = useInternetIdentity();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({ requestId, processed }: { requestId: string; processed: boolean }) => {
-      if (!identity) throw new Error('Not authenticated');
-      const actor = await makeAuthenticatedActor(identity);
-      return actor.updateRequestStatus(requestId, processed);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['contactRequests'] });
-    },
-  });
-}
-
-// ─── Admin: grant admin role ──────────────────────────────────────────────────
-
-export function useGrantAdminRole() {
-  const { identity } = useInternetIdentity();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (principalStr: string) => {
-      if (!identity) throw new Error('Not authenticated');
-      let principal: Principal;
-      try {
-        principal = Principal.fromText(principalStr.trim());
-      } catch {
-        throw new Error('Invalid principal ID format. Please check and try again.');
-      }
-      const actor = await makeAuthenticatedActor(identity);
-      return actor.grantAdminRole(principal);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['isCallerAdmin'] });
-    },
-  });
-}
-
-// ─── User profile ─────────────────────────────────────────────────────────────
+// ─── User Profile ─────────────────────────────────────────────────────────────
 
 export function useGetCallerUserProfile() {
   const { actor, isFetching: actorFetching } = useActor();
@@ -144,6 +74,97 @@ export function useSaveCallerUserProfile() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['currentUserProfile'] });
+    },
+  });
+}
+
+// ─── Contact Requests ─────────────────────────────────────────────────────────
+
+export function useSubmitRequest() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (input: NewRequest) => {
+      if (!actor) throw new Error('Not connected to backend');
+      return actor.submitRequest(input);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contactRequests'] });
+    },
+  });
+}
+
+// Alias kept for backward compatibility with ContactSection
+export const useSubmitContactRequest = useSubmitRequest;
+
+export function useGetAllRequests() {
+  const { identity } = useInternetIdentity();
+
+  return useQuery<ContactRequest[]>({
+    queryKey: ['contactRequests', identity?.getPrincipal().toString()],
+    queryFn: async () => {
+      if (!identity) throw new Error('Not authenticated');
+      const actor = await makeAuthenticatedActor(identity);
+      return actor.getAllRequests();
+    },
+    enabled: !!identity,
+    retry: false,
+  });
+}
+
+export function useUpdateRequestStatus() {
+  const { identity } = useInternetIdentity();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ requestId, processed }: { requestId: string; processed: boolean }) => {
+      if (!identity) throw new Error('Not authenticated');
+      const actor = await makeAuthenticatedActor(identity);
+      return actor.updateRequestStatus(requestId, processed);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contactRequests'] });
+    },
+  });
+}
+
+export function useDeleteContactRequest() {
+  const { identity } = useInternetIdentity();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (requestId: string) => {
+      if (!identity) throw new Error('Not authenticated');
+      const actor = await makeAuthenticatedActor(identity);
+      return actor.deleteContactRequest(requestId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contactRequests'] });
+    },
+  });
+}
+
+// ─── Role Management ──────────────────────────────────────────────────────────
+
+export function useGrantAdminRole() {
+  const { identity } = useInternetIdentity();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (principalStr: string) => {
+      if (!identity) throw new Error('Not authenticated');
+      let principal: Principal;
+      try {
+        principal = Principal.fromText(principalStr.trim());
+      } catch {
+        throw new Error('Invalid principal ID format. Please check and try again.');
+      }
+      const actor = await makeAuthenticatedActor(identity);
+      return actor.grantAdminRole(principal);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['isCallerAdmin'] });
     },
   });
 }
@@ -184,10 +205,10 @@ export function useUpdateEpisode() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ episodeId, episode }: { episodeId: string; episode: NewEpisode }) => {
+    mutationFn: async ({ episodeId, updatedEpisode }: { episodeId: string; updatedEpisode: NewEpisode }) => {
       if (!identity) throw new Error('Not authenticated');
       const actor = await makeAuthenticatedActor(identity);
-      return actor.updateEpisode(episodeId, episode);
+      return actor.updateEpisode(episodeId, updatedEpisode);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['episodes'] });
@@ -247,10 +268,10 @@ export function useUpdateCharacter() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ characterId, character }: { characterId: string; character: NewCharacter }) => {
+    mutationFn: async ({ characterId, updatedCharacter }: { characterId: string; updatedCharacter: NewCharacter }) => {
       if (!identity) throw new Error('Not authenticated');
       const actor = await makeAuthenticatedActor(identity);
-      return actor.updateCharacter(characterId, character);
+      return actor.updateCharacter(characterId, updatedCharacter);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['characters'] });
@@ -310,10 +331,10 @@ export function useUpdateContent() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ contentId, content }: { contentId: string; content: NewContent }) => {
+    mutationFn: async ({ contentId, updatedContent }: { contentId: string; updatedContent: NewContent }) => {
       if (!identity) throw new Error('Not authenticated');
       const actor = await makeAuthenticatedActor(identity);
-      return actor.updateContent(contentId, content);
+      return actor.updateContent(contentId, updatedContent);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contents'] });

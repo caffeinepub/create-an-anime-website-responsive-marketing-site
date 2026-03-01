@@ -112,7 +112,7 @@ export function AdminContentPanel() {
         <div className="text-center py-16 admin-card rounded-xl">
           <FileX className="w-12 h-12 mx-auto mb-4 admin-muted-text opacity-40" />
           <p className="admin-heading font-semibold mb-2">No content yet</p>
-          <p className="admin-muted-text text-sm mb-6">Add announcements, lore entries, and more.</p>
+          <p className="admin-muted-text text-sm mb-6">Add your first content entry to get started.</p>
           <Button onClick={handleAdd} className="admin-btn-primary gap-2">
             <Plus className="w-4 h-4" /> Add Content
           </Button>
@@ -128,36 +128,34 @@ export function AdminContentPanel() {
                 <tr className="admin-table-header">
                   <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider admin-muted-text">Type</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider admin-muted-text">Title</th>
-                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider admin-muted-text hidden md:table-cell">Body</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider admin-muted-text hidden md:table-cell">Body Preview</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider admin-muted-text hidden lg:table-cell">Image</th>
                   <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider admin-muted-text">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y admin-table-divider">
-                {(contents ?? []).map((content) => (
-                  <tr key={content.id} className="admin-table-row transition-colors">
+                {(contents ?? []).map((item) => (
+                  <tr key={item.id} className="admin-table-row transition-colors">
                     <td className="px-4 py-3">
-                      <Badge className="admin-badge-secondary text-xs capitalize">{content.contentType}</Badge>
+                      <Badge className="admin-badge-secondary text-xs capitalize">{item.contentType}</Badge>
                     </td>
                     <td className="px-4 py-3">
-                      <p className="text-sm font-medium admin-heading truncate max-w-[160px]">{content.title}</p>
+                      <p className="text-sm font-medium admin-heading truncate max-w-[180px]">{item.title}</p>
                     </td>
                     <td className="px-4 py-3 hidden md:table-cell">
-                      <p className="text-xs admin-muted-text truncate max-w-[220px]">{content.body}</p>
+                      <p className="text-xs admin-muted-text truncate max-w-[220px]">{item.body}</p>
                     </td>
                     <td className="px-4 py-3 hidden lg:table-cell">
-                      {content.imageUrl ? (
-                        <span className="text-xs text-teal-400 font-mono truncate max-w-[120px] block">✓ Set</span>
-                      ) : (
-                        <span className="text-xs admin-muted-text italic">None</span>
-                      )}
+                      <span className={`text-xs ${item.imageUrl ? 'text-green-400' : 'admin-muted-text opacity-50'}`}>
+                        {item.imageUrl ? 'Yes' : 'No'}
+                      </span>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-2">
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleEdit(content)}
+                          onClick={() => handleEdit(item)}
                           className="admin-btn-ghost h-8 w-8 p-0"
                         >
                           <Pencil className="w-3.5 h-3.5" />
@@ -176,13 +174,13 @@ export function AdminContentPanel() {
                             <AlertDialogHeader>
                               <AlertDialogTitle className="admin-heading">Delete Content</AlertDialogTitle>
                               <AlertDialogDescription className="admin-muted-text">
-                                Are you sure you want to delete "{content.title}"? This action cannot be undone.
+                                Are you sure you want to delete "{item.title}"? This action cannot be undone.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel className="admin-btn-outline">Cancel</AlertDialogCancel>
                               <AlertDialogAction
-                                onClick={() => handleDelete(content.id)}
+                                onClick={() => handleDelete(item.id)}
                                 className="bg-red-600 hover:bg-red-700 text-white"
                               >
                                 {deleteContent.isPending ? (

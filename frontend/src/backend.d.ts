@@ -94,6 +94,7 @@ export interface backendInterface {
     createContent(newContent: NewContent): Promise<string>;
     createEpisode(newEpisode: NewEpisode): Promise<string>;
     deleteCharacter(characterId: string): Promise<void>;
+    deleteContactRequest(requestId: string): Promise<void>;
     deleteContent(contentId: string): Promise<void>;
     deleteEpisode(episodeId: string): Promise<void>;
     getAllCharacters(): Promise<Array<Character>>;
