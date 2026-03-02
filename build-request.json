@@ -1,35 +1,61 @@
 {
   "kind": "build_request",
-  "title": "Deploy version 50 to production",
-  "priority": "high",
+  "title": "Drag-to-reorder characters in Admin Dashboard",
+  "projectName": "Whispers of the White Moon",
+  "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Deploy the current version 50 of the application (including the delete contact requests feature in the admin dashboard) to the Internet Computer mainnet.",
-      "target": "both",
+      "text": "Add a `displayOrder` field to the character data model in the backend to persist the admin-defined sort order for characters. Expose a new update-order endpoint (e.g., `reorderCharacters`) that accepts an array of character IDs in the desired order and updates their `displayOrder` values accordingly.",
+      "target": "backend",
       "source": {
         "messageIds": [
           "msg-4"
         ],
         "quotes": [
-          "go live for version 50"
+          "allow admin to be able to drag the character into the order ther desire"
         ]
       },
       "acceptanceCriteria": [
-        "The application is successfully deployed to the IC mainnet",
-        "The admin dashboard delete contact request functionality is accessible on the live deployment",
-        "All existing features remain functional on the live environment"
+        "Characters have a persisted `displayOrder` field in the backend.",
+        "A `reorderCharacters` (or equivalent) function accepts an ordered list of character IDs and updates their sort order.",
+        "Characters returned by the existing `getCharacters` query are sorted by `displayOrder` ascending.",
+        "The reorder endpoint is restricted to admin principals only."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "In the `AdminCharactersPanel` component, implement drag-and-drop reordering of the character list. Each character row/card should be draggable. When an admin drops a character into a new position, the new order should be immediately reflected in the UI (optimistic update) and persisted to the backend via the reorder mutation.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "when admins are veiwing the characters in the admindashbord, allow admin to be able to drag the character into the order ther desire"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Character rows/cards in `AdminCharactersPanel` have a visible drag handle icon.",
+        "Admin can drag a character card and drop it in a new position within the list.",
+        "The list reorders visually in real time while dragging.",
+        "On drop, the new order is sent to the backend reorder endpoint.",
+        "On successful save, the React Query cache is invalidated/updated to reflect the persisted order.",
+        "The saved order is reflected when the admin refreshes the page.",
+        "Existing edit and delete actions per character remain fully functional after reordering.",
+        "Drag-and-drop is disabled for non-admin users."
       ]
     }
   ],
   "constraints": [
-    "Do not modify any application code — this is a deployment-only request",
-    "Deploy exactly the code that was tested in version 50"
+    "Do not modify any files under frontend/src/hooks/useActor.ts, frontend/src/hooks/useInternetIdentity.ts, frontend/src/main.tsx, or frontend/src/components/ui.",
+    "All Motoko logic must remain in the single actor in backend/main.mo.",
+    "Reorder endpoint must be admin-only, consistent with existing MixinAuthorization access control patterns."
   ],
   "nonGoals": [
-    "Any new feature development",
-    "Code changes or bug fixes",
-    "Schema migrations unless already part of version 50"
+    "Drag-and-drop reordering on the public-facing CharactersSection (front site).",
+    "Reordering of episodes, content, or any other entity types.",
+    "Animated transitions beyond standard drag-and-drop visual feedback."
   ],
   "imageRequirements": {
     "required": [],

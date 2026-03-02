@@ -1,21 +1,31 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Deploy version 50 to production",
+  "title": "Drag-to-reorder characters in Admin Dashboard",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Deploy the current version 50 of the application to the Internet Computer mainnet without modifying any application code",
+      "id": "REQ-2",
+      "summary": "Implement drag-and-drop reordering of characters in the AdminCharactersPanel component with optimistic UI updates and backend persistence",
       "acceptanceCriteria": [
-        "The application is successfully deployed to the IC mainnet",
-        "The admin dashboard delete contact request functionality is accessible on the live deployment",
-        "All existing features remain functional on the live environment"
+        "Character rows/cards in AdminCharactersPanel have a visible drag handle icon.",
+        "Admin can drag a character card and drop it in a new position within the list.",
+        "The list reorders visually in real time while dragging.",
+        "On drop, the new order is sent to the backend reorder endpoint.",
+        "On successful save, the React Query cache is invalidated/updated to reflect the persisted order.",
+        "The saved order is reflected when the admin refreshes the page.",
+        "Existing edit and delete actions per character remain fully functional after reordering.",
+        "Drag-and-drop is disabled for non-admin users."
       ],
       "file_operations": [
         {
-          "path": "frontend/RUN-LOCAL-AND-DEPLOY-IC.md",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Add a deployment verification checklist section that confirms version 50 features (including the admin dashboard delete contact request functionality) are working correctly on mainnet after deployment. Include steps to verify all existing features remain functional in the live environment."
+          "description": "Add a new `useReorderCharacters` mutation hook that calls the `reorderCharacters` backend capability with an ordered array of character IDs. The hook should invalidate the 'characters' query key on success to refresh the character list with the persisted order."
+        },
+        {
+          "path": "frontend/src/components/AdminCharactersPanel.tsx",
+          "operation": "modify",
+          "description": "Integrate a drag-and-drop library (e.g., @dnd-kit/core and @dnd-kit/sortable) to enable reordering of the character list. Add a drag handle icon (e.g., GripVertical from lucide-react) to each character row. Implement drag event handlers that update the local list order optimistically during dragging, then call the useReorderCharacters mutation on drop with the new ordered array of character IDs. Ensure existing edit and delete actions remain accessible and functional. The characters list should already be sorted by displayOrder ascending due to backend changes (REQ-1)."
         }
       ]
     }

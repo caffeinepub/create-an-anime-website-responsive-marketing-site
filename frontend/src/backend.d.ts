@@ -54,6 +54,7 @@ export interface NewEpisode {
 export interface Character {
     id: string;
     bio: string;
+    displayOrder: bigint;
     traits: Array<string>;
     name: string;
     role: string;
@@ -111,6 +112,7 @@ export interface backendInterface {
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     grantAdminRole(userPrincipal: Principal): Promise<void>;
     isCallerAdmin(): Promise<boolean>;
+    reorderCharacters(newOrder: Array<string>): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     submitRequest(input: NewRequest): Promise<string>;
     updateCharacter(characterId: string, updatedCharacter: NewCharacter): Promise<void>;

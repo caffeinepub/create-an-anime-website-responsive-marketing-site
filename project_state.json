@@ -1,22 +1,38 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
+  "summary": "Project with an admin dashboard featuring character management. Admins can view characters (shown 6 at a time with 'show more') and now need drag-to-reorder functionality for characters.",
   "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
-  "existing_features": [],
+  "existing_features": [
+    {
+      "id": "feature-in-the-admincharacterspanel-component-implement-drag-and-drop-reordering-of-the-character-list-each-character-row-card-should-be-draggable-when-an-admin-drops-a-character-into-a-new-position-the-new-order-should-be-immediately-reflected-in-the-ui-optimistic-update-and-persisted-to-the-backend-via-the-reorder-mutation",
+      "title": "In the `AdminCharactersPanel` component, implement drag-and-drop reordering of the character list. Each character row/card should be draggable. When an admin drops a character into a new position, the new order should be immediately reflected in the UI (optimistic update) and persisted to the backend via the reorder mutation.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    }
+  ],
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Deploy the current version 50 of the application (including the delete contact requests feature in the admin dashboard) to the Internet Computer mainnet.",
+      "summary": "Allow admins to drag and reorder characters in the admin dashboard",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Add a `displayOrder` field to the character data model in the backend to persist the admin-defined sort order for characters. Expose a new update-order endpoint (e.g., `reorderCharacters`) that accepts an array of character IDs in the desired order and updates their `displayOrder` values accordingly.",
       "reqIds": [
         "REQ-1"
       ],
       "status": "pending"
     }
   ],
-  "projectName": "Deploy version 50 to production",
+  "gameProjectType": "none",
+  "projectName": "Whispers of the White Moon",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

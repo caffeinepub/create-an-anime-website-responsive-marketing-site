@@ -6,7 +6,9 @@ import Time "mo:core/Time";
 import Runtime "mo:core/Runtime";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
   let contactRequests = Map.empty<Text, ContactRequest>();
   var nextRequestId = 1;
@@ -84,6 +86,7 @@ actor {
     power : Text;
     role : Text;
     traits : [Text];
+    displayOrder : Nat;
   };
 
   public type NewCharacter = {
@@ -188,6 +191,7 @@ actor {
       power = newCharacter.power;
       role = newCharacter.role;
       traits = newCharacter.traits;
+      displayOrder = nextCharacterId;
     };
 
     characters.add(characterId, character);
@@ -203,7 +207,7 @@ actor {
 
     switch (characters.get(characterId)) {
       case (null) { Runtime.trap("Unable to update character. Character [" # characterId # "] not found") };
-      case (_) {
+      case (?oldCharacter) {
         let character : Character = {
           id = characterId;
           name = updatedCharacter.name;
@@ -213,6 +217,7 @@ actor {
           power = updatedCharacter.power;
           role = updatedCharacter.role;
           traits = updatedCharacter.traits;
+          displayOrder = oldCharacter.displayOrder;
         };
         characters.add(characterId, character);
       };
@@ -237,6 +242,27 @@ actor {
 
   public query ({ caller }) func getAllCharacters() : async [Character] {
     characters.values().toArray();
+  };
+
+  // New function to reorder characters
+  public shared ({ caller }) func reorderCharacters(newOrder : [Text]) : async () {
+    if (not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Only admins can reorder characters");
+    };
+
+    var displayOrder = 0;
+    for (characterId in newOrder.values()) {
+      switch (characters.get(characterId)) {
+        case (null) {
+          Runtime.trap("Character [" # characterId # "] not found");
+        };
+        case (?existingCharacter) {
+          let updatedCharacter = { existingCharacter with displayOrder };
+          characters.add(characterId, updatedCharacter);
+        };
+      };
+      displayOrder += 1;
+    };
   };
 
   // CRUD Operations for Content

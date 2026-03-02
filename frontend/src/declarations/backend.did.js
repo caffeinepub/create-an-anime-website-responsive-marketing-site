@@ -39,6 +39,7 @@ export const NewEpisode = IDL.Record({
 export const Character = IDL.Record({
   'id' : IDL.Text,
   'bio' : IDL.Text,
+  'displayOrder' : IDL.Nat,
   'traits' : IDL.Vec(IDL.Text),
   'name' : IDL.Text,
   'role' : IDL.Text,
@@ -126,6 +127,7 @@ export const idlService = IDL.Service({
     ),
   'grantAdminRole' : IDL.Func([IDL.Principal], [], []),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'reorderCharacters' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'submitRequest' : IDL.Func([NewRequest], [IDL.Text], []),
   'updateCharacter' : IDL.Func([IDL.Text, NewCharacter], [], []),
@@ -168,6 +170,7 @@ export const idlFactory = ({ IDL }) => {
   const Character = IDL.Record({
     'id' : IDL.Text,
     'bio' : IDL.Text,
+    'displayOrder' : IDL.Nat,
     'traits' : IDL.Vec(IDL.Text),
     'name' : IDL.Text,
     'role' : IDL.Text,
@@ -255,6 +258,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'grantAdminRole' : IDL.Func([IDL.Principal], [], []),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'reorderCharacters' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'submitRequest' : IDL.Func([NewRequest], [IDL.Text], []),
     'updateCharacter' : IDL.Func([IDL.Text, NewCharacter], [], []),

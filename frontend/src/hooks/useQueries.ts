@@ -295,6 +295,22 @@ export function useDeleteCharacter() {
   });
 }
 
+export function useReorderCharacters() {
+  const { identity } = useInternetIdentity();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (newOrder: string[]) => {
+      if (!identity) throw new Error('Not authenticated');
+      const actor = await makeAuthenticatedActor(identity);
+      return actor.reorderCharacters(newOrder);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['characters'] });
+    },
+  });
+}
+
 // ─── Content ──────────────────────────────────────────────────────────────────
 
 export function useGetAllContents() {

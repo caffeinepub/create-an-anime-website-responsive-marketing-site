@@ -1,31 +1,43 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-03-01T21:54:48.377Z",
-  "summary": "The diff shows documentation and project state updates, along with a frontend file summary that describes version 50 features (including the delete contact request functionality). However, there is no evidence of actual deployment artifacts — no dfx.json changes, no canister deployment logs, no Candid interface updates, no deployment scripts executed, and no IC mainnet deployment records. The project_state.json marks the feature as 'pending', confirming deployment has not occurred. The diff appears to only update documentation and project state tracking files, not perform the actual IC mainnet deployment.",
+  "generatedAt": "2026-03-02T21:29:59.290Z",
+  "summary": "The diff implements both REQ-1 (backend displayOrder field and reorderCharacters endpoint) and REQ-2 (drag-and-drop in AdminCharactersPanel). All major acceptance criteria appear to be addressed. Minor gaps exist around admin-only enforcement of drag-and-drop in the UI and explicit sorting in getCharacters on the backend (the backend is truncated so sorting behavior cannot be fully confirmed).",
   "missing_requirements": [
     {
-      "id": "REQ-1",
-      "requirement": "Deploy the current version 50 of the application (including the delete contact requests feature in the admin dashboard) to the Internet Computer mainnet.",
-      "reason": "No actual deployment to IC mainnet is evidenced in the diff. The project_state.json marks the deployment as 'pending'. There are no deployment artifacts, canister IDs, dfx deploy outputs, or any IC mainnet deployment records present. The frontend-file-summaries.txt only describes the state of frontend files but does not constitute a deployment.",
+      "id": "REQ-2",
+      "requirement": "Drag-and-drop is disabled for non-admin users.",
+      "reason": "The AdminCharactersPanel diff shows drag handlers attached unconditionally without any check against admin status. There is no visible guard (e.g., checking useIsCallerAdmin) to disable the drag handle or drag events for non-admin users.",
       "evidence": [
-        "project_state.json",
-        "frontend-file-summaries.txt"
+        "frontend/src/components/AdminCharactersPanel.tsx"
+      ]
+    },
+    {
+      "id": "REQ-1",
+      "requirement": "Characters returned by the existing getCharacters query are sorted by displayOrder ascending.",
+      "reason": "The backend/main.mo diff is truncated and does not show the getCharacters implementation. It is unclear whether getCharacters has been updated to sort by displayOrder ascending. The frontend compensates with a client-side sort, but backend-level sorting is required per the AC.",
+      "evidence": [
+        "backend/main.mo"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Addition of a deployment verification checklist and expanded troubleshooting section to RUN-LOCAL-AND-DEPLOY-IC.md",
-      "reason": "The build request is a deployment-only request with the constraint 'Do not modify any application code'. Modifying documentation files goes beyond the strict deployment-only scope and was not explicitly requested.",
+      "description": "A migration module (backend/migration.mo) was added to handle schema migration for the new displayOrder field.",
+      "reason": "The build request does not mention any migration module or migration strategy. While the displayOrder field addition is required, the explicit migration.mo file and its integration via the migration hook in main.mo were not requested.",
       "evidence": [
-        "frontend-file-summaries.txt"
+        "backend/migration.mo",
+        "backend/main.mo"
       ]
     }
   ],
-  "confidence": 0.82,
+  "confidence": 0.72,
   "changed_files": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "frontend-file-summaries.txt",
+    "frontend/src/components/AdminCharactersPanel.tsx",
+    "frontend/src/hooks/useQueries.ts",
     "project_state.json"
   ]
 }

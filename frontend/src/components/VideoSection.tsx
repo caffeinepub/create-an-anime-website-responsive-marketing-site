@@ -56,9 +56,8 @@ export function VideoSection({ selectedEpisode }: VideoSectionProps) {
                 </div>
               )
             ) : (
-              <div className="text-center text-foreground/40 p-8">
-                <p className="text-lg mb-2">Select an episode to watch</p>
-                <p className="text-sm">Choose an episode from the list below to start watching.</p>
+              <div className="text-center text-foreground/50 p-8">
+                <p className="text-lg">There are no available videos.</p>
               </div>
             )}
           </div>

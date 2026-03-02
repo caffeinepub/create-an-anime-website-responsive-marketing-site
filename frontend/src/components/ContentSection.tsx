@@ -40,8 +40,7 @@ export function ContentSection() {
 
         {!isLoading && !isError && (!contents || contents.length === 0) && (
           <div className="text-center py-16 text-foreground/50 max-w-6xl mx-auto">
-            <p className="text-lg italic">No updates have been posted yet.</p>
-            <p className="text-sm mt-2">Check back soon for news and lore updates.</p>
+            <p className="text-lg">There are no available updates.</p>
           </div>
         )}
 

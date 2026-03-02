@@ -1,4 +1,25 @@
 {
   "kind": "feature_evidence_report",
-  "features": []
+  "features": [
+    {
+      "featureId": "feature-in-the-admincharacterspanel-component-implement-drag-and-drop-reordering-of-the-character-list-each-character-row-card-should-be-draggable-when-an-admin-drops-a-character-into-a-new-position-the-new-order-should-be-immediately-reflected-in-the-ui-optimistic-update-and-persisted-to-the-backend-via-the-reorder-mutation",
+      "featureTitle": "In the `AdminCharactersPanel` component, implement drag-and-drop reordering of the character list. Each character row/card should be draggable. When an admin drops a character into a new position, the new order should be immediately reflected in the UI (optimistic update) and persisted to the backend via the reorder mutation.",
+      "files": [
+        "frontend/src/components/AdminCharactersPanel.tsx",
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    }
+  ]
 }

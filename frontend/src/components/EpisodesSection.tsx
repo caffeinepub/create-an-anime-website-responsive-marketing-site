@@ -61,8 +61,7 @@ export function EpisodesSection({ onEpisodeSelect }: EpisodesSectionProps) {
 
         {!isLoading && !isError && sortedEpisodes.length === 0 && (
           <div className="text-center py-16 text-foreground/50 max-w-5xl mx-auto">
-            <p className="text-lg italic">No episodes have been added yet.</p>
-            <p className="text-sm mt-2">Check back soon for new episodes.</p>
+            <p className="text-lg">There are no available episodes.</p>
           </div>
         )}
 

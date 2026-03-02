@@ -13,6 +13,7 @@ import type { Principal } from '@icp-sdk/core/principal';
 export interface Character {
   'id' : string,
   'bio' : string,
+  'displayOrder' : bigint,
   'traits' : Array<string>,
   'name' : string,
   'role' : string,
@@ -108,6 +109,7 @@ export interface _SERVICE {
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'grantAdminRole' : ActorMethod<[Principal], undefined>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'reorderCharacters' : ActorMethod<[Array<string>], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'submitRequest' : ActorMethod<[NewRequest], string>,
   'updateCharacter' : ActorMethod<[string, NewCharacter], undefined>,

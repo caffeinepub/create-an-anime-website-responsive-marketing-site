@@ -136,6 +136,7 @@ export interface NewEpisode {
 export interface Character {
     id: string;
     bio: string;
+    displayOrder: bigint;
     traits: Array<string>;
     name: string;
     role: string;
@@ -194,6 +195,7 @@ export interface backendInterface {
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     grantAdminRole(userPrincipal: Principal): Promise<void>;
     isCallerAdmin(): Promise<boolean>;
+    reorderCharacters(newOrder: Array<string>): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     submitRequest(input: NewRequest): Promise<string>;
     updateCharacter(characterId: string, updatedCharacter: NewCharacter): Promise<void>;
@@ -523,6 +525,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.isCallerAdmin();
+            return result;
+        }
+    }
+    async reorderCharacters(arg0: Array<string>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.reorderCharacters(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.reorderCharacters(arg0);
             return result;
         }
     }

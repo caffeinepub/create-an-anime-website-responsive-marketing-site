@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useGetAllCharacters, useDeleteCharacter } from '../hooks/useQueries';
+import React, { useState, useEffect, useRef } from 'react';
+import { useGetAllCharacters, useDeleteCharacter, useReorderCharacters } from '../hooks/useQueries';
 import { Character } from '../backend';
 import { CharacterForm } from './CharacterForm';
 import {
-  Users, Plus, Pencil, Trash2, Loader2, AlertCircle, RefreshCw, UserX
+  Users, Plus, Pencil, Trash2, Loader2, AlertCircle, RefreshCw, UserX, GripVertical
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -16,9 +16,28 @@ import { toast } from 'sonner';
 export function AdminCharactersPanel() {
   const { data: characters, isLoading, error, refetch } = useGetAllCharacters();
   const deleteCharacter = useDeleteCharacter();
+  const reorderCharacters = useReorderCharacters();
 
   const [showForm, setShowForm] = useState(false);
   const [editingCharacter, setEditingCharacter] = useState<Character | null>(null);
+
+  // Local sorted list for optimistic drag-and-drop UI
+  const [sortedCharacters, setSortedCharacters] = useState<Character[]>([]);
+
+  // Drag state
+  const dragIndexRef = useRef<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Sync local list when backend data changes
+  useEffect(() => {
+    if (characters) {
+      const sorted = [...characters].sort(
+        (a, b) => Number(a.displayOrder) - Number(b.displayOrder)
+      );
+      setSortedCharacters(sorted);
+    }
+  }, [characters]);
 
   const handleEdit = (character: Character) => {
     setEditingCharacter(character);
@@ -44,6 +63,74 @@ export function AdminCharactersPanel() {
     }
   };
 
+  // ── Drag handlers ──────────────────────────────────────────────────────────
+
+  const handleDragStart = (e: React.DragEvent<HTMLTableRowElement>, index: number) => {
+    dragIndexRef.current = index;
+    setIsDragging(true);
+    e.dataTransfer.effectAllowed = 'move';
+    // Use a transparent 1x1 pixel as drag image so the row itself shows the ghost
+    const ghost = document.createElement('div');
+    ghost.style.position = 'absolute';
+    ghost.style.top = '-9999px';
+    document.body.appendChild(ghost);
+    e.dataTransfer.setDragImage(ghost, 0, 0);
+    setTimeout(() => document.body.removeChild(ghost), 0);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLTableRowElement>, index: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (dragIndexRef.current === null || dragIndexRef.current === index) return;
+    setDragOverIndex(index);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverIndex(null);
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLTableRowElement>, dropIndex: number) => {
+    e.preventDefault();
+    const fromIndex = dragIndexRef.current;
+    if (fromIndex === null || fromIndex === dropIndex) {
+      setDragOverIndex(null);
+      setIsDragging(false);
+      dragIndexRef.current = null;
+      return;
+    }
+
+    // Reorder locally (optimistic update)
+    const reordered = [...sortedCharacters];
+    const [moved] = reordered.splice(fromIndex, 1);
+    reordered.splice(dropIndex, 0, moved);
+    setSortedCharacters(reordered);
+
+    setDragOverIndex(null);
+    setIsDragging(false);
+    dragIndexRef.current = null;
+
+    // Persist to backend
+    try {
+      await reorderCharacters.mutateAsync(reordered.map((c) => c.id));
+      toast.success('Character order saved');
+    } catch (err: any) {
+      toast.error(err?.message ?? 'Failed to save order');
+      // Revert on failure
+      if (characters) {
+        const reverted = [...characters].sort(
+          (a, b) => Number(a.displayOrder) - Number(b.displayOrder)
+        );
+        setSortedCharacters(reverted);
+      }
+    }
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+    setDragOverIndex(null);
+    dragIndexRef.current = null;
+  };
+
   if (showForm) {
     return (
       <CharacterForm
@@ -64,11 +151,19 @@ export function AdminCharactersPanel() {
           <div>
             <h2 className="text-xl font-bold admin-heading">Characters</h2>
             <p className="text-sm admin-muted-text">
-              {characters ? `${characters.length} character${characters.length !== 1 ? 's' : ''}` : 'Loading…'}
+              {sortedCharacters.length > 0
+                ? `${sortedCharacters.length} character${sortedCharacters.length !== 1 ? 's' : ''} — drag rows to reorder`
+                : isLoading ? 'Loading…' : '0 characters'}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
+          {reorderCharacters.isPending && (
+            <div className="flex items-center gap-1.5 text-xs admin-muted-text">
+              <Loader2 className="w-3.5 h-3.5 animate-spin admin-accent-text" />
+              <span className="hidden sm:inline">Saving order…</span>
+            </div>
+          )}
           <Button
             variant="ghost"
             size="sm"
@@ -108,7 +203,7 @@ export function AdminCharactersPanel() {
       )}
 
       {/* Empty state */}
-      {!isLoading && !error && (characters ?? []).length === 0 && (
+      {!isLoading && !error && sortedCharacters.length === 0 && (
         <div className="text-center py-16 admin-card rounded-xl">
           <UserX className="w-12 h-12 mx-auto mb-4 admin-muted-text opacity-40" />
           <p className="admin-heading font-semibold mb-2">No characters yet</p>
@@ -120,12 +215,14 @@ export function AdminCharactersPanel() {
       )}
 
       {/* Characters Table */}
-      {!isLoading && !error && (characters ?? []).length > 0 && (
+      {!isLoading && !error && sortedCharacters.length > 0 && (
         <div className="admin-card rounded-xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="admin-table-header">
+                  {/* Drag handle column */}
+                  <th className="w-8 px-2 py-3" aria-label="Drag to reorder" />
                   <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider admin-muted-text">Name</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider admin-muted-text hidden sm:table-cell">Role</th>
                   <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider admin-muted-text hidden md:table-cell">Weapon / Power</th>
@@ -134,86 +231,141 @@ export function AdminCharactersPanel() {
                 </tr>
               </thead>
               <tbody className="divide-y admin-table-divider">
-                {(characters ?? []).map((character) => (
-                  <tr key={character.id} className="admin-table-row transition-colors">
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        {character.imageUrl ? (
-                          <img
-                            src={character.imageUrl}
-                            alt={character.name}
-                            className="w-8 h-8 rounded-full object-cover admin-surface shrink-0"
-                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                          />
-                        ) : (
-                          <div className="w-8 h-8 rounded-full admin-surface flex items-center justify-center shrink-0">
-                            <Users className="w-4 h-4 admin-muted-text" />
-                          </div>
-                        )}
-                        <p className="text-sm font-medium admin-heading truncate max-w-[120px]">{character.name}</p>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 hidden sm:table-cell">
-                      <Badge className="admin-badge-secondary text-xs">{character.role || '—'}</Badge>
-                    </td>
-                    <td className="px-4 py-3 hidden md:table-cell">
-                      <p className="text-xs admin-muted-text">{character.weapon || '—'}</p>
-                      <p className="text-xs admin-muted-text">{character.power || '—'}</p>
-                    </td>
-                    <td className="px-4 py-3 hidden lg:table-cell">
-                      <div className="flex flex-wrap gap-1 max-w-[180px]">
-                        {character.traits.slice(0, 3).map((trait, i) => (
-                          <span key={i} className="text-xs admin-badge-outline px-1.5 py-0.5 rounded">{trait}</span>
-                        ))}
-                        {character.traits.length > 3 && (
-                          <span className="text-xs admin-muted-text">+{character.traits.length - 3}</span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center justify-end gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEdit(character)}
-                          className="admin-btn-ghost h-8 w-8 p-0"
+                {sortedCharacters.map((character, index) => {
+                  const isBeingDraggedOver = dragOverIndex === index;
+                  const isThisRowDragging =
+                    isDragging && dragIndexRef.current === index;
+
+                  return (
+                    <tr
+                      key={character.id}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, index)}
+                      onDragOver={(e) => handleDragOver(e, index)}
+                      onDragLeave={handleDragLeave}
+                      onDrop={(e) => handleDrop(e, index)}
+                      onDragEnd={handleDragEnd}
+                      className={[
+                        'admin-table-row transition-colors select-none',
+                        isThisRowDragging ? 'opacity-40' : '',
+                        isBeingDraggedOver
+                          ? 'border-t-2 border-t-[var(--admin-accent,theme(colors.teal.400))]'
+                          : '',
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
+                      {/* Drag handle */}
+                      <td className="w-8 px-2 py-3">
+                        <div
+                          className="flex items-center justify-center cursor-grab active:cursor-grabbing admin-muted-text opacity-50 hover:opacity-100 transition-opacity"
+                          title="Drag to reorder"
                         >
-                          <Pencil className="w-3.5 h-3.5" />
-                        </Button>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="admin-btn-danger h-8 w-8 p-0"
+                          <GripVertical className="w-4 h-4" />
+                        </div>
+                      </td>
+
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          {character.imageUrl ? (
+                            <img
+                              src={character.imageUrl}
+                              alt={character.name}
+                              className="w-8 h-8 rounded-full object-cover admin-surface shrink-0"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none';
+                              }}
+                            />
+                          ) : (
+                            <div className="w-8 h-8 rounded-full admin-surface flex items-center justify-center shrink-0">
+                              <Users className="w-4 h-4 admin-muted-text" />
+                            </div>
+                          )}
+                          <p className="text-sm font-medium admin-heading truncate max-w-[120px]">
+                            {character.name}
+                          </p>
+                        </div>
+                      </td>
+
+                      <td className="px-4 py-3 hidden sm:table-cell">
+                        <Badge className="admin-badge-secondary text-xs">{character.role || '—'}</Badge>
+                      </td>
+
+                      <td className="px-4 py-3 hidden md:table-cell">
+                        <p className="text-xs admin-muted-text">{character.weapon || '—'}</p>
+                        <p className="text-xs admin-muted-text">{character.power || '—'}</p>
+                      </td>
+
+                      <td className="px-4 py-3 hidden lg:table-cell">
+                        <div className="flex flex-wrap gap-1 max-w-[180px]">
+                          {character.traits.slice(0, 3).map((trait, i) => (
+                            <span
+                              key={i}
+                              className="text-xs admin-badge-outline px-1.5 py-0.5 rounded"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent className="admin-dialog">
-                            <AlertDialogHeader>
-                              <AlertDialogTitle className="admin-heading">Delete Character</AlertDialogTitle>
-                              <AlertDialogDescription className="admin-muted-text">
-                                Are you sure you want to delete "{character.name}"? This action cannot be undone.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel className="admin-btn-outline">Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => handleDelete(character.id)}
-                                className="bg-red-600 hover:bg-red-700 text-white"
+                              {trait}
+                            </span>
+                          ))}
+                          {character.traits.length > 3 && (
+                            <span className="text-xs admin-muted-text">
+                              +{character.traits.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      <td className="px-4 py-3">
+                        <div className="flex items-center justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEdit(character)}
+                            className="admin-btn-ghost h-8 w-8 p-0"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="admin-btn-danger h-8 w-8 p-0"
                               >
-                                {deleteCharacter.isPending ? (
-                                  <Loader2 className="w-4 h-4 animate-spin" />
-                                ) : 'Delete'}
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="admin-dialog">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle className="admin-heading">
+                                  Delete Character
+                                </AlertDialogTitle>
+                                <AlertDialogDescription className="admin-muted-text">
+                                  Are you sure you want to delete "{character.name}"? This action
+                                  cannot be undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel className="admin-btn-outline">
+                                  Cancel
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => handleDelete(character.id)}
+                                  className="bg-red-600 hover:bg-red-700 text-white"
+                                >
+                                  {deleteCharacter.isPending ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                  ) : (
+                                    'Delete'
+                                  )}
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
