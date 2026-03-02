@@ -1,42 +1,67 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-03-02T21:29:59.290Z",
-  "summary": "The diff implements both REQ-1 (backend displayOrder field and reorderCharacters endpoint) and REQ-2 (drag-and-drop in AdminCharactersPanel). All major acceptance criteria appear to be addressed. Minor gaps exist around admin-only enforcement of drag-and-drop in the UI and explicit sorting in getCharacters on the backend (the backend is truncated so sorting behavior cannot be fully confirmed).",
+  "generatedAt": "2026-03-02T22:29:41.986Z",
+  "summary": "The diff shows backend Motoko changes (Worldbuilding types, saveCharacterOrder, worldbuilding map), query hooks (useGetWorldbuilding, useUpdateWorldbuilding, saveCharacterOrder), and a dark theme CSS scope reference. However, the diff is heavily truncated and many frontend component files are only described in a summary file rather than shown as actual diffs. Based on what is visible, several frontend UI requirements lack concrete implementation evidence.",
   "missing_requirements": [
     {
-      "id": "REQ-2",
-      "requirement": "Drag-and-drop is disabled for non-admin users.",
-      "reason": "The AdminCharactersPanel diff shows drag handlers attached unconditionally without any check against admin status. There is no visible guard (e.g., checking useIsCallerAdmin) to disable the drag handle or drag events for non-admin users.",
+      "id": "REQ-1",
+      "requirement": "A visually distinct light blue 'Save' button is visible in the AdminCharactersPanel when character order has been changed via drag-and-drop; disabled/hidden when no reordering occurred.",
+      "reason": "No diff for AdminCharactersPanel component is shown. The frontend-file-summaries.txt mentions saveCharacterOrder in useQueries.ts hooks but no AdminCharactersPanel UI file is present in the diff to confirm the Save button rendering, conditional display logic, or light blue styling.",
       "evidence": [
-        "frontend/src/components/AdminCharactersPanel.tsx"
+        "frontend/src/hooks/useQueries.ts",
+        "frontend-file-summaries.txt"
       ]
     },
     {
-      "id": "REQ-1",
-      "requirement": "Characters returned by the existing getCharacters query are sorted by displayOrder ascending.",
-      "reason": "The backend/main.mo diff is truncated and does not show the getCharacters implementation. It is unclear whether getCharacters has been updated to sort by displayOrder ascending. The frontend compensates with a client-side sort, but backend-level sorting is required per the AC.",
+      "id": "REQ-2",
+      "requirement": "CharacterForm and ContentForm show both a URL text field and a drag-and-drop/file upload zone; files up to 50 MB accepted with validation error above 50 MB; file converted to data URL/object URL populating image field; preview thumbnail shown.",
+      "reason": "No diff for CharacterForm or ContentForm components is present. The frontend-file-summaries.txt does not mention these components having an image upload zone. There is no evidence of the 50 MB validation, drag-and-drop UI, data URL conversion, or preview thumbnail being implemented.",
       "evidence": [
-        "backend/main.mo"
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "requirement": "A 'Worldbuilding' entry appears in AdminSidebar and navigates to AdminWorldbuildingPanel; panel displays editable fields for clans, clan eye rules, power system, rank system, Shiranagi family; supports create, update, delete operations; saving persists to backend and public WorldbuildingSection reflects updates.",
+      "reason": "Backend types and hooks for worldbuilding are present, but no diff for AdminSidebar, AdminWorldbuildingPanel, or WorldbuildingSection components is shown. The frontend-file-summaries.txt does not mention AdminWorldbuildingPanel or a Worldbuilding sidebar entry. No evidence of CRUD UI or public WorldbuildingSection consuming backend data is visible.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Form inputs, buttons, modals, and badges adopt the dark theme; dark theme does not affect public-facing site styling.",
+      "reason": "frontend/src/index.css is mentioned in the summary as containing a scoped .admin-dashboard dark theme, but the actual CSS diff content is not shown. There is no diff for admin panel, modal, or form components to confirm dark theme classes are applied.",
+      "evidence": [
+        "frontend/src/index.css",
+        "frontend-file-summaries.txt"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "A migration module (backend/migration.mo) was added to handle schema migration for the new displayOrder field.",
-      "reason": "The build request does not mention any migration module or migration strategy. While the displayOrder field addition is required, the explicit migration.mo file and its integration via the migration hook in main.mo were not requested.",
+      "description": "A migration.mo module was added to the backend with a Migration.run function for state migration.",
+      "reason": "The build request does not mention any state migration module or migration infrastructure. This is extra implementation not requested.",
       "evidence": [
-        "backend/migration.mo",
+        "backend/migration.mo"
+      ]
+    },
+    {
+      "description": "The backend actor uses a blob storage mixin (MixinStorage) and authorization mixin (MixinAuthorization) infrastructure.",
+      "reason": "The build request does not mention blob storage or a mixin-based authorization system as new requirements. These appear to be added beyond the stated scope.",
+      "evidence": [
         "backend/main.mo"
       ]
     }
   ],
-  "confidence": 0.72,
+  "confidence": 0.45,
   "changed_files": [
     "backend/main.mo",
     "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/components/AdminCharactersPanel.tsx",
     "frontend/src/hooks/useQueries.ts",
     "project_state.json"
   ]

@@ -1,47 +1,77 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-03-02T21:29:59.295Z",
+  "generatedAt": "2026-03-02T22:29:41.989Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 1,
+    "total": 4,
+    "implemented": 2,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Add a `displayOrder` field to the character data model in the backend to persist the admin-defined sort order for characters. Expose a new update-order endpoint (e.g., `reorderCharacters`) that accepts an array of character IDs in the desired order and updates their `displayOrder` values accordingly.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
+        "summary": "Add a light blue 'Save' button to the AdminCharactersPanel that, when clicked, persists the current drag-reordered character sequence to the backend so the new display order is reflected on the main public-facing website's Characters section.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/AdminCharactersPanel.tsx",
+          "frontend/src/hooks/useQueries.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts"
+        ]
       },
       {
         "id": "REQ-2",
-        "summary": "In the `AdminCharactersPanel` component, implement drag-and-drop reordering of the character list. Each character row/card should be draggable. When an admin drops a character into a new position, the new order should be immediately reflected in the UI (optimistic update) and persisted to the backend via the reorder mutation.",
+        "summary": "In the admin dashboard's character and content forms, allow admins to provide an image either by entering a URL or by dragging and dropping / uploading a file directly (maximum file size: 50 MB). The uploaded file should be converted to a usable image URL and pre-fill the image URL field.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/components/ImageUploadInput.tsx",
+          "frontend/src/components/CharacterForm.tsx",
+          "frontend/src/components/ContentForm.tsx"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Add a 'Worldbuilding' tab to the AdminDashboard sidebar and create an AdminWorldbuildingPanel component. This panel must allow admins to view and edit all worldbuilding content (clans, clan eye rules, power system, rank system, Shiranagi family data) that is currently driven by animeSiteConfig, and save changes so the public WorldbuildingSection reflects the updated data.",
         "status": "implemented",
         "plannedFiles": [
+          "frontend/src/components/AdminSidebar.tsx",
+          "frontend/src/components/AdminDashboard.tsx",
+          "frontend/src/components/AdminWorldbuildingPanel.tsx",
           "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/AdminCharactersPanel.tsx"
+          "frontend/src/components/WorldbuildingSection.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/AdminCharactersPanel.tsx"
+          "frontend/src/hooks/useQueries.ts"
         ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Apply a dark theme to the admin dashboard. All admin panels, sidebar, forms, and modals should use a dark color palette consistent with the anime's aesthetic.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/index.css",
+          "frontend/src/components/AdminDashboard.tsx"
+        ],
+        "matchedFiles": []
       }
     ]
   },
   "changedFiles": [
+    "backend/blob-storage/Mixin.mo",
+    "backend/blob-storage/Storage.mo",
     "backend/main.mo",
     "backend/migration.mo",
     "build-request.json",
+    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/src/backend.d.ts",
     "frontend/src/backend.ts",
-    "frontend/src/components/AdminCharactersPanel.tsx",
     "frontend/src/declarations/backend.did.d.ts",
     "frontend/src/declarations/backend.did.js",
     "frontend/src/hooks/useQueries.ts",

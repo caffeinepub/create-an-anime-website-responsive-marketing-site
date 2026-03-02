@@ -2,10 +2,9 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-in-the-admincharacterspanel-component-implement-drag-and-drop-reordering-of-the-character-list-each-character-row-card-should-be-draggable-when-an-admin-drops-a-character-into-a-new-position-the-new-order-should-be-immediately-reflected-in-the-ui-optimistic-update-and-persisted-to-the-backend-via-the-reorder-mutation",
-      "featureTitle": "In the `AdminCharactersPanel` component, implement drag-and-drop reordering of the character list. Each character row/card should be draggable. When an admin drops a character into a new position, the new order should be immediately reflected in the UI (optimistic update) and persisted to the backend via the reorder mutation.",
+      "featureId": "feature-add-a-light-blue-save-button-to-the-admincharacterspanel-that-when-clicked-persists-the-current-drag-reordered-character-sequence-to-the-backend-so-the-new-display-order-is-reflected-on-the-main-public-facing-website-s-characters-section",
+      "featureTitle": "Add a light blue 'Save' button to the AdminCharactersPanel that, when clicked, persists the current drag-reordered character sequence to the backend so the new display order is reflected on the main public-facing website's Characters section.",
       "files": [
-        "frontend/src/components/AdminCharactersPanel.tsx",
         "frontend/src/hooks/useQueries.ts"
       ],
       "components": [
@@ -14,10 +13,31 @@
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
         "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-2"
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-worldbuilding-tab-to-the-admindashboard-sidebar-and-create-an-adminworldbuildingpanel-component-this-panel-must-allow-admins-to-view-and-edit-all-worldbuilding-content-clans-clan-eye-rules-power-system-rank-system-shiranagi-family-data-that-is-currently-driven-by-animesiteconfig-and-save-changes-so-the-public-worldbuildingsection-reflects-the-updated-data",
+      "featureTitle": "Add a 'Worldbuilding' tab to the AdminDashboard sidebar and create an AdminWorldbuildingPanel component. This panel must allow admins to view and edit all worldbuilding content (clans, clan eye rules, power system, rank system, Shiranagi family data) that is currently driven by animeSiteConfig, and save changes so the public WorldbuildingSection reflects the updated data.",
+      "files": [
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
       ],
       "confidence": "high"
     }

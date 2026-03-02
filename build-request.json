@@ -1,61 +1,94 @@
 {
   "kind": "build_request",
-  "title": "Drag-to-reorder characters in Admin Dashboard",
+  "title": "Save button for character order, image file upload, and Worldbuilding admin tab",
   "projectName": "Whispers of the White Moon",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Add a `displayOrder` field to the character data model in the backend to persist the admin-defined sort order for characters. Expose a new update-order endpoint (e.g., `reorderCharacters`) that accepts an array of character IDs in the desired order and updates their `displayOrder` values accordingly.",
-      "target": "backend",
+      "text": "Add a light blue 'Save' button to the AdminCharactersPanel that, when clicked, persists the current drag-reordered character sequence to the backend so the new display order is reflected on the main public-facing website's Characters section.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-1"
         ],
         "quotes": [
-          "allow admin to be able to drag the character into the order ther desire"
+          "add a light blue button that says \"Save\" and when pressed, any changes including the order the charcters are in should be uploaded into the website"
         ]
       },
       "acceptanceCriteria": [
-        "Characters have a persisted `displayOrder` field in the backend.",
-        "A `reorderCharacters` (or equivalent) function accepts an ordered list of character IDs and updates their sort order.",
-        "Characters returned by the existing `getCharacters` query are sorted by `displayOrder` ascending.",
-        "The reorder endpoint is restricted to admin principals only."
+        "A visually distinct light blue 'Save' button is visible in the AdminCharactersPanel when character order has been changed via drag-and-drop.",
+        "Pressing Save calls the backend reorder mutation and updates the stored displayOrder for all characters.",
+        "After saving, the public CharactersSection renders characters in the newly saved order.",
+        "If no reordering has occurred, the Save button is either hidden or disabled."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "In the `AdminCharactersPanel` component, implement drag-and-drop reordering of the character list. Each character row/card should be draggable. When an admin drops a character into a new position, the new order should be immediately reflected in the UI (optimistic update) and persisted to the backend via the reorder mutation.",
+      "text": "In the admin dashboard's character and content forms, allow admins to provide an image either by entering a URL or by dragging and dropping / uploading a file directly (maximum file size: 50 MB). The uploaded file should be converted to a usable image URL and pre-fill the image URL field.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-1"
         ],
         "quotes": [
-          "when admins are veiwing the characters in the admindashbord, allow admin to be able to drag the character into the order ther desire"
+          "for the image URL, allow admins to also be able to drag or upload a file, and the limit is 50MB"
         ]
       },
       "acceptanceCriteria": [
-        "Character rows/cards in `AdminCharactersPanel` have a visible drag handle icon.",
-        "Admin can drag a character card and drop it in a new position within the list.",
-        "The list reorders visually in real time while dragging.",
-        "On drop, the new order is sent to the backend reorder endpoint.",
-        "On successful save, the React Query cache is invalidated/updated to reflect the persisted order.",
-        "The saved order is reflected when the admin refreshes the page.",
-        "Existing edit and delete actions per character remain fully functional after reordering.",
-        "Drag-and-drop is disabled for non-admin users."
+        "The image input in CharacterForm and ContentForm shows both a URL text field and a drag-and-drop/file upload zone.",
+        "Files up to 50 MB are accepted; files exceeding 50 MB show a validation error.",
+        "On successful file selection, the image is converted to a data URL or object URL and populates the image URL field.",
+        "A preview thumbnail is shown after a file is selected or a valid URL is entered."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add a 'Worldbuilding' tab to the AdminDashboard sidebar and create an AdminWorldbuildingPanel component. This panel must allow admins to view and edit all worldbuilding content (clans, clan eye rules, power system, rank system, Shiranagi family data) that is currently driven by animeSiteConfig, and save changes so the public WorldbuildingSection reflects the updated data.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "add the Worldbuilding tab to the admin dashboard, where admins will be able to edit the worldbuilding section on the main website. Make sure to connect the worldbuilding with the world-building section in the admin dashboard"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A 'Worldbuilding' entry appears in AdminSidebar and navigates to AdminWorldbuildingPanel.",
+        "AdminWorldbuildingPanel displays editable fields for clans (name, description, sigil), clan eye rules, power system details, rank system details, and Shiranagi family entries.",
+        "Saving changes persists the worldbuilding data to the backend and the public WorldbuildingSection renders the updated content.",
+        "All worldbuilding fields support create, update, and delete operations."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Apply a dark theme to the admin dashboard. All admin panels, sidebar, forms, and modals should use a dark color palette consistent with the anime's aesthetic.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "give the anime a dark theme"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The AdminDashboard, AdminSidebar, and all admin panels render with a dark background and appropriately contrasted text and UI elements.",
+        "Form inputs, buttons, modals, and badges adopt the dark theme without readability issues.",
+        "The dark theme does not affect the public-facing site styling."
       ]
     }
   ],
   "constraints": [
-    "Do not modify any files under frontend/src/hooks/useActor.ts, frontend/src/hooks/useInternetIdentity.ts, frontend/src/main.tsx, or frontend/src/components/ui.",
-    "All Motoko logic must remain in the single actor in backend/main.mo.",
-    "Reorder endpoint must be admin-only, consistent with existing MixinAuthorization access control patterns."
+    "Do not modify files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui.",
+    "Image file uploads must be handled entirely on the frontend (data URL / object URL); do not route binary image data through the Motoko backend.",
+    "All Motoko logic must remain in the single backend/main.mo actor."
   ],
   "nonGoals": [
-    "Drag-and-drop reordering on the public-facing CharactersSection (front site).",
-    "Reordering of episodes, content, or any other entity types.",
-    "Animated transitions beyond standard drag-and-drop visual feedback."
+    "External image hosting or CDN integration.",
+    "Real-time collaboration or live preview of worldbuilding edits.",
+    "Changes to the public-facing site's overall theme or color scheme."
   ],
   "imageRequirements": {
     "required": [],

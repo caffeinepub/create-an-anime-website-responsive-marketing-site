@@ -1,16 +1,24 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Project with an admin dashboard featuring character management. Admins can view characters (shown 6 at a time with 'show more') and now need drag-to-reorder functionality for characters.",
+  "summary": "Admin dashboard project with drag-to-reorder characters, save functionality, image upload support, and worldbuilding tab management.",
   "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-in-the-admincharacterspanel-component-implement-drag-and-drop-reordering-of-the-character-list-each-character-row-card-should-be-draggable-when-an-admin-drops-a-character-into-a-new-position-the-new-order-should-be-immediately-reflected-in-the-ui-optimistic-update-and-persisted-to-the-backend-via-the-reorder-mutation",
-      "title": "In the `AdminCharactersPanel` component, implement drag-and-drop reordering of the character list. Each character row/card should be draggable. When an admin drops a character into a new position, the new order should be immediately reflected in the UI (optimistic update) and persisted to the backend via the reorder mutation.",
+      "id": "feature-add-a-light-blue-save-button-to-the-admincharacterspanel-that-when-clicked-persists-the-current-drag-reordered-character-sequence-to-the-backend-so-the-new-display-order-is-reflected-on-the-main-public-facing-website-s-characters-section",
+      "title": "Add a light blue 'Save' button to the AdminCharactersPanel that, when clicked, persists the current drag-reordered character sequence to the backend so the new display order is reflected on the main public-facing website's Characters section.",
       "reqIds": [
-        "REQ-2"
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-worldbuilding-tab-to-the-admindashboard-sidebar-and-create-an-adminworldbuildingpanel-component-this-panel-must-allow-admins-to-view-and-edit-all-worldbuilding-content-clans-clan-eye-rules-power-system-rank-system-shiranagi-family-data-that-is-currently-driven-by-animesiteconfig-and-save-changes-so-the-public-worldbuildingsection-reflects-the-updated-data",
+      "title": "Add a 'Worldbuilding' tab to the AdminDashboard sidebar and create an AdminWorldbuildingPanel component. This panel must allow admins to view and edit all worldbuilding content (clans, clan eye rules, power system, rank system, Shiranagi family data) that is currently driven by animeSiteConfig, and save changes so the public WorldbuildingSection reflects the updated data.",
+      "reqIds": [
+        "REQ-3"
       ],
       "version": 1
     }
@@ -18,15 +26,35 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Allow admins to drag and reorder characters in the admin dashboard",
+      "summary": "Add a light blue 'Save' button in the dashboard that uploads character order changes to the main website",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Add a `displayOrder` field to the character data model in the backend to persist the admin-defined sort order for characters. Expose a new update-order endpoint (e.g., `reorderCharacters`) that accepts an array of character IDs in the desired order and updates their `displayOrder` values accordingly.",
+      "summary": "Allow admins to drag or upload image files (up to 50MB) in addition to URL input for image fields",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Add a Worldbuilding tab to the admin dashboard connected to the worldbuilding section on the main website, with a dark theme for the anime",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "In the admin dashboard's character and content forms, allow admins to provide an image either by entering a URL or by dragging and dropping / uploading a file directly (maximum file size: 50 MB). The uploaded file should be converted to a usable image URL and pre-fill the image URL field.",
       "reqIds": [
-        "REQ-1"
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Apply a dark theme to the admin dashboard. All admin panels, sidebar, forms, and modals should use a dark color palette consistent with the anime's aesthetic.",
+      "reqIds": [
+        "REQ-4"
       ],
       "status": "pending"
     }

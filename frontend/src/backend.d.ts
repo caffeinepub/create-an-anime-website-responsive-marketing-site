@@ -7,6 +7,69 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
+export type Time = bigint;
+export interface Rank {
+    title: string;
+    privileges: Array<string>;
+    responsibilities: Array<string>;
+    rankingRequirements: Array<string>;
+    order: bigint;
+    description: string;
+    symbol: string;
+}
+export interface Content {
+    id: string;
+    title: string;
+    contentType: string;
+    body: string;
+    imageUrl?: string;
+}
+export interface NewCharacter {
+    bio: string;
+    traits: Array<string>;
+    name: string;
+    role: string;
+    imageUrl: string;
+    power: string;
+    weapon: string;
+}
+export interface ShiranagiFamily {
+    symbols: Array<string>;
+    bloodlinePowers: Array<string>;
+    coreEthos: string;
+    history: string;
+    affiliations: Array<string>;
+    notableMembers: Array<string>;
+    familyValues: Array<string>;
+    evolutionOverTime: string;
+}
+export interface PowerSystemElement {
+    categories: Array<string>;
+    name: string;
+    description: string;
+    masteryLevels: Array<string>;
+    symbol: string;
+}
+export interface Character {
+    id: string;
+    bio: string;
+    displayOrder: bigint;
+    traits: Array<string>;
+    name: string;
+    role: string;
+    imageUrl: string;
+    power: string;
+    weapon: string;
+}
+export interface Episode {
+    id: string;
+    title: string;
+    thumbnailUrl: string;
+    description: string;
+    seasonNumber: bigint;
+    episodeNumber: bigint;
+    videoUrl: string;
+}
 export interface NewRequest {
     topic: Topics;
     email: string;
@@ -26,22 +89,23 @@ export interface NewContent {
     body: string;
     imageUrl?: string;
 }
-export type Time = bigint;
-export interface Content {
-    id: string;
-    title: string;
-    contentType: string;
-    body: string;
-    imageUrl?: string;
+export interface ClanEyeRule {
+    description: string;
+    symbol: string;
 }
-export interface NewCharacter {
-    bio: string;
-    traits: Array<string>;
+export interface Clan {
     name: string;
-    role: string;
-    imageUrl: string;
-    power: string;
-    weapon: string;
+    description: string;
+    uniqueAbilities: Array<string>;
+    notableMembers: Array<string>;
+    symbol: string;
+}
+export interface Worldbuilding {
+    powerSystem: Array<PowerSystemElement>;
+    clanEyeRules: Array<ClanEyeRule>;
+    clans: Array<Clan>;
+    shiranagiFamily: ShiranagiFamily;
+    rankSystem: Array<Rank>;
 }
 export interface NewEpisode {
     title: string;
@@ -51,29 +115,9 @@ export interface NewEpisode {
     episodeNumber: bigint;
     videoUrl: string;
 }
-export interface Character {
-    id: string;
-    bio: string;
-    displayOrder: bigint;
-    traits: Array<string>;
-    name: string;
-    role: string;
-    imageUrl: string;
-    power: string;
-    weapon: string;
-}
 export interface UserProfile {
     name: string;
     email?: string;
-}
-export interface Episode {
-    id: string;
-    title: string;
-    thumbnailUrl: string;
-    description: string;
-    seasonNumber: bigint;
-    episodeNumber: bigint;
-    videoUrl: string;
 }
 export enum Topics {
     businessPartnerships = "businessPartnerships",
@@ -90,33 +134,28 @@ export enum UserRole {
     guest = "guest"
 }
 export interface backendInterface {
+    addCharacter(newChar: NewCharacter): Promise<Character>;
+    addContent(newContent: NewContent): Promise<Content>;
+    addEpisode(newEp: NewEpisode): Promise<Episode>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
-    createCharacter(newCharacter: NewCharacter): Promise<string>;
-    createContent(newContent: NewContent): Promise<string>;
-    createEpisode(newEpisode: NewEpisode): Promise<string>;
-    deleteCharacter(characterId: string): Promise<void>;
-    deleteContactRequest(requestId: string): Promise<void>;
-    deleteContent(contentId: string): Promise<void>;
-    deleteEpisode(episodeId: string): Promise<void>;
-    getAllCharacters(): Promise<Array<Character>>;
-    getAllContents(): Promise<Array<Content>>;
-    getAllEpisodes(): Promise<Array<Episode>>;
-    getAllRequests(): Promise<Array<ContactRequest>>;
+    deleteCharacter(id: string): Promise<void>;
+    deleteContent(id: string): Promise<void>;
+    deleteEpisode(id: string): Promise<void>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
-    getCharacter(characterId: string): Promise<Character | null>;
-    getContent(contentId: string): Promise<Content | null>;
-    getEpisode(episodeId: string): Promise<Episode | null>;
-    getRequestsByStatus(processed: boolean): Promise<Array<ContactRequest>>;
-    getRequestsByTopic(requestedTopic: Topics): Promise<Array<ContactRequest>>;
+    getCharacters(): Promise<Array<Character>>;
+    getContactRequests(): Promise<Array<ContactRequest>>;
+    getContentById(id: string): Promise<Content | null>;
+    getEpisodes(): Promise<Array<Episode>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
-    grantAdminRole(userPrincipal: Principal): Promise<void>;
+    getWorldbuilding(): Promise<Worldbuilding | null>;
     isCallerAdmin(): Promise<boolean>;
-    reorderCharacters(newOrder: Array<string>): Promise<void>;
+    markContactRequestProcessed(id: string): Promise<boolean>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
-    submitRequest(input: NewRequest): Promise<string>;
-    updateCharacter(characterId: string, updatedCharacter: NewCharacter): Promise<void>;
-    updateContent(contentId: string, updatedContent: NewContent): Promise<void>;
-    updateEpisode(episodeId: string, updatedEpisode: NewEpisode): Promise<void>;
-    updateRequestStatus(requestId: string, processed: boolean): Promise<void>;
+    saveCharacterOrder(orderedIds: Array<string>): Promise<void>;
+    setWorldbuilding(worldbuildingData: Worldbuilding): Promise<void>;
+    submitContactRequest(request: NewRequest): Promise<ContactRequest>;
+    updateCharacter(id: string, updatedChar: NewCharacter): Promise<Character | null>;
+    updateContent(id: string, updatedContent: NewContent): Promise<Content | null>;
+    updateEpisode(id: string, updatedEp: NewEpisode): Promise<Episode | null>;
 }

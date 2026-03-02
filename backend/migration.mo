@@ -1,24 +1,20 @@
 import Map "mo:core/Map";
-import Text "mo:core/Text";
 import Nat "mo:core/Nat";
+import Principal "mo:core/Principal";
+import Text "mo:core/Text";
 
 module {
-  type OldCharacter = {
+  type Episode = {
     id : Text;
-    name : Text;
-    bio : Text;
-    imageUrl : Text;
-    weapon : Text;
-    power : Text;
-    role : Text;
-    traits : [Text];
+    title : Text;
+    description : Text;
+    videoUrl : Text;
+    thumbnailUrl : Text;
+    episodeNumber : Nat;
+    seasonNumber : Nat;
   };
 
-  type OldActor = {
-    characters : Map.Map<Text, OldCharacter>;
-  };
-
-  type NewCharacter = {
+  type Character = {
     id : Text;
     name : Text;
     bio : Text;
@@ -30,17 +26,48 @@ module {
     displayOrder : Nat;
   };
 
+  type UserProfile = {
+    name : Text;
+    email : ?Text;
+  };
+
+  type Content = {
+    id : Text;
+    contentType : Text;
+    title : Text;
+    body : Text;
+    imageUrl : ?Text;
+  };
+
+  type OldActor = {
+    episodes : Map.Map<Text, Episode>;
+    nextEpisodeId : Nat;
+    characters : Map.Map<Text, Character>;
+    nextCharacterId : Nat;
+    userProfiles : Map.Map<Principal, UserProfile>;
+    contents : Map.Map<Text, Content>;
+    nextContentId : Nat;
+  };
+
   type NewActor = {
-    characters : Map.Map<Text, NewCharacter>;
+    episodes : Map.Map<Text, Episode>;
+    nextEpisodeId : Nat;
+    characters : Map.Map<Text, Character>;
+    nextCharacterId : Nat;
+    userProfiles : Map.Map<Principal, UserProfile>;
+    contents : Map.Map<Text, Content>;
+    nextContentId : Nat;
   };
 
   public func run(old : OldActor) : NewActor {
-    // Convert all old characters to new ones with default displayOrder
-    let newCharacters = old.characters.map<Text, OldCharacter, NewCharacter>(
-      func(_id, oldCharacter) {
-        { oldCharacter with displayOrder = 0 }; // Default value for migration
-      }
-    );
-    { characters = newCharacters };
+    {
+      episodes = old.episodes;
+      nextEpisodeId = old.nextEpisodeId;
+      characters = old.characters;
+      nextCharacterId = old.nextCharacterId;
+      userProfiles = old.userProfiles;
+      contents = old.contents;
+      nextContentId = old.nextContentId;
+    };
   };
 };

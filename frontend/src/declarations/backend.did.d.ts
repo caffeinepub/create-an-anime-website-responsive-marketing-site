@@ -21,6 +21,14 @@ export interface Character {
   'power' : string,
   'weapon' : string,
 }
+export interface Clan {
+  'name' : string,
+  'description' : string,
+  'uniqueAbilities' : Array<string>,
+  'notableMembers' : Array<string>,
+  'symbol' : string,
+}
+export interface ClanEyeRule { 'description' : string, 'symbol' : string }
 export interface ContactRequest {
   'id' : string,
   'topic' : Topics,
@@ -73,6 +81,32 @@ export interface NewRequest {
   'email' : string,
   'message' : string,
 }
+export interface PowerSystemElement {
+  'categories' : Array<string>,
+  'name' : string,
+  'description' : string,
+  'masteryLevels' : Array<string>,
+  'symbol' : string,
+}
+export interface Rank {
+  'title' : string,
+  'privileges' : Array<string>,
+  'responsibilities' : Array<string>,
+  'rankingRequirements' : Array<string>,
+  'order' : bigint,
+  'description' : string,
+  'symbol' : string,
+}
+export interface ShiranagiFamily {
+  'symbols' : Array<string>,
+  'bloodlinePowers' : Array<string>,
+  'coreEthos' : string,
+  'history' : string,
+  'affiliations' : Array<string>,
+  'notableMembers' : Array<string>,
+  'familyValues' : Array<string>,
+  'evolutionOverTime' : string,
+}
 export type Time = bigint;
 export type Topics = { 'businessPartnerships' : null } |
   { 'interviewRequests' : null } |
@@ -85,37 +119,65 @@ export interface UserProfile { 'name' : string, 'email' : [] | [string] }
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
+export interface Worldbuilding {
+  'powerSystem' : Array<PowerSystemElement>,
+  'clanEyeRules' : Array<ClanEyeRule>,
+  'clans' : Array<Clan>,
+  'shiranagiFamily' : ShiranagiFamily,
+  'rankSystem' : Array<Rank>,
+}
+export interface _CaffeineStorageCreateCertificateResult {
+  'method' : string,
+  'blob_hash' : string,
+}
+export interface _CaffeineStorageRefillInformation {
+  'proposed_top_up_amount' : [] | [bigint],
+}
+export interface _CaffeineStorageRefillResult {
+  'success' : [] | [boolean],
+  'topped_up_amount' : [] | [bigint],
+}
 export interface _SERVICE {
+  '_caffeineStorageBlobIsLive' : ActorMethod<[Uint8Array], boolean>,
+  '_caffeineStorageBlobsToDelete' : ActorMethod<[], Array<Uint8Array>>,
+  '_caffeineStorageConfirmBlobDeletion' : ActorMethod<
+    [Array<Uint8Array>],
+    undefined
+  >,
+  '_caffeineStorageCreateCertificate' : ActorMethod<
+    [string],
+    _CaffeineStorageCreateCertificateResult
+  >,
+  '_caffeineStorageRefillCashier' : ActorMethod<
+    [[] | [_CaffeineStorageRefillInformation]],
+    _CaffeineStorageRefillResult
+  >,
+  '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'addCharacter' : ActorMethod<[NewCharacter], Character>,
+  'addContent' : ActorMethod<[NewContent], Content>,
+  'addEpisode' : ActorMethod<[NewEpisode], Episode>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
-  'createCharacter' : ActorMethod<[NewCharacter], string>,
-  'createContent' : ActorMethod<[NewContent], string>,
-  'createEpisode' : ActorMethod<[NewEpisode], string>,
   'deleteCharacter' : ActorMethod<[string], undefined>,
-  'deleteContactRequest' : ActorMethod<[string], undefined>,
   'deleteContent' : ActorMethod<[string], undefined>,
   'deleteEpisode' : ActorMethod<[string], undefined>,
-  'getAllCharacters' : ActorMethod<[], Array<Character>>,
-  'getAllContents' : ActorMethod<[], Array<Content>>,
-  'getAllEpisodes' : ActorMethod<[], Array<Episode>>,
-  'getAllRequests' : ActorMethod<[], Array<ContactRequest>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
-  'getCharacter' : ActorMethod<[string], [] | [Character]>,
-  'getContent' : ActorMethod<[string], [] | [Content]>,
-  'getEpisode' : ActorMethod<[string], [] | [Episode]>,
-  'getRequestsByStatus' : ActorMethod<[boolean], Array<ContactRequest>>,
-  'getRequestsByTopic' : ActorMethod<[Topics], Array<ContactRequest>>,
+  'getCharacters' : ActorMethod<[], Array<Character>>,
+  'getContactRequests' : ActorMethod<[], Array<ContactRequest>>,
+  'getContentById' : ActorMethod<[string], [] | [Content]>,
+  'getEpisodes' : ActorMethod<[], Array<Episode>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
-  'grantAdminRole' : ActorMethod<[Principal], undefined>,
+  'getWorldbuilding' : ActorMethod<[], [] | [Worldbuilding]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
-  'reorderCharacters' : ActorMethod<[Array<string>], undefined>,
+  'markContactRequestProcessed' : ActorMethod<[string], boolean>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
-  'submitRequest' : ActorMethod<[NewRequest], string>,
-  'updateCharacter' : ActorMethod<[string, NewCharacter], undefined>,
-  'updateContent' : ActorMethod<[string, NewContent], undefined>,
-  'updateEpisode' : ActorMethod<[string, NewEpisode], undefined>,
-  'updateRequestStatus' : ActorMethod<[string, boolean], undefined>,
+  'saveCharacterOrder' : ActorMethod<[Array<string>], undefined>,
+  'setWorldbuilding' : ActorMethod<[Worldbuilding], undefined>,
+  'submitContactRequest' : ActorMethod<[NewRequest], ContactRequest>,
+  'updateCharacter' : ActorMethod<[string, NewCharacter], [] | [Character]>,
+  'updateContent' : ActorMethod<[string, NewContent], [] | [Content]>,
+  'updateEpisode' : ActorMethod<[string, NewEpisode], [] | [Episode]>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

@@ -1,31 +1,112 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Drag-to-reorder characters in Admin Dashboard",
+  "title": "Save button for character order, image file upload, and Worldbuilding admin tab",
   "requirements": [
     {
-      "id": "REQ-2",
-      "summary": "Implement drag-and-drop reordering of characters in the AdminCharactersPanel component with optimistic UI updates and backend persistence",
+      "id": "REQ-1",
+      "summary": "Add a light blue 'Save' button to AdminCharactersPanel that persists drag-reordered character sequences to the backend",
       "acceptanceCriteria": [
-        "Character rows/cards in AdminCharactersPanel have a visible drag handle icon.",
-        "Admin can drag a character card and drop it in a new position within the list.",
-        "The list reorders visually in real time while dragging.",
-        "On drop, the new order is sent to the backend reorder endpoint.",
-        "On successful save, the React Query cache is invalidated/updated to reflect the persisted order.",
-        "The saved order is reflected when the admin refreshes the page.",
-        "Existing edit and delete actions per character remain fully functional after reordering.",
-        "Drag-and-drop is disabled for non-admin users."
+        "A visually distinct light blue 'Save' button is visible in the AdminCharactersPanel when character order has been changed via drag-and-drop.",
+        "Pressing Save calls the backend reorder mutation and updates the stored displayOrder for all characters.",
+        "After saving, the public CharactersSection renders characters in the newly saved order.",
+        "If no reordering has occurred, the Save button is either hidden or disabled."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Add a new `useReorderCharacters` mutation hook that calls the `reorderCharacters` backend capability with an ordered array of character IDs. The hook should invalidate the 'characters' query key on success to refresh the character list with the persisted order."
-        },
-        {
           "path": "frontend/src/components/AdminCharactersPanel.tsx",
           "operation": "modify",
-          "description": "Integrate a drag-and-drop library (e.g., @dnd-kit/core and @dnd-kit/sortable) to enable reordering of the character list. Add a drag handle icon (e.g., GripVertical from lucide-react) to each character row. Implement drag event handlers that update the local list order optimistically during dragging, then call the useReorderCharacters mutation on drop with the new ordered array of character IDs. Ensure existing edit and delete actions remain accessible and functional. The characters list should already be sorted by displayOrder ascending due to backend changes (REQ-1)."
+          "description": "Add local state to track whether the character order has been modified since the last save. Add a light blue 'Save' button that is visible only when hasUnsavedChanges is true. When clicked, the button should call the existing useReorderCharacters mutation with the current ordered character IDs, then reset the hasUnsavedChanges flag. Update the drag-and-drop handlers to set hasUnsavedChanges to true when a reorder occurs."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Verify that the useReorderCharacters mutation hook correctly calls actor.saveCharacterOrder with the ordered IDs array and invalidates the 'characters' query key on success. If the hook does not exist, add it using useMutation from React Query, wiring it to the backend saveCharacterOrder capability."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Allow admins to provide images via URL input or by uploading a file (max 50 MB) in character and content forms",
+      "acceptanceCriteria": [
+        "The image input in CharacterForm and ContentForm shows both a URL text field and a drag-and-drop/file upload zone.",
+        "Files up to 50 MB are accepted; files exceeding 50 MB show a validation error.",
+        "On successful file selection, the image is converted to a data URL or object URL and populates the image URL field.",
+        "A preview thumbnail is shown after a file is selected or a valid URL is entered."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ImageUploadInput.tsx",
+          "operation": "create",
+          "description": "Create a reusable ImageUploadInput component that accepts a value (image URL string) and onChange callback. Render a text input for URL entry and a drag-and-drop zone for file uploads. On file selection, validate the file size (max 50 MB) and convert the file to an object URL or data URL using FileReader. Call onChange with the generated URL. Display a thumbnail preview when a valid URL or file is provided. Show a validation error message if the file exceeds 50 MB."
+        },
+        {
+          "path": "frontend/src/components/CharacterForm.tsx",
+          "operation": "modify",
+          "description": "Replace the existing image URL text input with the new ImageUploadInput component. Wire the component's value to the form's imageUrl field and its onChange to the form's setValue callback. Ensure the form validation and submission logic remain unchanged."
+        },
+        {
+          "path": "frontend/src/components/ContentForm.tsx",
+          "operation": "modify",
+          "description": "Replace the existing image URL text input with the new ImageUploadInput component. Wire the component's value to the form's imageUrl field and its onChange to the form's setValue callback. Ensure the form validation and submission logic remain unchanged."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Add a 'Worldbuilding' tab to AdminDashboard and create AdminWorldbuildingPanel for editing worldbuilding content",
+      "acceptanceCriteria": [
+        "A 'Worldbuilding' entry appears in AdminSidebar and navigates to AdminWorldbuildingPanel.",
+        "AdminWorldbuildingPanel displays editable fields for clans (name, description, sigil), clan eye rules, power system details, rank system details, and Shiranagi family entries.",
+        "Saving changes persists the worldbuilding data to the backend and the public WorldbuildingSection renders the updated content.",
+        "All worldbuilding fields support create, update, and delete operations."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AdminSidebar.tsx",
+          "operation": "modify",
+          "description": "Add a 'Worldbuilding' navigation item to the sidebar links array. When clicked, it should set the active section to 'worldbuilding'. Position the item logically in the navigation order (e.g., after Content and before Contact Requests)."
+        },
+        {
+          "path": "frontend/src/components/AdminDashboard.tsx",
+          "operation": "modify",
+          "description": "Add a conditional branch that renders AdminWorldbuildingPanel when activeSection is 'worldbuilding'. Import the new AdminWorldbuildingPanel component at the top of the file."
+        },
+        {
+          "path": "frontend/src/components/AdminWorldbuildingPanel.tsx",
+          "operation": "create",
+          "description": "Create the AdminWorldbuildingPanel component that fetches the current worldbuilding data using a new useGetWorldbuilding query hook. Display collapsible/tabbed sections for Clans, Clan Eye Rules, Power System, Rank System, and Shiranagi Family. Each section should render a list of entries with inline edit/delete controls and an 'Add New' button. Use react-hook-form or local state for editing individual entries. Provide a 'Save All' button that calls a new useUpdateWorldbuilding mutation hook with the complete Worldbuilding object. Show loading states, error messages, and success toasts appropriately."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add a useGetWorldbuilding query hook that calls actor.getWorldbuilding and returns the Worldbuilding object or null. Add a useUpdateWorldbuilding mutation hook that calls actor.setWorldbuilding with the updated Worldbuilding data and invalidates the 'worldbuilding' query key on success. Ensure the hooks follow the same pattern as other query/mutation hooks in this file."
+        },
+        {
+          "path": "frontend/src/components/WorldbuildingSection.tsx",
+          "operation": "modify",
+          "description": "Update the WorldbuildingSection component to fetch worldbuilding data from the backend using the new useGetWorldbuilding hook instead of reading from animeSiteConfig. Display the fetched data in the same visual layout. Add loading skeletons and error/empty states. Fall back to animeSiteConfig data if the backend returns null (for backward compatibility during initial setup)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Apply a dark theme to the admin dashboard",
+      "acceptanceCriteria": [
+        "The AdminDashboard, AdminSidebar, and all admin panels render with a dark background and appropriately contrasted text and UI elements.",
+        "Form inputs, buttons, modals, and badges adopt the dark theme without readability issues.",
+        "The dark theme does not affect the public-facing site styling."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Extend the existing .admin-dashboard scoped dark theme CSS block to include comprehensive dark theme styling for all admin components. Define dark background colors, borders, text colors, input styles, button styles, badge styles, and modal styles using the OKLCH color tokens already defined in the file. Ensure all admin-specific selectors are prefixed with .admin-dashboard to avoid affecting the public site. Include hover and focus states for interactive elements."
+        },
+        {
+          "path": "frontend/src/components/AdminDashboard.tsx",
+          "operation": "modify",
+          "description": "Ensure the root container div of AdminDashboard has the className 'admin-dashboard' so that the scoped dark theme styles apply to all child components. Verify that all descendant admin components inherit the dark theme without additional changes."
         }
       ]
     }

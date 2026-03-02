@@ -11,7 +11,9 @@ import type {
   Content,
   NewContent,
   UserProfile,
+  Worldbuilding,
 } from '../backend';
+import { UserRole } from '../backend';
 import { Principal } from '@dfinity/principal';
 import { createActorWithConfig } from '../config';
 
@@ -87,7 +89,7 @@ export function useSubmitRequest() {
   return useMutation({
     mutationFn: async (input: NewRequest) => {
       if (!actor) throw new Error('Not connected to backend');
-      return actor.submitRequest(input);
+      return actor.submitContactRequest(input);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contactRequests'] });
@@ -106,7 +108,7 @@ export function useGetAllRequests() {
     queryFn: async () => {
       if (!identity) throw new Error('Not authenticated');
       const actor = await makeAuthenticatedActor(identity);
-      return actor.getAllRequests();
+      return actor.getContactRequests();
     },
     enabled: !!identity,
     retry: false,
@@ -118,10 +120,10 @@ export function useUpdateRequestStatus() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ requestId, processed }: { requestId: string; processed: boolean }) => {
+    mutationFn: async ({ requestId }: { requestId: string; processed: boolean }) => {
       if (!identity) throw new Error('Not authenticated');
       const actor = await makeAuthenticatedActor(identity);
-      return actor.updateRequestStatus(requestId, processed);
+      return actor.markContactRequestProcessed(requestId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contactRequests'] });
@@ -129,15 +131,14 @@ export function useUpdateRequestStatus() {
   });
 }
 
+// Note: Backend does not support deleting contact requests; this is a no-op stub
 export function useDeleteContactRequest() {
-  const { identity } = useInternetIdentity();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (requestId: string) => {
-      if (!identity) throw new Error('Not authenticated');
-      const actor = await makeAuthenticatedActor(identity);
-      return actor.deleteContactRequest(requestId);
+    mutationFn: async (_requestId: string) => {
+      // Backend does not expose a deleteContactRequest method.
+      throw new Error('Delete contact request is not supported by the backend.');
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contactRequests'] });
@@ -161,7 +162,7 @@ export function useGrantAdminRole() {
         throw new Error('Invalid principal ID format. Please check and try again.');
       }
       const actor = await makeAuthenticatedActor(identity);
-      return actor.grantAdminRole(principal);
+      return actor.assignCallerUserRole(principal, UserRole.admin);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['isCallerAdmin'] });
@@ -178,7 +179,7 @@ export function useGetAllEpisodes() {
     queryKey: ['episodes'],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getAllEpisodes();
+      return actor.getEpisodes();
     },
     enabled: !!actor && !isFetching,
   });
@@ -192,7 +193,7 @@ export function useCreateEpisode() {
     mutationFn: async (newEpisode: NewEpisode) => {
       if (!identity) throw new Error('Not authenticated');
       const actor = await makeAuthenticatedActor(identity);
-      return actor.createEpisode(newEpisode);
+      return actor.addEpisode(newEpisode);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['episodes'] });
@@ -241,7 +242,7 @@ export function useGetAllCharacters() {
     queryKey: ['characters'],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getAllCharacters();
+      return actor.getCharacters();
     },
     enabled: !!actor && !isFetching,
   });
@@ -255,7 +256,7 @@ export function useCreateCharacter() {
     mutationFn: async (newCharacter: NewCharacter) => {
       if (!identity) throw new Error('Not authenticated');
       const actor = await makeAuthenticatedActor(identity);
-      return actor.createCharacter(newCharacter);
+      return actor.addCharacter(newCharacter);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['characters'] });
@@ -303,7 +304,7 @@ export function useReorderCharacters() {
     mutationFn: async (newOrder: string[]) => {
       if (!identity) throw new Error('Not authenticated');
       const actor = await makeAuthenticatedActor(identity);
-      return actor.reorderCharacters(newOrder);
+      return actor.saveCharacterOrder(newOrder);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['characters'] });
@@ -313,14 +314,29 @@ export function useReorderCharacters() {
 
 // ─── Content ──────────────────────────────────────────────────────────────────
 
+// Backend only exposes getContentById; we store a known list of IDs via a
+// separate query that fetches all content by iterating known IDs.
+// Since the backend has no getAllContents, we use a workaround: we cache
+// content entries client-side after create/update and re-fetch by ID.
+// For simplicity, we maintain a local registry of content IDs in the query cache.
+
 export function useGetAllContents() {
   const { actor, isFetching } = useActor();
+
+  // We use a special query key 'contentIds' to track known IDs
+  const queryClient = useQueryClient();
 
   return useQuery<Content[]>({
     queryKey: ['contents'],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getAllContents();
+      // Retrieve known IDs from cache, or start with empty
+      const knownIds: string[] = queryClient.getQueryData(['contentIds']) ?? [];
+      if (knownIds.length === 0) return [];
+      const results = await Promise.all(
+        knownIds.map((id) => actor.getContentById(id))
+      );
+      return results.filter((c): c is Content => c !== null);
     },
     enabled: !!actor && !isFetching,
   });
@@ -334,9 +350,12 @@ export function useCreateContent() {
     mutationFn: async (newContent: NewContent) => {
       if (!identity) throw new Error('Not authenticated');
       const actor = await makeAuthenticatedActor(identity);
-      return actor.createContent(newContent);
+      return actor.addContent(newContent);
     },
-    onSuccess: () => {
+    onSuccess: (created) => {
+      // Register the new ID
+      const existing: string[] = queryClient.getQueryData(['contentIds']) ?? [];
+      queryClient.setQueryData(['contentIds'], [...existing, created.id]);
       queryClient.invalidateQueries({ queryKey: ['contents'] });
     },
   });
@@ -368,8 +387,42 @@ export function useDeleteContent() {
       const actor = await makeAuthenticatedActor(identity);
       return actor.deleteContent(contentId);
     },
-    onSuccess: () => {
+    onSuccess: (_data, contentId) => {
+      // Remove the ID from the registry
+      const existing: string[] = queryClient.getQueryData(['contentIds']) ?? [];
+      queryClient.setQueryData(['contentIds'], existing.filter((id) => id !== contentId));
       queryClient.invalidateQueries({ queryKey: ['contents'] });
+    },
+  });
+}
+
+// ─── Worldbuilding ────────────────────────────────────────────────────────────
+
+export function useGetWorldbuilding() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<Worldbuilding | null>({
+    queryKey: ['worldbuilding'],
+    queryFn: async () => {
+      if (!actor) return null;
+      return actor.getWorldbuilding();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useUpdateWorldbuilding() {
+  const { identity } = useInternetIdentity();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (worldbuildingData: Worldbuilding) => {
+      if (!identity) throw new Error('Not authenticated');
+      const actor = await makeAuthenticatedActor(identity);
+      return actor.setWorldbuilding(worldbuildingData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['worldbuilding'] });
     },
   });
 }
