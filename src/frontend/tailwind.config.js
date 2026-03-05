@@ -64,7 +64,7 @@ export default {
             },
             boxShadow: {
                 xs: '0 1px 2px 0 rgba(0,0,0,0.05)',
-                'manga': '4px 4px 0px 0px oklch(var(--foreground) / 0.1)'
+                manga: '4px 4px 0px 0px oklch(var(--foreground) / 0.1)'
             },
             keyframes: {
                 'accordion-down': {
@@ -81,8 +81,10 @@ export default {
                 'accordion-up': 'accordion-up 0.2s ease-out'
             },
             fontFamily: {
-                sans: ['Inter', 'system-ui', 'sans-serif'],
-                serif: ['Noto Serif JP', 'serif']
+                sans: ['"Outfit"', 'system-ui', 'sans-serif'],
+                display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+                bricolage: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+                outfit: ['"Outfit"', 'system-ui', 'sans-serif']
             }
         }
     },

@@ -11,7 +11,9 @@ export function normalizeIntroEmbedUrl(url: string): string {
 
   // YouTube watch URLs: https://www.youtube.com/watch?v=VIDEO_ID
   // YouTube share URLs: https://youtu.be/VIDEO_ID
-  const youtubeMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/);
+  const youtubeMatch = url.match(
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/,
+  );
   if (youtubeMatch) {
     return `https://www.youtube.com/embed/${youtubeMatch[1]}`;
   }

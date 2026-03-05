@@ -1,390 +1,472 @@
-import { useState } from 'react';
-import { SectionHeader } from './SectionHeader';
-import { useInternetIdentity } from '../hooks/useInternetIdentity';
-import { useGetAllRequests, useUpdateRequestStatus, useIsCallerAdmin, useGrantAdminRole } from '../hooks/useQueries';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Loader2, Download, LogIn, LogOut, Shield, CheckCircle, Circle, RefreshCw, Copy, UserPlus } from 'lucide-react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
-import { Badge } from './ui/badge';
-import { Topics } from '../backend';
-import { toast } from 'sonner';
-import { Separator } from './ui/separator';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  AlertCircle,
+  Check,
+  CheckCircle,
+  Clock,
+  Copy,
+  Download,
+  Loader2,
+  LogIn,
+  LogOut,
+  Mail,
+  RefreshCw,
+  Shield,
+  UserPlus,
+  XCircle,
+} from "lucide-react";
+import React, { useState } from "react";
+import { toast } from "sonner";
+import type { ContactRequest, Topics } from "../backend";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import {
+  useGetAllRequests,
+  useGrantAdminRole,
+  useIsCallerAdmin,
+  useUpdateRequestStatus,
+} from "../hooks/useQueries";
+
+const TOPIC_LABELS: Record<string, string> = {
+  businessPartnerships: "Business Partnerships",
+  advertisingInquiries: "Advertising Inquiries",
+  interviewRequests: "Interview Requests",
+  eventOrWorkshopProposals: "Event / Workshop Proposals",
+  publishingSubmissions: "Publishing Submissions",
+  challengesAndBounties: "Challenges & Bounties",
+  generalInquiries: "General Inquiries",
+};
+
+function topicLabel(topic: Topics): string {
+  return TOPIC_LABELS[topic as string] ?? String(topic);
+}
+
+function formatDate(timestamp: bigint): string {
+  const ms = Number(timestamp / 1_000_000n);
+  return new Date(ms).toLocaleString();
+}
 
 export function AdminSection() {
-  const { login, clear, loginStatus, identity } = useInternetIdentity();
+  const { login, clear, isLoggingIn, identity } = useInternetIdentity();
+  const queryClient = useQueryClient();
+
   const isAuthenticated = !!identity;
-  const isLoggingIn = loginStatus === 'logging-in';
+  const principal = identity?.getPrincipal().toString() ?? "";
 
-  const { data: requests, isLoading, error, refetch, isFetching } = useGetAllRequests(isAuthenticated);
-  const { data: isAdmin, isLoading: isAdminLoading } = useIsCallerAdmin(isAuthenticated);
-  const updateStatusMutation = useUpdateRequestStatus();
-  const grantAdminMutation = useGrantAdminRole();
+  const { data: isAdmin, isLoading: adminCheckLoading } = useIsCallerAdmin();
+  const {
+    data: requests,
+    isLoading: requestsLoading,
+    error: requestsError,
+    refetch,
+  } = useGetAllRequests();
+  const updateStatus = useUpdateRequestStatus();
+  const grantAdmin = useGrantAdminRole();
 
-  const [principalToPromote, setPrincipalToPromote] = useState('');
+  const [copiedPrincipal, setCopiedPrincipal] = useState(false);
+  const [newAdminPrincipal, setNewAdminPrincipal] = useState("");
+  const [filterStatus, setFilterStatus] = useState<
+    "all" | "pending" | "processed"
+  >("all");
 
-  const currentPrincipal = identity?.getPrincipal().toString() || '';
-
-  const handleAuth = async () => {
-    if (isAuthenticated) {
-      await clear();
-    } else {
-      try {
-        await login();
-      } catch (error: any) {
-        console.error('Login error:', error);
-        toast.error('Login failed', {
-          description: error.message || 'Please try again.'
-        });
+  const handleLogin = async () => {
+    try {
+      await login();
+    } catch (err: any) {
+      if (err?.message === "User is already authenticated") {
+        await clear();
+        setTimeout(() => login(), 300);
+      } else {
+        toast.error("Login failed. Please try again.");
       }
     }
   };
 
-  const handleCopyPrincipal = () => {
-    if (currentPrincipal) {
-      navigator.clipboard.writeText(currentPrincipal);
-      toast.success('Principal copied to clipboard');
+  const handleLogout = async () => {
+    await clear();
+    queryClient.clear();
+  };
+
+  const handleCopyPrincipal = async () => {
+    await navigator.clipboard.writeText(principal);
+    setCopiedPrincipal(true);
+    setTimeout(() => setCopiedPrincipal(false), 2000);
+  };
+
+  const handleToggleStatus = async (req: ContactRequest) => {
+    try {
+      await updateStatus.mutateAsync({
+        requestId: req.id,
+        processed: !req.processed,
+      });
+      toast.success(
+        `Request marked as ${!req.processed ? "processed" : "pending"}`,
+      );
+    } catch (err: any) {
+      toast.error(err?.message ?? "Failed to update status");
     }
   };
 
-  const handleGrantAdmin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!principalToPromote.trim()) {
-      toast.error('Please enter a principal');
+  const handleGrantAdmin = async () => {
+    if (!newAdminPrincipal.trim()) {
+      toast.error("Please enter a principal ID");
       return;
     }
-
     try {
-      await grantAdminMutation.mutateAsync(principalToPromote);
-      toast.success('Admin access granted successfully', {
-        description: 'The user can now access admin features.'
-      });
-      setPrincipalToPromote('');
-    } catch (error: any) {
-      toast.error('Failed to grant admin access', {
-        description: error.message || 'Please check the principal and try again.'
-      });
+      await grantAdmin.mutateAsync(newAdminPrincipal.trim());
+      toast.success("Admin role granted successfully");
+      setNewAdminPrincipal("");
+    } catch (err: any) {
+      toast.error(err?.message ?? "Failed to grant admin role");
     }
   };
 
   const handleExport = () => {
     if (!requests || requests.length === 0) {
-      toast.info('No data to export');
+      toast.error("No requests to export");
       return;
     }
-
-    const dataStr = JSON.stringify(requests, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `contact-requests-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const headers = ["ID", "Email", "Topic", "Message", "Timestamp", "Status"];
+    const rows = requests.map((r) => [
+      r.id,
+      r.email,
+      topicLabel(r.topic),
+      `"${r.message.replace(/"/g, '""')}"`,
+      formatDate(r.timestamp),
+      r.processed ? "Processed" : "Pending",
+    ]);
+    const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `contact-requests-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
     URL.revokeObjectURL(url);
-    
-    toast.success('Export successful', {
-      description: 'Contact requests downloaded as JSON file.'
-    });
+    toast.success("Exported successfully");
   };
 
-  const handleToggleStatus = async (requestId: string, currentStatus: boolean) => {
-    try {
-      await updateStatusMutation.mutateAsync({
-        requestId,
-        processed: !currentStatus
-      });
-      toast.success('Status updated successfully');
-    } catch (error: any) {
-      toast.error('Failed to update status', {
-        description: error.message || 'Please try again.'
-      });
-    }
-  };
+  const filteredRequests = (requests ?? []).filter((r) => {
+    if (filterStatus === "pending") return !r.processed;
+    if (filterStatus === "processed") return r.processed;
+    return true;
+  });
 
-  const formatDate = (timestamp: bigint) => {
-    const date = new Date(Number(timestamp) / 1000000);
-    return date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const formatTopic = (topic: Topics) => {
-    const topicMap: Record<Topics, string> = {
-      [Topics.generalInquiries]: 'General',
-      [Topics.businessPartnerships]: 'Business',
-      [Topics.advertisingInquiries]: 'Advertising',
-      [Topics.interviewRequests]: 'Interview',
-      [Topics.eventOrWorkshopProposals]: 'Event/Workshop',
-      [Topics.publishingSubmissions]: 'Publishing',
-      [Topics.challengesAndBounties]: 'Challenges'
-    };
-    return topicMap[topic] || topic;
-  };
-
-  return (
-    <section id="admin" className="py-20 bg-muted/30">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-center gap-3 mb-8">
-          <Shield className="text-accent" size={32} />
-          <SectionHeader title="Admin Dashboard" />
-        </div>
-
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-card border-2 border-accent/30 rounded-lg p-6 shadow-lg">
-            {/* Auth Section */}
-            <div className="flex items-center justify-between mb-6 pb-6 border-b border-border">
-              <div className="flex items-center gap-3">
-                <div className={`w-3 h-3 rounded-full ${isAuthenticated ? 'bg-green-500' : 'bg-gray-400'}`} />
-                <span className="text-sm font-medium text-muted-foreground">
-                  {isAuthenticated ? 'Authenticated' : 'Not authenticated'}
-                </span>
-              </div>
-              <Button
-                onClick={handleAuth}
-                disabled={isLoggingIn}
-                variant={isAuthenticated ? 'outline' : 'default'}
-                className="gap-2"
-              >
-                {isLoggingIn ? (
-                  <>
-                    <Loader2 className="animate-spin" size={16} />
-                    Logging in...
-                  </>
-                ) : isAuthenticated ? (
-                  <>
-                    <LogOut size={16} />
-                    Logout
-                  </>
-                ) : (
-                  <>
-                    <LogIn size={16} />
-                    Login with Internet Identity
-                  </>
-                )}
-              </Button>
-            </div>
-
-            {/* Content */}
-            {!isAuthenticated ? (
-              <div className="text-center py-12">
-                <Shield className="mx-auto mb-4 text-muted-foreground" size={48} />
-                <h3 className="text-xl font-bold text-foreground mb-2">Authentication Required</h3>
-                <p className="text-muted-foreground mb-6">
-                  Please log in with Internet Identity to access the admin dashboard.
-                </p>
-              </div>
+  // ── Not logged in ──────────────────────────────────────────────────────────
+  if (!isAuthenticated) {
+    return (
+      <section id="admin" className="py-20 bg-background">
+        <div className="max-w-lg mx-auto px-6 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent/10 mb-6">
+            <Shield className="w-8 h-8 text-accent" />
+          </div>
+          <h2 className="font-heading text-3xl font-bold text-foreground mb-3">
+            Admin Access
+          </h2>
+          <p className="text-muted-foreground mb-8">
+            Sign in with your Internet Identity to access the admin dashboard.
+          </p>
+          <Button
+            onClick={handleLogin}
+            disabled={isLoggingIn}
+            className="gap-2"
+            size="lg"
+          >
+            {isLoggingIn ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" /> Signing in…
+              </>
             ) : (
               <>
-                {/* Principal Display Section - Always visible when authenticated */}
-                <div className="mb-6 p-4 bg-muted/50 rounded-lg border border-border">
-                  <Label className="text-sm font-semibold text-foreground mb-2 block">
-                    Your Internet Identity Principal
-                  </Label>
-                  <p className="text-xs text-muted-foreground mb-3">
-                    This is your unique identifier on the Internet Computer. Share this with an admin to receive access.
-                  </p>
-                  <div className="flex gap-2">
-                    <Input
-                      value={currentPrincipal}
-                      readOnly
-                      className="font-mono text-sm"
-                    />
-                    <Button
-                      onClick={handleCopyPrincipal}
-                      variant="outline"
-                      size="icon"
-                      className="shrink-0"
-                    >
-                      <Copy size={16} />
-                    </Button>
-                  </div>
-                </div>
+                <LogIn className="w-4 h-4" /> Sign In
+              </>
+            )}
+          </Button>
+        </div>
+      </section>
+    );
+  }
 
-                {isAdminLoading ? (
-                  <div className="text-center py-12">
-                    <Loader2 className="mx-auto mb-4 animate-spin text-accent" size={48} />
-                    <p className="text-muted-foreground">Checking permissions...</p>
-                  </div>
-                ) : error || !isAdmin ? (
-                  <div className="text-center py-12">
-                    <Shield className="mx-auto mb-4 text-destructive" size={48} />
-                    <h3 className="text-xl font-bold text-foreground mb-2">Access Denied</h3>
-                    <p className="text-muted-foreground mb-6">
-                      You do not have permission to view contact requests.
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Only authorized administrators can access this section.
-                    </p>
-                  </div>
-                ) : (
-                  <>
-                    {/* Admin-only: Grant Admin Access Section */}
-                    <div className="mb-6 p-4 bg-accent/5 rounded-lg border-2 border-accent/30">
-                      <div className="flex items-center gap-2 mb-3">
-                        <UserPlus className="text-accent" size={20} />
-                        <h3 className="text-lg font-bold text-foreground">Grant Admin Access</h3>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        <strong>Important:</strong> Admin permissions are granted by Internet Identity principal, not by email address. 
-                        Ask the user to log in and share their principal (shown above when logged in).
-                      </p>
-                      <form onSubmit={handleGrantAdmin} className="space-y-3">
-                        <div>
-                          <Label htmlFor="principal-input" className="text-sm font-medium">
-                            User's Internet Identity Principal
-                          </Label>
-                          <Input
-                            id="principal-input"
-                            type="text"
-                            placeholder="e.g., 2vxsx-fae..."
-                            value={principalToPromote}
-                            onChange={(e) => setPrincipalToPromote(e.target.value)}
-                            disabled={grantAdminMutation.isPending}
-                            className="font-mono text-sm mt-1"
-                          />
-                        </div>
-                        <Button
-                          type="submit"
-                          disabled={grantAdminMutation.isPending || !principalToPromote.trim()}
-                          className="gap-2"
+  // ── Checking admin status ──────────────────────────────────────────────────
+  if (adminCheckLoading) {
+    return (
+      <section id="admin" className="py-20 bg-background">
+        <div className="max-w-lg mx-auto px-6 text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-accent mx-auto mb-4" />
+          <p className="text-muted-foreground">Verifying admin access…</p>
+        </div>
+      </section>
+    );
+  }
+
+  // ── Not admin ──────────────────────────────────────────────────────────────
+  if (!isAdmin) {
+    return (
+      <section id="admin" className="py-20 bg-background">
+        <div className="max-w-lg mx-auto px-6 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-destructive/10 mb-6">
+            <XCircle className="w-8 h-8 text-destructive" />
+          </div>
+          <h2 className="font-heading text-3xl font-bold text-foreground mb-3">
+            Access Denied
+          </h2>
+          <p className="text-muted-foreground mb-4">
+            Your principal does not have admin privileges.
+          </p>
+          <div className="bg-muted rounded-lg p-3 mb-6 flex items-center gap-2 text-sm font-mono break-all">
+            <span className="flex-1 text-left text-muted-foreground">
+              {principal}
+            </span>
+            <button
+              type="button"
+              onClick={handleCopyPrincipal}
+              className="shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {copiedPrincipal ? (
+                <Check className="w-4 h-4 text-green-600" />
+              ) : (
+                <Copy className="w-4 h-4" />
+              )}
+            </button>
+          </div>
+          <p className="text-xs text-muted-foreground mb-6">
+            Share your principal ID with an existing admin to request access.
+          </p>
+          <Button variant="outline" onClick={handleLogout} className="gap-2">
+            <LogOut className="w-4 h-4" /> Sign Out
+          </Button>
+        </div>
+      </section>
+    );
+  }
+
+  // ── Admin dashboard ────────────────────────────────────────────────────────
+  return (
+    <section id="admin" className="py-20 bg-background">
+      <div className="max-w-5xl mx-auto px-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+          <div className="flex items-center gap-3">
+            <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent/10">
+              <Shield className="w-5 h-5 text-accent" />
+            </div>
+            <div>
+              <h2 className="font-heading text-2xl font-bold text-foreground">
+                Admin Dashboard
+              </h2>
+              <div className="flex items-center gap-2 mt-0.5">
+                <span className="text-xs text-muted-foreground font-mono truncate max-w-[200px]">
+                  {principal}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleCopyPrincipal}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {copiedPrincipal ? (
+                    <Check className="w-3 h-3 text-green-600" />
+                  ) : (
+                    <Copy className="w-3 h-3" />
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleLogout}
+            className="gap-2 self-start sm:self-auto"
+          >
+            <LogOut className="w-4 h-4" /> Sign Out
+          </Button>
+        </div>
+
+        {/* Grant Admin Role */}
+        <div className="bg-muted/40 border border-border rounded-xl p-6 mb-8">
+          <h3 className="font-heading text-lg font-semibold text-foreground mb-1 flex items-center gap-2">
+            <UserPlus className="w-5 h-5 text-accent" /> Grant Admin Role
+          </h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Enter a principal ID to grant admin access to another user.
+          </p>
+          <div className="flex gap-3">
+            <Input
+              value={newAdminPrincipal}
+              onChange={(e) => setNewAdminPrincipal(e.target.value)}
+              placeholder="xxxxx-xxxxx-xxxxx-xxxxx-xxx"
+              className="font-mono text-sm flex-1"
+              disabled={grantAdmin.isPending}
+            />
+            <Button
+              onClick={handleGrantAdmin}
+              disabled={grantAdmin.isPending || !newAdminPrincipal.trim()}
+              className="gap-2 shrink-0"
+            >
+              {grantAdmin.isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" /> Granting…
+                </>
+              ) : (
+                <>
+                  <UserPlus className="w-4 h-4" /> Grant
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+
+        {/* Contact Requests */}
+        <div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+            <h3 className="font-heading text-lg font-semibold text-foreground flex items-center gap-2">
+              <Mail className="w-5 h-5 text-accent" /> Contact Requests
+              {requests && (
+                <Badge variant="secondary" className="ml-1">
+                  {requests.length}
+                </Badge>
+              )}
+            </h3>
+            <div className="flex items-center gap-2 flex-wrap">
+              {(["all", "pending", "processed"] as const).map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  onClick={() => setFilterStatus(f)}
+                  className={`px-3 py-1 rounded-full text-xs font-medium transition-colors capitalize ${
+                    filterStatus === f
+                      ? "bg-accent text-accent-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  }`}
+                >
+                  {f}
+                </button>
+              ))}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => refetch()}
+                className="gap-1.5"
+              >
+                <RefreshCw className="w-3.5 h-3.5" /> Refresh
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExport}
+                className="gap-1.5"
+              >
+                <Download className="w-3.5 h-3.5" /> Export CSV
+              </Button>
+            </div>
+          </div>
+
+          {requestsLoading && (
+            <div className="text-center py-12">
+              <Loader2 className="w-6 h-6 animate-spin text-accent mx-auto mb-3" />
+              <p className="text-muted-foreground text-sm">Loading requests…</p>
+            </div>
+          )}
+
+          {requestsError && (
+            <div className="flex items-start gap-3 bg-destructive/10 border border-destructive/20 rounded-xl p-4">
+              <AlertCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-destructive">
+                  Failed to load requests
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {(requestsError as Error).message}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {!requestsLoading &&
+            !requestsError &&
+            filteredRequests.length === 0 && (
+              <div className="text-center py-12 text-muted-foreground">
+                <Mail className="w-8 h-8 mx-auto mb-3 opacity-40" />
+                <p className="text-sm">
+                  No {filterStatus !== "all" ? filterStatus : ""} requests
+                  found.
+                </p>
+              </div>
+            )}
+
+          {!requestsLoading &&
+            !requestsError &&
+            filteredRequests.length > 0 && (
+              <div className="space-y-4">
+                {filteredRequests.map((req) => (
+                  <div
+                    key={req.id}
+                    className="bg-card border border-border rounded-xl p-5 hover:border-accent/40 transition-colors"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xs font-mono text-muted-foreground">
+                          #{req.id}
+                        </span>
+                        <Badge
+                          variant={req.processed ? "secondary" : "default"}
+                          className="text-xs"
                         >
-                          {grantAdminMutation.isPending ? (
+                          {req.processed ? (
                             <>
-                              <Loader2 className="animate-spin" size={16} />
-                              Granting access...
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              Processed
                             </>
                           ) : (
                             <>
-                              <UserPlus size={16} />
-                              Grant Admin Access
+                              <Clock className="w-3 h-3 mr-1" />
+                              Pending
                             </>
                           )}
-                        </Button>
-                      </form>
-                    </div>
-
-                    <Separator className="my-6" />
-
-                    {/* Contact Requests Section */}
-                    {isLoading ? (
-                      <div className="text-center py-12">
-                        <Loader2 className="mx-auto mb-4 animate-spin text-accent" size={48} />
-                        <p className="text-muted-foreground">Loading contact requests...</p>
+                        </Badge>
+                        <Badge variant="outline" className="text-xs">
+                          {topicLabel(req.topic)}
+                        </Badge>
                       </div>
-                    ) : (
-                      <>
-                        {/* Actions Bar */}
-                        <div className="flex items-center justify-between mb-6">
-                          <div className="flex items-center gap-2">
-                            <h3 className="text-lg font-bold text-foreground">
-                              Contact Requests
-                            </h3>
-                            <Badge variant="secondary">
-                              {requests?.length || 0} total
-                            </Badge>
-                          </div>
-                          <div className="flex gap-2">
-                            <Button
-                              onClick={() => refetch()}
-                              disabled={isFetching}
-                              variant="outline"
-                              size="sm"
-                              className="gap-2"
-                            >
-                              <RefreshCw className={isFetching ? 'animate-spin' : ''} size={16} />
-                              Refresh
-                            </Button>
-                            <Button
-                              onClick={handleExport}
-                              disabled={!requests || requests.length === 0}
-                              variant="default"
-                              size="sm"
-                              className="gap-2"
-                            >
-                              <Download size={16} />
-                              Export JSON
-                            </Button>
-                          </div>
-                        </div>
-
-                        {/* Table */}
-                        {!requests || requests.length === 0 ? (
-                          <div className="text-center py-12 border-2 border-dashed border-border rounded-lg">
-                            <p className="text-muted-foreground">No contact requests yet.</p>
-                          </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleToggleStatus(req)}
+                        disabled={updateStatus.isPending}
+                        className="gap-1.5 shrink-0 text-xs"
+                      >
+                        {updateStatus.isPending ? (
+                          <Loader2 className="w-3 h-3 animate-spin" />
+                        ) : req.processed ? (
+                          <>
+                            <XCircle className="w-3 h-3" /> Mark Pending
+                          </>
                         ) : (
-                          <div className="border-2 border-border rounded-lg overflow-hidden">
-                            <div className="overflow-x-auto">
-                              <Table>
-                                <TableHeader>
-                                  <TableRow>
-                                    <TableHead className="w-[100px]">Status</TableHead>
-                                    <TableHead className="w-[180px]">Date</TableHead>
-                                    <TableHead className="w-[120px]">Topic</TableHead>
-                                    <TableHead className="w-[200px]">Email</TableHead>
-                                    <TableHead>Message</TableHead>
-                                  </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                  {requests.map((request) => (
-                                    <TableRow key={request.id}>
-                                      <TableCell>
-                                        <Button
-                                          onClick={() => handleToggleStatus(request.id, request.processed)}
-                                          disabled={updateStatusMutation.isPending}
-                                          variant="ghost"
-                                          size="sm"
-                                          className="gap-2"
-                                        >
-                                          {request.processed ? (
-                                            <>
-                                              <CheckCircle className="text-green-500" size={16} />
-                                              Done
-                                            </>
-                                          ) : (
-                                            <>
-                                              <Circle className="text-gray-400" size={16} />
-                                              New
-                                            </>
-                                          )}
-                                        </Button>
-                                      </TableCell>
-                                      <TableCell className="text-sm text-muted-foreground">
-                                        {formatDate(request.timestamp)}
-                                      </TableCell>
-                                      <TableCell>
-                                        <Badge variant="outline" className="text-xs">
-                                          {formatTopic(request.topic)}
-                                        </Badge>
-                                      </TableCell>
-                                      <TableCell className="text-sm font-mono">
-                                        {request.email}
-                                      </TableCell>
-                                      <TableCell className="text-sm max-w-md truncate">
-                                        {request.message}
-                                      </TableCell>
-                                    </TableRow>
-                                  ))}
-                                </TableBody>
-                              </Table>
-                            </div>
-                          </div>
+                          <>
+                            <CheckCircle className="w-3 h-3" /> Mark Processed
+                          </>
                         )}
-                      </>
-                    )}
-                  </>
-                )}
-              </>
+                      </Button>
+                    </div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                      <span className="text-sm text-foreground">
+                        {req.email}
+                      </span>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                      {req.message}
+                    </p>
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Clock className="w-3 h-3" />
+                      {formatDate(req.timestamp)}
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
-          </div>
         </div>
       </div>
     </section>

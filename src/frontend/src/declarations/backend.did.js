@@ -8,10 +8,75 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const _CaffeineStorageCreateCertificateResult = IDL.Record({
+  'method' : IDL.Text,
+  'blob_hash' : IDL.Text,
+});
+export const _CaffeineStorageRefillInformation = IDL.Record({
+  'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
+});
+export const _CaffeineStorageRefillResult = IDL.Record({
+  'success' : IDL.Opt(IDL.Bool),
+  'topped_up_amount' : IDL.Opt(IDL.Nat),
+});
+export const NewCharacter = IDL.Record({
+  'bio' : IDL.Text,
+  'traits' : IDL.Vec(IDL.Text),
+  'name' : IDL.Text,
+  'role' : IDL.Text,
+  'imageUrl' : IDL.Text,
+  'power' : IDL.Text,
+  'weapon' : IDL.Text,
+});
+export const Character = IDL.Record({
+  'id' : IDL.Text,
+  'bio' : IDL.Text,
+  'displayOrder' : IDL.Nat,
+  'traits' : IDL.Vec(IDL.Text),
+  'name' : IDL.Text,
+  'role' : IDL.Text,
+  'imageUrl' : IDL.Text,
+  'power' : IDL.Text,
+  'weapon' : IDL.Text,
+});
+export const NewContent = IDL.Record({
+  'title' : IDL.Text,
+  'contentType' : IDL.Text,
+  'body' : IDL.Text,
+  'imageUrl' : IDL.Opt(IDL.Text),
+});
+export const Content = IDL.Record({
+  'id' : IDL.Text,
+  'title' : IDL.Text,
+  'contentType' : IDL.Text,
+  'body' : IDL.Text,
+  'imageUrl' : IDL.Opt(IDL.Text),
+});
+export const NewEpisode = IDL.Record({
+  'title' : IDL.Text,
+  'thumbnailUrl' : IDL.Text,
+  'description' : IDL.Text,
+  'seasonNumber' : IDL.Nat,
+  'episodeNumber' : IDL.Nat,
+  'videoUrl' : IDL.Text,
+});
+export const Episode = IDL.Record({
+  'id' : IDL.Text,
+  'title' : IDL.Text,
+  'thumbnailUrl' : IDL.Text,
+  'description' : IDL.Text,
+  'seasonNumber' : IDL.Nat,
+  'episodeNumber' : IDL.Nat,
+  'videoUrl' : IDL.Text,
+});
 export const UserRole = IDL.Variant({
   'admin' : IDL.Null,
   'user' : IDL.Null,
   'guest' : IDL.Null,
+});
+export const UserProfile = IDL.Record({
+  'name' : IDL.Text,
+  'email' : IDL.Opt(IDL.Text),
 });
 export const Topics = IDL.Variant({
   'businessPartnerships' : IDL.Null,
@@ -31,9 +96,49 @@ export const ContactRequest = IDL.Record({
   'timestamp' : Time,
   'processed' : IDL.Bool,
 });
-export const UserProfile = IDL.Record({
+export const PowerSystemElement = IDL.Record({
+  'categories' : IDL.Vec(IDL.Text),
   'name' : IDL.Text,
-  'email' : IDL.Opt(IDL.Text),
+  'description' : IDL.Text,
+  'masteryLevels' : IDL.Vec(IDL.Text),
+  'symbol' : IDL.Text,
+});
+export const ClanEyeRule = IDL.Record({
+  'description' : IDL.Text,
+  'symbol' : IDL.Text,
+});
+export const Clan = IDL.Record({
+  'name' : IDL.Text,
+  'description' : IDL.Text,
+  'uniqueAbilities' : IDL.Vec(IDL.Text),
+  'notableMembers' : IDL.Vec(IDL.Text),
+  'symbol' : IDL.Text,
+});
+export const ShiranagiFamily = IDL.Record({
+  'symbols' : IDL.Vec(IDL.Text),
+  'bloodlinePowers' : IDL.Vec(IDL.Text),
+  'coreEthos' : IDL.Text,
+  'history' : IDL.Text,
+  'affiliations' : IDL.Vec(IDL.Text),
+  'notableMembers' : IDL.Vec(IDL.Text),
+  'familyValues' : IDL.Vec(IDL.Text),
+  'evolutionOverTime' : IDL.Text,
+});
+export const Rank = IDL.Record({
+  'title' : IDL.Text,
+  'privileges' : IDL.Vec(IDL.Text),
+  'responsibilities' : IDL.Vec(IDL.Text),
+  'rankingRequirements' : IDL.Vec(IDL.Text),
+  'order' : IDL.Nat,
+  'description' : IDL.Text,
+  'symbol' : IDL.Text,
+});
+export const Worldbuilding = IDL.Record({
+  'powerSystem' : IDL.Vec(PowerSystemElement),
+  'clanEyeRules' : IDL.Vec(ClanEyeRule),
+  'clans' : IDL.Vec(Clan),
+  'shiranagiFamily' : ShiranagiFamily,
+  'rankSystem' : IDL.Vec(Rank),
 });
 export const NewRequest = IDL.Record({
   'topic' : Topics,
@@ -42,40 +147,139 @@ export const NewRequest = IDL.Record({
 });
 
 export const idlService = IDL.Service({
+  '_caffeineStorageBlobIsLive' : IDL.Func(
+      [IDL.Vec(IDL.Nat8)],
+      [IDL.Bool],
+      ['query'],
+    ),
+  '_caffeineStorageBlobsToDelete' : IDL.Func(
+      [],
+      [IDL.Vec(IDL.Vec(IDL.Nat8))],
+      ['query'],
+    ),
+  '_caffeineStorageConfirmBlobDeletion' : IDL.Func(
+      [IDL.Vec(IDL.Vec(IDL.Nat8))],
+      [],
+      [],
+    ),
+  '_caffeineStorageCreateCertificate' : IDL.Func(
+      [IDL.Text],
+      [_CaffeineStorageCreateCertificateResult],
+      [],
+    ),
+  '_caffeineStorageRefillCashier' : IDL.Func(
+      [IDL.Opt(_CaffeineStorageRefillInformation)],
+      [_CaffeineStorageRefillResult],
+      [],
+    ),
+  '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'addCharacter' : IDL.Func([NewCharacter], [Character], []),
+  'addContent' : IDL.Func([NewContent], [Content], []),
+  'addEpisode' : IDL.Func([NewEpisode], [Episode], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-  'getAllRequests' : IDL.Func([], [IDL.Vec(ContactRequest)], ['query']),
+  'deleteCharacter' : IDL.Func([IDL.Text], [], []),
+  'deleteContent' : IDL.Func([IDL.Text], [], []),
+  'deleteEpisode' : IDL.Func([IDL.Text], [], []),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-  'getRequestsByStatus' : IDL.Func(
-      [IDL.Bool],
-      [IDL.Vec(ContactRequest)],
-      ['query'],
-    ),
-  'getRequestsByTopic' : IDL.Func(
-      [Topics],
-      [IDL.Vec(ContactRequest)],
-      ['query'],
-    ),
+  'getCharacters' : IDL.Func([], [IDL.Vec(Character)], ['query']),
+  'getContactRequests' : IDL.Func([], [IDL.Vec(ContactRequest)], ['query']),
+  'getContentById' : IDL.Func([IDL.Text], [IDL.Opt(Content)], ['query']),
+  'getEpisodes' : IDL.Func([], [IDL.Vec(Episode)], ['query']),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
-  'grantAdminRole' : IDL.Func([IDL.Principal], [], []),
+  'getWorldbuilding' : IDL.Func([], [IDL.Opt(Worldbuilding)], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'markContactRequestProcessed' : IDL.Func([IDL.Text], [IDL.Bool], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
-  'submitRequest' : IDL.Func([NewRequest], [IDL.Text], []),
-  'updateRequestStatus' : IDL.Func([IDL.Text, IDL.Bool], [], []),
+  'saveCharacterOrder' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
+  'setWorldbuilding' : IDL.Func([Worldbuilding], [], []),
+  'submitContactRequest' : IDL.Func([NewRequest], [ContactRequest], []),
+  'updateCharacter' : IDL.Func(
+      [IDL.Text, NewCharacter],
+      [IDL.Opt(Character)],
+      [],
+    ),
+  'updateContent' : IDL.Func([IDL.Text, NewContent], [IDL.Opt(Content)], []),
+  'updateEpisode' : IDL.Func([IDL.Text, NewEpisode], [IDL.Opt(Episode)], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const _CaffeineStorageCreateCertificateResult = IDL.Record({
+    'method' : IDL.Text,
+    'blob_hash' : IDL.Text,
+  });
+  const _CaffeineStorageRefillInformation = IDL.Record({
+    'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
+  });
+  const _CaffeineStorageRefillResult = IDL.Record({
+    'success' : IDL.Opt(IDL.Bool),
+    'topped_up_amount' : IDL.Opt(IDL.Nat),
+  });
+  const NewCharacter = IDL.Record({
+    'bio' : IDL.Text,
+    'traits' : IDL.Vec(IDL.Text),
+    'name' : IDL.Text,
+    'role' : IDL.Text,
+    'imageUrl' : IDL.Text,
+    'power' : IDL.Text,
+    'weapon' : IDL.Text,
+  });
+  const Character = IDL.Record({
+    'id' : IDL.Text,
+    'bio' : IDL.Text,
+    'displayOrder' : IDL.Nat,
+    'traits' : IDL.Vec(IDL.Text),
+    'name' : IDL.Text,
+    'role' : IDL.Text,
+    'imageUrl' : IDL.Text,
+    'power' : IDL.Text,
+    'weapon' : IDL.Text,
+  });
+  const NewContent = IDL.Record({
+    'title' : IDL.Text,
+    'contentType' : IDL.Text,
+    'body' : IDL.Text,
+    'imageUrl' : IDL.Opt(IDL.Text),
+  });
+  const Content = IDL.Record({
+    'id' : IDL.Text,
+    'title' : IDL.Text,
+    'contentType' : IDL.Text,
+    'body' : IDL.Text,
+    'imageUrl' : IDL.Opt(IDL.Text),
+  });
+  const NewEpisode = IDL.Record({
+    'title' : IDL.Text,
+    'thumbnailUrl' : IDL.Text,
+    'description' : IDL.Text,
+    'seasonNumber' : IDL.Nat,
+    'episodeNumber' : IDL.Nat,
+    'videoUrl' : IDL.Text,
+  });
+  const Episode = IDL.Record({
+    'id' : IDL.Text,
+    'title' : IDL.Text,
+    'thumbnailUrl' : IDL.Text,
+    'description' : IDL.Text,
+    'seasonNumber' : IDL.Nat,
+    'episodeNumber' : IDL.Nat,
+    'videoUrl' : IDL.Text,
+  });
   const UserRole = IDL.Variant({
     'admin' : IDL.Null,
     'user' : IDL.Null,
     'guest' : IDL.Null,
+  });
+  const UserProfile = IDL.Record({
+    'name' : IDL.Text,
+    'email' : IDL.Opt(IDL.Text),
   });
   const Topics = IDL.Variant({
     'businessPartnerships' : IDL.Null,
@@ -95,9 +299,49 @@ export const idlFactory = ({ IDL }) => {
     'timestamp' : Time,
     'processed' : IDL.Bool,
   });
-  const UserProfile = IDL.Record({
+  const PowerSystemElement = IDL.Record({
+    'categories' : IDL.Vec(IDL.Text),
     'name' : IDL.Text,
-    'email' : IDL.Opt(IDL.Text),
+    'description' : IDL.Text,
+    'masteryLevels' : IDL.Vec(IDL.Text),
+    'symbol' : IDL.Text,
+  });
+  const ClanEyeRule = IDL.Record({
+    'description' : IDL.Text,
+    'symbol' : IDL.Text,
+  });
+  const Clan = IDL.Record({
+    'name' : IDL.Text,
+    'description' : IDL.Text,
+    'uniqueAbilities' : IDL.Vec(IDL.Text),
+    'notableMembers' : IDL.Vec(IDL.Text),
+    'symbol' : IDL.Text,
+  });
+  const ShiranagiFamily = IDL.Record({
+    'symbols' : IDL.Vec(IDL.Text),
+    'bloodlinePowers' : IDL.Vec(IDL.Text),
+    'coreEthos' : IDL.Text,
+    'history' : IDL.Text,
+    'affiliations' : IDL.Vec(IDL.Text),
+    'notableMembers' : IDL.Vec(IDL.Text),
+    'familyValues' : IDL.Vec(IDL.Text),
+    'evolutionOverTime' : IDL.Text,
+  });
+  const Rank = IDL.Record({
+    'title' : IDL.Text,
+    'privileges' : IDL.Vec(IDL.Text),
+    'responsibilities' : IDL.Vec(IDL.Text),
+    'rankingRequirements' : IDL.Vec(IDL.Text),
+    'order' : IDL.Nat,
+    'description' : IDL.Text,
+    'symbol' : IDL.Text,
+  });
+  const Worldbuilding = IDL.Record({
+    'powerSystem' : IDL.Vec(PowerSystemElement),
+    'clanEyeRules' : IDL.Vec(ClanEyeRule),
+    'clans' : IDL.Vec(Clan),
+    'shiranagiFamily' : ShiranagiFamily,
+    'rankSystem' : IDL.Vec(Rank),
   });
   const NewRequest = IDL.Record({
     'topic' : Topics,
@@ -106,31 +350,65 @@ export const idlFactory = ({ IDL }) => {
   });
   
   return IDL.Service({
+    '_caffeineStorageBlobIsLive' : IDL.Func(
+        [IDL.Vec(IDL.Nat8)],
+        [IDL.Bool],
+        ['query'],
+      ),
+    '_caffeineStorageBlobsToDelete' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Vec(IDL.Nat8))],
+        ['query'],
+      ),
+    '_caffeineStorageConfirmBlobDeletion' : IDL.Func(
+        [IDL.Vec(IDL.Vec(IDL.Nat8))],
+        [],
+        [],
+      ),
+    '_caffeineStorageCreateCertificate' : IDL.Func(
+        [IDL.Text],
+        [_CaffeineStorageCreateCertificateResult],
+        [],
+      ),
+    '_caffeineStorageRefillCashier' : IDL.Func(
+        [IDL.Opt(_CaffeineStorageRefillInformation)],
+        [_CaffeineStorageRefillResult],
+        [],
+      ),
+    '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'addCharacter' : IDL.Func([NewCharacter], [Character], []),
+    'addContent' : IDL.Func([NewContent], [Content], []),
+    'addEpisode' : IDL.Func([NewEpisode], [Episode], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-    'getAllRequests' : IDL.Func([], [IDL.Vec(ContactRequest)], ['query']),
+    'deleteCharacter' : IDL.Func([IDL.Text], [], []),
+    'deleteContent' : IDL.Func([IDL.Text], [], []),
+    'deleteEpisode' : IDL.Func([IDL.Text], [], []),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-    'getRequestsByStatus' : IDL.Func(
-        [IDL.Bool],
-        [IDL.Vec(ContactRequest)],
-        ['query'],
-      ),
-    'getRequestsByTopic' : IDL.Func(
-        [Topics],
-        [IDL.Vec(ContactRequest)],
-        ['query'],
-      ),
+    'getCharacters' : IDL.Func([], [IDL.Vec(Character)], ['query']),
+    'getContactRequests' : IDL.Func([], [IDL.Vec(ContactRequest)], ['query']),
+    'getContentById' : IDL.Func([IDL.Text], [IDL.Opt(Content)], ['query']),
+    'getEpisodes' : IDL.Func([], [IDL.Vec(Episode)], ['query']),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
-    'grantAdminRole' : IDL.Func([IDL.Principal], [], []),
+    'getWorldbuilding' : IDL.Func([], [IDL.Opt(Worldbuilding)], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'markContactRequestProcessed' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
-    'submitRequest' : IDL.Func([NewRequest], [IDL.Text], []),
-    'updateRequestStatus' : IDL.Func([IDL.Text, IDL.Bool], [], []),
+    'saveCharacterOrder' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
+    'setWorldbuilding' : IDL.Func([Worldbuilding], [], []),
+    'submitContactRequest' : IDL.Func([NewRequest], [ContactRequest], []),
+    'updateCharacter' : IDL.Func(
+        [IDL.Text, NewCharacter],
+        [IDL.Opt(Character)],
+        [],
+      ),
+    'updateContent' : IDL.Func([IDL.Text, NewContent], [IDL.Opt(Content)], []),
+    'updateEpisode' : IDL.Func([IDL.Text, NewEpisode], [IDL.Opt(Episode)], []),
   });
 };
 
