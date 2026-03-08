@@ -76,6 +76,7 @@ export interface NewEpisode {
   'episodeNumber' : bigint,
   'videoUrl' : string,
 }
+export interface NewReferral { 'source' : string, 'otherText' : [] | [string] }
 export interface NewRequest {
   'topic' : Topics,
   'email' : string,
@@ -96,6 +97,12 @@ export interface Rank {
   'order' : bigint,
   'description' : string,
   'symbol' : string,
+}
+export interface ReferralSource {
+  'id' : string,
+  'source' : string,
+  'otherText' : [] | [string],
+  'timestamp' : Time,
 }
 export interface ShiranagiFamily {
   'symbols' : Array<string>,
@@ -161,12 +168,14 @@ export interface _SERVICE {
   'deleteCharacter' : ActorMethod<[string], undefined>,
   'deleteContent' : ActorMethod<[string], undefined>,
   'deleteEpisode' : ActorMethod<[string], undefined>,
+  'deleteReferral' : ActorMethod<[string], undefined>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getCharacters' : ActorMethod<[], Array<Character>>,
   'getContactRequests' : ActorMethod<[], Array<ContactRequest>>,
   'getContentById' : ActorMethod<[string], [] | [Content]>,
   'getEpisodes' : ActorMethod<[], Array<Episode>>,
+  'getReferrals' : ActorMethod<[], Array<ReferralSource>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'getWorldbuilding' : ActorMethod<[], [] | [Worldbuilding]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
@@ -175,6 +184,7 @@ export interface _SERVICE {
   'saveCharacterOrder' : ActorMethod<[Array<string>], undefined>,
   'setWorldbuilding' : ActorMethod<[Worldbuilding], undefined>,
   'submitContactRequest' : ActorMethod<[NewRequest], ContactRequest>,
+  'submitReferral' : ActorMethod<[NewReferral], ReferralSource>,
   'updateCharacter' : ActorMethod<[string, NewCharacter], [] | [Character]>,
   'updateContent' : ActorMethod<[string, NewContent], [] | [Content]>,
   'updateEpisode' : ActorMethod<[string, NewEpisode], [] | [Episode]>,

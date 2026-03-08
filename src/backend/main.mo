@@ -1,22 +1,19 @@
 import Principal "mo:core/Principal";
 import Map "mo:core/Map";
-import List "mo:core/List";
+import Text "mo:core/Text";
 import Iter "mo:core/Iter";
 import Time "mo:core/Time";
 import Runtime "mo:core/Runtime";
-import Text "mo:core/Text";
 import Nat "mo:core/Nat";
 import Array "mo:core/Array";
-import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
+import MixinAuthorization "authorization/MixinAuthorization";
 import MixinStorage "blob-storage/Mixin";
-import Storage "blob-storage/Storage";
+import Migration "migration";
 
-
-
+(with migration = Migration.run)
 actor {
   // TYPES
-
   public type Worldbuilding = {
     clans : [Clan];
     clanEyeRules : [ClanEyeRule];
@@ -153,6 +150,18 @@ actor {
     imageUrl : ?Text;
   };
 
+  public type ReferralSource = {
+    id : Text;
+    source : Text;
+    otherText : ?Text;
+    timestamp : Time.Time;
+  };
+
+  public type NewReferral = {
+    source : Text;
+    otherText : ?Text;
+  };
+
   // FIELDS
 
   let contactRequests = Map.empty<Text, ContactRequest>();
@@ -170,6 +179,9 @@ actor {
 
   let contents = Map.empty<Text, Content>();
   var nextContentId = 1;
+
+  let referrals = Map.empty<Text, ReferralSource>();
+  var nextReferralId = 1;
 
   // COMPONENTS
 
@@ -448,5 +460,34 @@ actor {
         true;
       };
     };
+  };
+
+  // REFERRAL METHODS
+
+  public shared ({ caller }) func submitReferral(newReferral : NewReferral) : async ReferralSource {
+    let id = nextReferralId.toText();
+    nextReferralId += 1;
+    let referral : ReferralSource = {
+      id = id;
+      source = newReferral.source;
+      otherText = newReferral.otherText;
+      timestamp = Time.now();
+    };
+    referrals.add(id, referral);
+    referral;
+  };
+
+  public query ({ caller }) func getReferrals() : async [ReferralSource] {
+    if (not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Only admins can view referrals");
+    };
+    referrals.values().toArray();
+  };
+
+  public shared ({ caller }) func deleteReferral(id : Text) : async () {
+    if (not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Only admins can delete referrals");
+    };
+    referrals.remove(id);
   };
 };

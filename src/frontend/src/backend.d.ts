@@ -24,14 +24,9 @@ export interface Content {
     body: string;
     imageUrl?: string;
 }
-export interface NewCharacter {
-    bio: string;
-    traits: Array<string>;
-    name: string;
-    role: string;
-    imageUrl: string;
-    power: string;
-    weapon: string;
+export interface NewReferral {
+    source: string;
+    otherText?: string;
 }
 export interface ShiranagiFamily {
     symbols: Array<string>;
@@ -49,6 +44,15 @@ export interface PowerSystemElement {
     description: string;
     masteryLevels: Array<string>;
     symbol: string;
+}
+export interface NewCharacter {
+    bio: string;
+    traits: Array<string>;
+    name: string;
+    role: string;
+    imageUrl: string;
+    power: string;
+    weapon: string;
 }
 export interface Character {
     id: string;
@@ -100,6 +104,12 @@ export interface Clan {
     notableMembers: Array<string>;
     symbol: string;
 }
+export interface ReferralSource {
+    id: string;
+    source: string;
+    otherText?: string;
+    timestamp: Time;
+}
 export interface Worldbuilding {
     powerSystem: Array<PowerSystemElement>;
     clanEyeRules: Array<ClanEyeRule>;
@@ -141,12 +151,14 @@ export interface backendInterface {
     deleteCharacter(id: string): Promise<void>;
     deleteContent(id: string): Promise<void>;
     deleteEpisode(id: string): Promise<void>;
+    deleteReferral(id: string): Promise<void>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getCharacters(): Promise<Array<Character>>;
     getContactRequests(): Promise<Array<ContactRequest>>;
     getContentById(id: string): Promise<Content | null>;
     getEpisodes(): Promise<Array<Episode>>;
+    getReferrals(): Promise<Array<ReferralSource>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     getWorldbuilding(): Promise<Worldbuilding | null>;
     isCallerAdmin(): Promise<boolean>;
@@ -155,6 +167,7 @@ export interface backendInterface {
     saveCharacterOrder(orderedIds: Array<string>): Promise<void>;
     setWorldbuilding(worldbuildingData: Worldbuilding): Promise<void>;
     submitContactRequest(request: NewRequest): Promise<ContactRequest>;
+    submitReferral(newReferral: NewReferral): Promise<ReferralSource>;
     updateCharacter(id: string, updatedChar: NewCharacter): Promise<Character | null>;
     updateContent(id: string, updatedContent: NewContent): Promise<Content | null>;
     updateEpisode(id: string, updatedEp: NewEpisode): Promise<Episode | null>;

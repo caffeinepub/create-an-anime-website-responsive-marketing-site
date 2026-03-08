@@ -12,6 +12,7 @@ import { EpisodesSection } from "./components/EpisodesSection";
 import { Footer } from "./components/Footer";
 import { HeroSection } from "./components/HeroSection";
 import { IntroSection } from "./components/IntroSection";
+import { ReferralPopup } from "./components/ReferralPopup";
 import { RewardsSection } from "./components/RewardsSection";
 import { TopNav } from "./components/TopNav";
 import { VideoSection } from "./components/VideoSection";
@@ -72,6 +73,7 @@ function App() {
         </main>
         <Footer />
         <Toaster />
+        <ReferralPopup />
       </div>
     </QueryClientProvider>
   );

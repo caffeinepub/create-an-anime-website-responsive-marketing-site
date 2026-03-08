@@ -96,6 +96,12 @@ export const ContactRequest = IDL.Record({
   'timestamp' : Time,
   'processed' : IDL.Bool,
 });
+export const ReferralSource = IDL.Record({
+  'id' : IDL.Text,
+  'source' : IDL.Text,
+  'otherText' : IDL.Opt(IDL.Text),
+  'timestamp' : Time,
+});
 export const PowerSystemElement = IDL.Record({
   'categories' : IDL.Vec(IDL.Text),
   'name' : IDL.Text,
@@ -145,6 +151,10 @@ export const NewRequest = IDL.Record({
   'email' : IDL.Text,
   'message' : IDL.Text,
 });
+export const NewReferral = IDL.Record({
+  'source' : IDL.Text,
+  'otherText' : IDL.Opt(IDL.Text),
+});
 
 export const idlService = IDL.Service({
   '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -181,12 +191,14 @@ export const idlService = IDL.Service({
   'deleteCharacter' : IDL.Func([IDL.Text], [], []),
   'deleteContent' : IDL.Func([IDL.Text], [], []),
   'deleteEpisode' : IDL.Func([IDL.Text], [], []),
+  'deleteReferral' : IDL.Func([IDL.Text], [], []),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getCharacters' : IDL.Func([], [IDL.Vec(Character)], ['query']),
   'getContactRequests' : IDL.Func([], [IDL.Vec(ContactRequest)], ['query']),
   'getContentById' : IDL.Func([IDL.Text], [IDL.Opt(Content)], ['query']),
   'getEpisodes' : IDL.Func([], [IDL.Vec(Episode)], ['query']),
+  'getReferrals' : IDL.Func([], [IDL.Vec(ReferralSource)], ['query']),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
@@ -199,6 +211,7 @@ export const idlService = IDL.Service({
   'saveCharacterOrder' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
   'setWorldbuilding' : IDL.Func([Worldbuilding], [], []),
   'submitContactRequest' : IDL.Func([NewRequest], [ContactRequest], []),
+  'submitReferral' : IDL.Func([NewReferral], [ReferralSource], []),
   'updateCharacter' : IDL.Func(
       [IDL.Text, NewCharacter],
       [IDL.Opt(Character)],
@@ -299,6 +312,12 @@ export const idlFactory = ({ IDL }) => {
     'timestamp' : Time,
     'processed' : IDL.Bool,
   });
+  const ReferralSource = IDL.Record({
+    'id' : IDL.Text,
+    'source' : IDL.Text,
+    'otherText' : IDL.Opt(IDL.Text),
+    'timestamp' : Time,
+  });
   const PowerSystemElement = IDL.Record({
     'categories' : IDL.Vec(IDL.Text),
     'name' : IDL.Text,
@@ -348,6 +367,10 @@ export const idlFactory = ({ IDL }) => {
     'email' : IDL.Text,
     'message' : IDL.Text,
   });
+  const NewReferral = IDL.Record({
+    'source' : IDL.Text,
+    'otherText' : IDL.Opt(IDL.Text),
+  });
   
   return IDL.Service({
     '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -384,12 +407,14 @@ export const idlFactory = ({ IDL }) => {
     'deleteCharacter' : IDL.Func([IDL.Text], [], []),
     'deleteContent' : IDL.Func([IDL.Text], [], []),
     'deleteEpisode' : IDL.Func([IDL.Text], [], []),
+    'deleteReferral' : IDL.Func([IDL.Text], [], []),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getCharacters' : IDL.Func([], [IDL.Vec(Character)], ['query']),
     'getContactRequests' : IDL.Func([], [IDL.Vec(ContactRequest)], ['query']),
     'getContentById' : IDL.Func([IDL.Text], [IDL.Opt(Content)], ['query']),
     'getEpisodes' : IDL.Func([], [IDL.Vec(Episode)], ['query']),
+    'getReferrals' : IDL.Func([], [IDL.Vec(ReferralSource)], ['query']),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
@@ -402,6 +427,7 @@ export const idlFactory = ({ IDL }) => {
     'saveCharacterOrder' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
     'setWorldbuilding' : IDL.Func([Worldbuilding], [], []),
     'submitContactRequest' : IDL.Func([NewRequest], [ContactRequest], []),
+    'submitReferral' : IDL.Func([NewReferral], [ReferralSource], []),
     'updateCharacter' : IDL.Func(
         [IDL.Text, NewCharacter],
         [IDL.Opt(Character)],

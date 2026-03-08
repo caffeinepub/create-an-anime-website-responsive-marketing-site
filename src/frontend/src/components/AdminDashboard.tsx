@@ -22,6 +22,7 @@ import { AdminCharactersPanel } from "./AdminCharactersPanel";
 import { AdminContactRequestsPanel } from "./AdminContactRequestsPanel";
 import { AdminContentPanel } from "./AdminContentPanel";
 import { AdminEpisodesPanel } from "./AdminEpisodesPanel";
+import { AdminReferralsPanel } from "./AdminReferralsPanel";
 import { AdminRolePanel } from "./AdminRolePanel";
 import { AdminSidebar } from "./AdminSidebar";
 
@@ -30,7 +31,8 @@ export type AdminSection =
   | "characters"
   | "content"
   | "contacts"
-  | "roles";
+  | "roles"
+  | "referrals";
 
 export function AdminDashboard() {
   const { login, clear, isLoggingIn, identity } = useInternetIdentity();
@@ -268,6 +270,8 @@ export function AdminDashboard() {
         return <AdminContactRequestsPanel />;
       case "roles":
         return <AdminRolePanel />;
+      case "referrals":
+        return <AdminReferralsPanel />;
       default:
         return <AdminEpisodesPanel />;
     }

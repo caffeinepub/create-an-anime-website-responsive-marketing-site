@@ -414,6 +414,54 @@ export function useDeleteContent() {
   });
 }
 
+// ─── Referrals ────────────────────────────────────────────────────────────────
+
+export function useSubmitReferral() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (newReferral: { source: string; otherText?: string }) => {
+      if (!actor) throw new Error("Not connected to backend");
+      return actor.submitReferral(newReferral);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["referrals"] });
+    },
+  });
+}
+
+export function useGetAllReferrals() {
+  const { identity } = useInternetIdentity();
+
+  return useQuery({
+    queryKey: ["referrals", identity?.getPrincipal().toString()],
+    queryFn: async () => {
+      if (!identity) throw new Error("Not authenticated");
+      const actor = await makeAuthenticatedActor(identity);
+      return actor.getReferrals();
+    },
+    enabled: !!identity,
+    retry: false,
+  });
+}
+
+export function useDeleteReferral() {
+  const { identity } = useInternetIdentity();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (referralId: string) => {
+      if (!identity) throw new Error("Not authenticated");
+      const actor = await makeAuthenticatedActor(identity);
+      return actor.deleteReferral(referralId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["referrals"] });
+    },
+  });
+}
+
 // ─── Worldbuilding ────────────────────────────────────────────────────────────
 
 export function useGetWorldbuilding() {

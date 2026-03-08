@@ -1,4 +1,12 @@
-import { FileText, Film, Mail, ShieldCheck, Users, X } from "lucide-react";
+import {
+  BarChart2,
+  FileText,
+  Film,
+  Mail,
+  ShieldCheck,
+  Users,
+  X,
+} from "lucide-react";
 import type React from "react";
 import type { AdminSection } from "./AdminDashboard";
 
@@ -44,6 +52,12 @@ const navItems: {
     label: "Role Management",
     icon: <ShieldCheck className="w-4 h-4" />,
     description: "Grant admin access",
+  },
+  {
+    id: "referrals",
+    label: "Site Referrals",
+    icon: <BarChart2 className="w-4 h-4" />,
+    description: "How visitors found the site",
   },
 ];
 

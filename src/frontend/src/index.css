@@ -477,3 +477,181 @@
 .admin-panel-roles {
   border-top: 3px solid oklch(0.68 0.16 195);
 }
+
+.admin-panel-referrals {
+  border-top: 3px solid oklch(0.72 0.14 60);
+}
+
+/* ─── Referral Popup ────────────────────────────────────────────────────────── */
+
+.referral-dialog {
+  background: oklch(0.11 0.02 240) !important;
+  border: 1px solid oklch(0.55 0.14 195 / 0.3) !important;
+  color: oklch(0.94 0.01 240) !important;
+  box-shadow: 0 0 40px oklch(0.55 0.14 195 / 0.15), 0 20px 60px
+    oklch(0 0 0 / 0.7) !important;
+  border-radius: 1rem !important;
+}
+
+.referral-dialog-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    oklch(0.72 0.14 195),
+    transparent
+  );
+  border-radius: 0 0 8px 8px;
+}
+
+.referral-close-btn {
+  position: absolute;
+  top: 0.875rem;
+  right: 0.875rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: oklch(0.2 0.015 240);
+  color: oklch(0.58 0.01 240);
+  border: 1px solid oklch(0.28 0.015 240);
+  transition: background 0.15s, color 0.15s;
+  z-index: 10;
+}
+
+.referral-close-btn:hover {
+  background: oklch(0.25 0.015 240);
+  color: oklch(0.85 0.01 240);
+}
+
+.referral-icon-ring {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: oklch(0.55 0.14 195 / 0.12);
+  border: 1px solid oklch(0.55 0.14 195 / 0.3);
+}
+
+.referral-accent-icon {
+  color: oklch(0.72 0.14 195);
+}
+
+.referral-title {
+  color: oklch(0.97 0.01 240);
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  font-weight: 700;
+}
+
+.referral-subtitle {
+  color: oklch(0.62 0.01 240);
+}
+
+.referral-option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.625rem;
+  border: 1px solid oklch(0.25 0.015 240);
+  background: oklch(0.17 0.015 240);
+  color: oklch(0.78 0.01 240);
+  font-family: "Outfit", system-ui, sans-serif;
+  transition: border-color 0.15s, background 0.15s, color 0.15s, box-shadow
+    0.15s;
+  cursor: pointer;
+}
+
+.referral-option-btn:hover {
+  border-color: oklch(0.55 0.14 195 / 0.5);
+  background: oklch(0.55 0.14 195 / 0.08);
+  color: oklch(0.92 0.01 240);
+}
+
+.referral-option-active {
+  border-color: oklch(0.72 0.14 195) !important;
+  background: oklch(0.55 0.14 195 / 0.15) !important;
+  color: oklch(0.97 0.01 240) !important;
+  box-shadow: 0 0 12px oklch(0.55 0.14 195 / 0.2);
+}
+
+.referral-other-input {
+  background: oklch(0.17 0.015 240);
+  border: 1px solid oklch(0.28 0.015 240);
+  color: oklch(0.94 0.01 240);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-family: "Outfit", system-ui, sans-serif;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+
+.referral-other-input:focus {
+  border-color: oklch(0.72 0.14 195);
+  box-shadow: 0 0 0 2px oklch(0.55 0.14 195 / 0.2);
+}
+
+.referral-other-input::placeholder {
+  color: oklch(0.42 0.01 240);
+}
+
+.referral-other-input-error {
+  border-color: oklch(0.62 0.2 20) !important;
+}
+
+.referral-error-text {
+  color: oklch(0.68 0.18 20);
+}
+
+.referral-skip-btn {
+  padding: 0.55rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid oklch(0.25 0.015 240);
+  background: transparent;
+  color: oklch(0.58 0.01 240);
+  font-size: 0.875rem;
+  font-family: "Outfit", system-ui, sans-serif;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  cursor: pointer;
+}
+
+.referral-skip-btn:hover {
+  background: oklch(0.18 0.015 240);
+  color: oklch(0.78 0.01 240);
+  border-color: oklch(0.32 0.015 240);
+}
+
+.referral-submit-btn {
+  padding: 0.55rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: oklch(0.55 0.14 195);
+  color: oklch(0.98 0.005 240);
+  font-size: 0.875rem;
+  font-family: "Outfit", system-ui, sans-serif;
+  font-weight: 600;
+  transition: background 0.15s, box-shadow 0.15s;
+  cursor: pointer;
+}
+
+.referral-submit-btn:hover:not(:disabled) {
+  background: oklch(0.62 0.14 195);
+  box-shadow: 0 0 12px oklch(0.55 0.14 195 / 0.3);
+}
+
+.referral-submit-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
