@@ -31,12 +31,16 @@ import {
   useGetAllCharacters,
   useReorderCharacters,
 } from "../hooks/useQueries";
+import { useSeedCharacters } from "../hooks/useSeedCharacters";
 import { CharacterForm } from "./CharacterForm";
 
 export function AdminCharactersPanel() {
   const { data: characters, isLoading, error, refetch } = useGetAllCharacters();
   const deleteCharacter = useDeleteCharacter();
   const reorderCharacters = useReorderCharacters();
+
+  // Auto-seed known characters when the canister is empty
+  useSeedCharacters();
 
   const [showForm, setShowForm] = useState(false);
   const [editingCharacter, setEditingCharacter] = useState<Character | null>(

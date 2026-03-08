@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   Check,
   Copy,
+  KeyRound,
   Loader2,
   LogIn,
   LogOut,
@@ -15,6 +17,7 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import { useIsCallerAdmin } from "../hooks/useQueries";
+import { getSessionParameter, storeSessionParameter } from "../utils/urlParams";
 import { AdminCharactersPanel } from "./AdminCharactersPanel";
 import { AdminContactRequestsPanel } from "./AdminContactRequestsPanel";
 import { AdminContentPanel } from "./AdminContentPanel";
@@ -41,6 +44,10 @@ export function AdminDashboard() {
   const [copiedPrincipal, setCopiedPrincipal] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
+  // Token entry state for first-time setup
+  const [tokenInput, setTokenInput] = useState("");
+  const [isApplyingToken, setIsApplyingToken] = useState(false);
+
   const handleLogin = async () => {
     try {
       await login();
@@ -57,12 +64,42 @@ export function AdminDashboard() {
   const handleLogout = async () => {
     await clear();
     queryClient.clear();
+    // Clear any stored token so a re-login starts fresh
+    try {
+      sessionStorage.removeItem("caffeineAdminToken");
+    } catch {}
   };
 
   const handleCopyPrincipal = async () => {
     await navigator.clipboard.writeText(principal);
     setCopiedPrincipal(true);
     setTimeout(() => setCopiedPrincipal(false), 2000);
+  };
+
+  // Store the admin token in sessionStorage and force-reinitialize the actor
+  const handleApplyToken = async () => {
+    const token = tokenInput.trim();
+    if (!token) {
+      toast.error("Please enter your admin token.");
+      return;
+    }
+    setIsApplyingToken(true);
+    try {
+      storeSessionParameter("caffeineAdminToken", token);
+      // Invalidate the actor so useActor recreates it with the new token
+      await queryClient.invalidateQueries({ queryKey: ["actor"] });
+      await queryClient.refetchQueries({ queryKey: ["actor"] });
+      // Give a moment for the actor to reinitialize
+      await new Promise((r) => setTimeout(r, 800));
+      await queryClient.invalidateQueries({ queryKey: ["isCallerAdmin"] });
+      await queryClient.refetchQueries({ queryKey: ["isCallerAdmin"] });
+      toast.success("Token applied — checking access…");
+    } catch (_err: unknown) {
+      toast.error("Failed to apply token. Please try again.");
+    } finally {
+      setIsApplyingToken(false);
+      setTokenInput("");
+    }
   };
 
   // ── Not logged in ──────────────────────────────────────────────────────────
@@ -85,6 +122,7 @@ export function AdminDashboard() {
               panel.
             </p>
             <Button
+              data-ocid="admin.login.primary_button"
               onClick={handleLogin}
               disabled={isLoggingIn}
               className="admin-btn-primary gap-2 w-full"
@@ -126,22 +164,29 @@ export function AdminDashboard() {
     );
   }
 
-  // ── Not admin ──────────────────────────────────────────────────────────────
+  // ── Not admin — offer token entry for first-time setup ────────────────────
   if (!isAdmin) {
+    // Check if there's already a stored token — if so they tried but it didn't work
+    const hasStoredToken = !!getSessionParameter("caffeineAdminToken");
+
     return (
       <div className="admin-dashboard min-h-screen flex items-center justify-center">
         <div className="max-w-md w-full mx-auto px-6 text-center">
           <div className="admin-card rounded-2xl p-10">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-500/10 mb-6">
-              <XCircle className="w-10 h-10 text-red-400" />
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-amber-500/10 mb-6">
+              <KeyRound className="w-10 h-10 text-amber-400" />
             </div>
             <h1 className="text-3xl font-bold admin-heading mb-3">
-              Access Denied
+              {hasStoredToken ? "Access Denied" : "Enter Admin Token"}
             </h1>
-            <p className="admin-muted-text mb-4">
-              Your account does not have admin privileges.
+            <p className="admin-muted-text mb-4 text-sm">
+              {hasStoredToken
+                ? "The token you entered did not match. Please check and try again, or contact the site owner."
+                : "Enter your admin token to unlock the dashboard. This was provided when the app was deployed."}
             </p>
-            <div className="admin-surface rounded-lg p-3 mb-6 flex items-center gap-2 text-sm font-mono break-all">
+
+            {/* Principal display */}
+            <div className="admin-surface rounded-lg p-3 mb-5 flex items-center gap-2 text-sm font-mono break-all">
               <span className="flex-1 text-left admin-muted-text text-xs">
                 {principal}
               </span>
@@ -149,6 +194,7 @@ export function AdminDashboard() {
                 type="button"
                 onClick={handleCopyPrincipal}
                 className="shrink-0 admin-muted-text hover:admin-accent-text transition-colors"
+                title="Copy your principal ID"
               >
                 {copiedPrincipal ? (
                   <Check className="w-4 h-4 text-green-400" />
@@ -157,9 +203,37 @@ export function AdminDashboard() {
                 )}
               </button>
             </div>
-            <p className="text-xs admin-muted-text mb-6">
-              Share your principal ID with an existing admin to request access.
-            </p>
+
+            {/* Token input */}
+            <div className="space-y-3 mb-6">
+              <Input
+                data-ocid="admin.token.input"
+                type="password"
+                value={tokenInput}
+                onChange={(e) => setTokenInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleApplyToken()}
+                placeholder="Paste your admin token here"
+                className="admin-input text-sm"
+                disabled={isApplyingToken}
+              />
+              <Button
+                data-ocid="admin.token.submit_button"
+                onClick={handleApplyToken}
+                disabled={isApplyingToken || !tokenInput.trim()}
+                className="admin-btn-primary gap-2 w-full"
+              >
+                {isApplyingToken ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" /> Verifying…
+                  </>
+                ) : (
+                  <>
+                    <KeyRound className="w-4 h-4" /> Unlock Dashboard
+                  </>
+                )}
+              </Button>
+            </div>
+
             <div className="flex gap-3 justify-center">
               <Button
                 variant="outline"
