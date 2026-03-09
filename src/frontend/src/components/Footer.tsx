@@ -43,7 +43,7 @@ export function Footer() {
                 className="font-medium"
                 style={{ color: "oklch(0.70 0.18 50)" }}
               >
-                $WOTWM
+                $WOTWM1
               </span>
             </p>
           </div>

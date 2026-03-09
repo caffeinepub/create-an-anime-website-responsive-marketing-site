@@ -9,9 +9,9 @@ import Array "mo:core/Array";
 import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
 import MixinStorage "blob-storage/Mixin";
-import Migration "migration";
 
-(with migration = Migration.run)
+
+
 actor {
   // TYPES
   public type Worldbuilding = {
