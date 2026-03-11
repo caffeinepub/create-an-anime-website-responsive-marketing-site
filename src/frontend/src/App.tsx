@@ -12,6 +12,7 @@ import { EpisodesSection } from "./components/EpisodesSection";
 import { Footer } from "./components/Footer";
 import { HeroSection } from "./components/HeroSection";
 import { IntroSection } from "./components/IntroSection";
+import { JoinPage } from "./components/JoinPage";
 import { ReferralPopup } from "./components/ReferralPopup";
 import { RewardsSection } from "./components/RewardsSection";
 import { TopNav } from "./components/TopNav";
@@ -34,7 +35,9 @@ export type SelectedEpisode = {
   videoSourceUrl?: string;
 };
 
-const isAdminRoute = window.location.pathname === "/admin";
+const currentPath = window.location.pathname;
+const isAdminRoute = currentPath === "/admin";
+const isJoinRoute = currentPath === "/join";
 
 function App() {
   const [selectedEpisode, setSelectedEpisode] = useState<Episode | null>(null);
@@ -48,6 +51,15 @@ function App() {
     return (
       <QueryClientProvider client={queryClient}>
         <AdminDashboard />
+        <Toaster />
+      </QueryClientProvider>
+    );
+  }
+
+  if (isJoinRoute) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <JoinPage />
         <Toaster />
       </QueryClientProvider>
     );
