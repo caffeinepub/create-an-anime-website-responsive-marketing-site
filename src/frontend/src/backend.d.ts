@@ -24,9 +24,14 @@ export interface Content {
     body: string;
     imageUrl?: string;
 }
-export interface NewReferral {
-    source: string;
-    otherText?: string;
+export interface NewCharacter {
+    bio: string;
+    traits: Array<string>;
+    name: string;
+    role: string;
+    imageUrl: string;
+    power: string;
+    weapon: string;
 }
 export interface ShiranagiFamily {
     symbols: Array<string>;
@@ -45,14 +50,9 @@ export interface PowerSystemElement {
     masteryLevels: Array<string>;
     symbol: string;
 }
-export interface NewCharacter {
-    bio: string;
-    traits: Array<string>;
-    name: string;
-    role: string;
-    imageUrl: string;
-    power: string;
-    weapon: string;
+export interface NewReferral {
+    source: string;
+    otherText?: string;
 }
 export interface Character {
     id: string;
@@ -147,21 +147,25 @@ export interface backendInterface {
     addCharacter(newChar: NewCharacter): Promise<Character>;
     addContent(newContent: NewContent): Promise<Content>;
     addEpisode(newEp: NewEpisode): Promise<Episode>;
-    assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    assignRole(user: Principal, role: UserRole): Promise<void>;
     deleteCharacter(id: string): Promise<void>;
+    deleteContactRequest(id: string): Promise<void>;
     deleteContent(id: string): Promise<void>;
     deleteEpisode(id: string): Promise<void>;
     deleteReferral(id: string): Promise<void>;
     getCallerUserProfile(): Promise<UserProfile | null>;
-    getCallerUserRole(): Promise<UserRole>;
+    getCharacterById(id: string): Promise<Character | null>;
+    getCharacterImage(id: string): Promise<string | null>;
     getCharacters(): Promise<Array<Character>>;
+    getCharactersMetadata(): Promise<Array<Character>>;
     getContactRequests(): Promise<Array<ContactRequest>>;
     getContentById(id: string): Promise<Content | null>;
     getEpisodes(): Promise<Array<Episode>>;
+    getMyRole(): Promise<string>;
     getReferrals(): Promise<Array<ReferralSource>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     getWorldbuilding(): Promise<Worldbuilding | null>;
-    isCallerAdmin(): Promise<boolean>;
+    initialize(): Promise<void>;
     markContactRequestProcessed(id: string): Promise<boolean>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     saveCharacterOrder(orderedIds: Array<string>): Promise<void>;

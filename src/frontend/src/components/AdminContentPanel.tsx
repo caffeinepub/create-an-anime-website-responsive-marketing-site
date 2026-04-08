@@ -23,8 +23,8 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import { toast } from "sonner";
-import type { Content } from "../backend";
 import { useDeleteContent, useGetAllContents } from "../hooks/useQueries";
+import type { Content } from "../types/backend-types";
 import { ContentForm } from "./ContentForm";
 
 export function AdminContentPanel() {

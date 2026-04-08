@@ -1,19 +1,79 @@
 import Principal "mo:core/Principal";
 import Map "mo:core/Map";
 import Text "mo:core/Text";
-import Iter "mo:core/Iter";
 import Time "mo:core/Time";
 import Runtime "mo:core/Runtime";
 import Nat "mo:core/Nat";
-import Array "mo:core/Array";
-import AccessControl "authorization/access-control";
-import MixinAuthorization "authorization/MixinAuthorization";
-import MixinStorage "blob-storage/Mixin";
 
 
 
 actor {
-  // TYPES
+  // ─── AUTHORIZATION TYPES ──────────────────────────────────────────────────
+
+  type UserRole = { #admin; #user; #guest };
+
+  // ─── AUTHORIZATION STATE ──────────────────────────────────────────────────
+
+  let roles = Map.empty<Principal, UserRole>();
+  var firstAdmin : ?Principal = null;
+
+  // ─── AUTHORIZATION HELPERS ────────────────────────────────────────────────
+
+  func getUserRole(caller : Principal) : UserRole {
+    if (caller.isAnonymous()) { return #guest };
+    switch (roles.get(caller)) {
+      case (?role) { role };
+      case null {
+        // First authenticated user becomes admin
+        switch (firstAdmin) {
+          case null {
+            firstAdmin := ?caller;
+            roles.add(caller, #admin);
+            #admin;
+          };
+          case (?_) { #user };
+        };
+      };
+    };
+  };
+
+  func isAdmin(caller : Principal) : Bool {
+    getUserRole(caller) == #admin;
+  };
+
+  func hasPermission(caller : Principal, required : UserRole) : Bool {
+    let role = getUserRole(caller);
+    switch (required) {
+      case (#guest) { true };
+      case (#user) { role == #user or role == #admin };
+      case (#admin) { role == #admin };
+    };
+  };
+
+  // ─── AUTHORIZATION PUBLIC METHODS ─────────────────────────────────────────
+
+  public query ({ caller }) func getMyRole() : async Text {
+    switch (getUserRole(caller)) {
+      case (#admin) { "admin" };
+      case (#user) { "user" };
+      case (#guest) { "guest" };
+    };
+  };
+
+  public shared ({ caller }) func assignRole(user : Principal, role : UserRole) : async () {
+    if (not isAdmin(caller)) {
+      Runtime.trap("Unauthorized: Only admins can assign roles");
+    };
+    roles.add(user, role);
+  };
+
+  public shared ({ caller }) func initialize() : async () {
+    // Trigger role init for caller (first caller becomes admin)
+    ignore getUserRole(caller);
+  };
+
+  // ─── DOMAIN TYPES ─────────────────────────────────────────────────────────
+
   public type Worldbuilding = {
     clans : [Clan];
     clanEyeRules : [ClanEyeRule];
@@ -162,7 +222,7 @@ actor {
     otherText : ?Text;
   };
 
-  // FIELDS
+  // ─── DOMAIN STATE ─────────────────────────────────────────────────────────
 
   let contactRequests = Map.empty<Text, ContactRequest>();
   var nextRequestId = 1;
@@ -183,58 +243,69 @@ actor {
   let referrals = Map.empty<Text, ReferralSource>();
   var nextReferralId = 1;
 
-  // COMPONENTS
-
-  let accessControlState = AccessControl.initState();
-  include MixinAuthorization(accessControlState);
-  include MixinStorage();
-
-  // EXPOSED METHODS
-
-  // USER PROFILE METHODS
+  // ─── USER PROFILE METHODS ─────────────────────────────────────────────────
 
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+    if (not hasPermission(caller, #user)) {
       Runtime.trap("Unauthorized: Only users can get their profile");
     };
     userProfiles.get(caller);
   };
 
   public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+    if (not hasPermission(caller, #user)) {
       Runtime.trap("Unauthorized: Only users can save profiles");
     };
     userProfiles.add(caller, profile);
   };
 
   public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
-    if (caller != user and not AccessControl.isAdmin(accessControlState, caller)) {
+    if (caller != user and not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Can only view your own profile");
     };
     userProfiles.get(user);
   };
 
-  // WORLDBUILDING METHODS
+  // ─── WORLDBUILDING METHODS ────────────────────────────────────────────────
 
   public query ({}) func getWorldbuilding() : async ?Worldbuilding {
     worldbuilding.get("worldbuilding");
   };
 
   public shared ({ caller }) func setWorldbuilding(worldbuildingData : Worldbuilding) : async () {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can modify worldbuilding");
     };
     worldbuilding.add("worldbuilding", worldbuildingData);
   };
 
-  // CHARACTER METHODS
+  // ─── CHARACTER METHODS ────────────────────────────────────────────────────
 
+  // Returns characters with imageUrl omitted (empty string) to stay within the 3MB ICP payload limit.
   public query ({}) func getCharacters() : async [Character] {
-    characters.values().toArray();
+    characters.values().map<Character, Character>(func(c) { { c with imageUrl = "" } }).toArray();
+  };
+
+  // Alias for getCharacters — lightweight list without imageUrl for admin dashboard.
+  public query ({}) func getCharactersMetadata() : async [Character] {
+    characters.values().map<Character, Character>(func(c) { { c with imageUrl = "" } }).toArray();
+  };
+
+  // Returns the full Character record including imageUrl for individual character detail fetching.
+  public query ({}) func getCharacterById(id : Text) : async ?Character {
+    characters.get(id);
+  };
+
+  // Returns just the imageUrl for a single character — use for lazy-loading images one at a time.
+  public query ({}) func getCharacterImage(id : Text) : async ?Text {
+    switch (characters.get(id)) {
+      case null { null };
+      case (?c) { ?c.imageUrl };
+    };
   };
 
   public shared ({ caller }) func addCharacter(newChar : NewCharacter) : async Character {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can add characters");
     };
     let id = nextCharacterId.toText();
@@ -255,7 +326,7 @@ actor {
   };
 
   public shared ({ caller }) func updateCharacter(id : Text, updatedChar : NewCharacter) : async ?Character {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can update characters");
     };
     switch (characters.get(id)) {
@@ -279,15 +350,14 @@ actor {
   };
 
   public shared ({ caller }) func deleteCharacter(id : Text) : async () {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can delete characters");
     };
     characters.remove(id);
   };
 
-  // Save the display order for a list of character ids (ordered array)
   public shared ({ caller }) func saveCharacterOrder(orderedIds : [Text]) : async () {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can reorder characters");
     };
     var order = 0;
@@ -313,14 +383,14 @@ actor {
     };
   };
 
-  // EPISODE METHODS
+  // ─── EPISODE METHODS ──────────────────────────────────────────────────────
 
   public query ({}) func getEpisodes() : async [Episode] {
     episodes.values().toArray();
   };
 
   public shared ({ caller }) func addEpisode(newEp : NewEpisode) : async Episode {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can add episodes");
     };
     let id = nextEpisodeId.toText();
@@ -339,7 +409,7 @@ actor {
   };
 
   public shared ({ caller }) func updateEpisode(id : Text, updatedEp : NewEpisode) : async ?Episode {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can update episodes");
     };
     switch (episodes.get(id)) {
@@ -361,20 +431,20 @@ actor {
   };
 
   public shared ({ caller }) func deleteEpisode(id : Text) : async () {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can delete episodes");
     };
     episodes.remove(id);
   };
 
-  // CONTENT METHODS
+  // ─── CONTENT METHODS ──────────────────────────────────────────────────────
 
   public query ({}) func getContentById(id : Text) : async ?Content {
     contents.get(id);
   };
 
   public shared ({ caller }) func addContent(newContent : NewContent) : async Content {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can add content");
     };
     let id = nextContentId.toText();
@@ -391,7 +461,7 @@ actor {
   };
 
   public shared ({ caller }) func updateContent(id : Text, updatedContent : NewContent) : async ?Content {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can update content");
     };
     switch (contents.get(id)) {
@@ -411,13 +481,13 @@ actor {
   };
 
   public shared ({ caller }) func deleteContent(id : Text) : async () {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can delete content");
     };
     contents.remove(id);
   };
 
-  // CONTACT REQUEST METHODS
+  // ─── CONTACT REQUEST METHODS ──────────────────────────────────────────────
 
   public shared ({}) func submitContactRequest(request : NewRequest) : async ContactRequest {
     let id = nextRequestId.toText();
@@ -435,14 +505,14 @@ actor {
   };
 
   public query ({ caller }) func getContactRequests() : async [ContactRequest] {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can view contact requests");
     };
     contactRequests.values().toArray();
   };
 
   public shared ({ caller }) func markContactRequestProcessed(id : Text) : async Bool {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can process contact requests");
     };
     switch (contactRequests.get(id)) {
@@ -462,9 +532,16 @@ actor {
     };
   };
 
-  // REFERRAL METHODS
+  public shared ({ caller }) func deleteContactRequest(id : Text) : async () {
+    if (not isAdmin(caller)) {
+      Runtime.trap("Unauthorized: Only admins can delete contact requests");
+    };
+    contactRequests.remove(id);
+  };
 
-  public shared ({ caller }) func submitReferral(newReferral : NewReferral) : async ReferralSource {
+  // ─── REFERRAL METHODS ─────────────────────────────────────────────────────
+
+  public shared func submitReferral(newReferral : NewReferral) : async ReferralSource {
     let id = nextReferralId.toText();
     nextReferralId += 1;
     let referral : ReferralSource = {
@@ -478,14 +555,14 @@ actor {
   };
 
   public query ({ caller }) func getReferrals() : async [ReferralSource] {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can view referrals");
     };
     referrals.values().toArray();
   };
 
   public shared ({ caller }) func deleteReferral(id : Text) : async () {
-    if (not AccessControl.isAdmin(accessControlState, caller)) {
+    if (not isAdmin(caller)) {
       Runtime.trap("Unauthorized: Only admins can delete referrals");
     };
     referrals.remove(id);

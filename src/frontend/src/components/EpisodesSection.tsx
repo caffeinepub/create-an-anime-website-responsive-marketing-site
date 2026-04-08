@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import React, { useState } from "react";
-import type { Episode } from "../backend";
 import { useGetAllEpisodes } from "../hooks/useQueries";
+import type { Episode } from "../types/backend-types";
 import { SectionHeader } from "./SectionHeader";
 
 interface EpisodesSectionProps {

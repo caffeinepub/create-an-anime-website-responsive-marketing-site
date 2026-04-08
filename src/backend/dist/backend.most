@@ -1,0 +1,161 @@
+// Version: 1.0.0
+type Character__117766171 =
+  {
+    bio : Text;
+    displayOrder : Nat;
+    id : Text;
+    imageUrl : Text;
+    name : Text;
+    power : Text;
+    role : Text;
+    traits : [Text];
+    weapon : Text
+  };
+type ClanEyeRule__558384000 = {description : Text; symbol : Text};
+type Clan__998698249 =
+  {
+    description : Text;
+    name : Text;
+    notableMembers : [Text];
+    symbol : Text;
+    uniqueAbilities : [Text]
+  };
+type ContactRequest__876110523 =
+  {
+    email : Text;
+    id : Text;
+    message : Text;
+    processed : Bool;
+    timestamp : Time__900049286;
+    topic : Topics__558280157
+  };
+type Content__216757941 =
+  {
+    body : Text;
+    contentType : Text;
+    id : Text;
+    imageUrl : ?Text;
+    title : Text
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type Episode__362271522 =
+  {
+    description : Text;
+    episodeNumber : Nat;
+    id : Text;
+    seasonNumber : Nat;
+    thumbnailUrl : Text;
+    title : Text;
+    videoUrl : Text
+  };
+type Int__270357528 = Int__616954475;
+type Int__616954475 = Int;
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type PowerSystemElement__295340849 =
+  {
+    categories : [Text];
+    description : Text;
+    masteryLevels : [Text];
+    name : Text;
+    symbol : Text
+  };
+type Rank__34630604 =
+  {
+    description : Text;
+    order : Nat;
+    privileges : [Text];
+    rankingRequirements : [Text];
+    responsibilities : [Text];
+    symbol : Text;
+    title : Text
+  };
+type ReferralSource__119525941 =
+  {id : Text; otherText : ?Text; source : Text; timestamp : Time__900049286};
+type ShiranagiFamily__69866567 =
+  {
+    affiliations : [Text];
+    bloodlinePowers : [Text];
+    coreEthos : Text;
+    evolutionOverTime : Text;
+    familyValues : [Text];
+    history : Text;
+    notableMembers : [Text];
+    symbols : [Text]
+  };
+type Time__796480547 = Int__270357528;
+type Time__900049286 = Time__796480547;
+type Topics__558280157 =
+  {
+    #advertisingInquiries;
+    #businessPartnerships;
+    #challengesAndBounties;
+    #eventOrWorkshopProposals;
+    #generalInquiries;
+    #interviewRequests;
+    #publishingSubmissions
+  };
+type UserProfile__491224006 = {email : ?Text; name : Text};
+type UserRole__599675725 = {#admin; #guest; #user};
+type Worldbuilding__18073475 =
+  {
+    clanEyeRules : [ClanEyeRule__558384000];
+    clans : [Clan__998698249];
+    powerSystem : [PowerSystemElement__295340849];
+    rankSystem : [Rank__34630604];
+    shiranagiFamily : ShiranagiFamily__69866567
+  };
+actor {
+  stable characters :
+    {
+      var root : Node__46230540<Text, Character__117766171>;
+      var size : Nat__490723111
+    };
+  stable contactRequests :
+    {
+      var root : Node__46230540<Text, ContactRequest__876110523>;
+      var size : Nat__490723111
+    };
+  stable contents :
+    {
+      var root : Node__46230540<Text, Content__216757941>;
+      var size : Nat__490723111
+    };
+  stable episodes :
+    {
+      var root : Node__46230540<Text, Episode__362271522>;
+      var size : Nat__490723111
+    };
+  stable var firstAdmin : ?Principal;
+  stable var nextCharacterId : Nat;
+  stable var nextContentId : Nat;
+  stable var nextEpisodeId : Nat;
+  stable var nextReferralId : Nat;
+  stable var nextRequestId : Nat;
+  stable referrals :
+    {
+      var root : Node__46230540<Text, ReferralSource__119525941>;
+      var size : Nat__490723111
+    };
+  stable roles :
+    {
+      var root : Node__46230540<Principal, UserRole__599675725>;
+      var size : Nat__490723111
+    };
+  stable userProfiles :
+    {
+      var root : Node__46230540<Principal, UserProfile__491224006>;
+      var size : Nat__490723111
+    };
+  stable worldbuilding :
+    {
+      var root : Node__46230540<Text, Worldbuilding__18073475>;
+      var size : Nat__490723111
+    }
+};

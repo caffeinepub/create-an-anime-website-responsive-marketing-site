@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import React, { useState } from "react";
-import { useGetAllCharacters } from "../hooks/useQueries";
+import { useGetAllCharacters, useGetCharacterImage } from "../hooks/useQueries";
 import { SectionHeader } from "./SectionHeader";
 
 const INITIAL_LIMIT = 6;
@@ -10,6 +10,38 @@ const INITIAL_LIMIT = 6;
 const AMBER_ACCENT = "oklch(0.72 0.18 75)";
 const AMBER_BG = "oklch(0.14 0.04 75)";
 const AMBER_CARD = "oklch(0.18 0.04 75)";
+
+// Lazy-loads a single character's image for the public card
+function CharacterImage({
+  characterId,
+  name,
+}: { characterId: string; name: string }) {
+  const { data: imageUrl, isLoading } = useGetCharacterImage(characterId);
+
+  if (isLoading) {
+    return (
+      <div className="mb-4 flex justify-center">
+        <Skeleton className="w-48 h-48 rounded-lg" />
+      </div>
+    );
+  }
+
+  if (!imageUrl) return null;
+
+  return (
+    <div className="mb-4 flex justify-center">
+      <img
+        src={imageUrl}
+        alt={name}
+        className="w-48 h-48 object-cover rounded-lg"
+        style={{ border: `2px solid ${AMBER_ACCENT}50` }}
+        onError={(e) => {
+          (e.target as HTMLImageElement).style.display = "none";
+        }}
+      />
+    </div>
+  );
+}
 
 export function CharactersSection() {
   const { data: characters, isLoading, isError } = useGetAllCharacters();
@@ -104,19 +136,10 @@ export function CharactersSection() {
                       "none";
                   }}
                 >
-                  {character.imageUrl && (
-                    <div className="mb-4 flex justify-center">
-                      <img
-                        src={character.imageUrl}
-                        alt={character.name}
-                        className="w-48 h-48 object-cover rounded-lg"
-                        style={{ border: `2px solid ${AMBER_ACCENT}50` }}
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = "none";
-                        }}
-                      />
-                    </div>
-                  )}
+                  <CharacterImage
+                    characterId={character.id}
+                    name={character.name}
+                  />
                   <h3
                     className="text-2xl font-bold mb-2"
                     style={{ color: "oklch(0.94 0.01 85)" }}

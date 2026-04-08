@@ -1,5 +1,5 @@
 import React from "react";
-import type { Episode } from "../backend";
+import type { Episode } from "../types/backend-types";
 import { normalizeIntroEmbedUrl } from "../utils/normalizeIntroEmbedUrl";
 
 interface VideoSectionProps {

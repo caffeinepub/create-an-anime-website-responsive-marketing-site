@@ -6,8 +6,8 @@ import { ArrowLeft, Film, Loader2, Save } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import type { Episode, NewEpisode } from "../backend";
 import { useCreateEpisode, useUpdateEpisode } from "../hooks/useQueries";
+import type { Episode, NewEpisode } from "../types/backend-types";
 
 interface EpisodeFormData {
   title: string;

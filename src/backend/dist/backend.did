@@ -1,0 +1,188 @@
+type Worldbuilding = 
+ record {
+   clanEyeRules: vec ClanEyeRule;
+   clans: vec Clan;
+   powerSystem: vec PowerSystemElement;
+   rankSystem: vec Rank;
+   shiranagiFamily: ShiranagiFamily;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = 
+ record {
+   email: opt text;
+   name: text;
+ };
+type Topics = 
+ variant {
+   advertisingInquiries;
+   businessPartnerships;
+   challengesAndBounties;
+   eventOrWorkshopProposals;
+   generalInquiries;
+   interviewRequests;
+   publishingSubmissions;
+ };
+type Time = int;
+type ShiranagiFamily = 
+ record {
+   affiliations: vec text;
+   bloodlinePowers: vec text;
+   coreEthos: text;
+   evolutionOverTime: text;
+   familyValues: vec text;
+   history: text;
+   notableMembers: vec text;
+   symbols: vec text;
+ };
+type ReferralSource = 
+ record {
+   id: text;
+   otherText: opt text;
+   source: text;
+   timestamp: Time;
+ };
+type Rank = 
+ record {
+   description: text;
+   order: nat;
+   privileges: vec text;
+   rankingRequirements: vec text;
+   responsibilities: vec text;
+   symbol: text;
+   title: text;
+ };
+type PowerSystemElement = 
+ record {
+   categories: vec text;
+   description: text;
+   masteryLevels: vec text;
+   name: text;
+   symbol: text;
+ };
+type NewRequest = 
+ record {
+   email: text;
+   message: text;
+   topic: Topics;
+ };
+type NewReferral = 
+ record {
+   otherText: opt text;
+   source: text;
+ };
+type NewEpisode = 
+ record {
+   description: text;
+   episodeNumber: nat;
+   seasonNumber: nat;
+   thumbnailUrl: text;
+   title: text;
+   videoUrl: text;
+ };
+type NewContent = 
+ record {
+   body: text;
+   contentType: text;
+   imageUrl: opt text;
+   title: text;
+ };
+type NewCharacter = 
+ record {
+   bio: text;
+   imageUrl: text;
+   name: text;
+   power: text;
+   role: text;
+   traits: vec text;
+   weapon: text;
+ };
+type Episode = 
+ record {
+   description: text;
+   episodeNumber: nat;
+   id: text;
+   seasonNumber: nat;
+   thumbnailUrl: text;
+   title: text;
+   videoUrl: text;
+ };
+type Content = 
+ record {
+   body: text;
+   contentType: text;
+   id: text;
+   imageUrl: opt text;
+   title: text;
+ };
+type ContactRequest = 
+ record {
+   email: text;
+   id: text;
+   message: text;
+   processed: bool;
+   timestamp: Time;
+   topic: Topics;
+ };
+type ClanEyeRule = 
+ record {
+   description: text;
+   symbol: text;
+ };
+type Clan = 
+ record {
+   description: text;
+   name: text;
+   notableMembers: vec text;
+   symbol: text;
+   uniqueAbilities: vec text;
+ };
+type Character = 
+ record {
+   bio: text;
+   displayOrder: nat;
+   id: text;
+   imageUrl: text;
+   name: text;
+   power: text;
+   role: text;
+   traits: vec text;
+   weapon: text;
+ };
+service : {
+  addCharacter: (newChar: NewCharacter) -> (Character);
+  addContent: (newContent: NewContent) -> (Content);
+  addEpisode: (newEp: NewEpisode) -> (Episode);
+  assignRole: (user: principal, role: UserRole) -> ();
+  deleteCharacter: (id: text) -> ();
+  deleteContactRequest: (id: text) -> ();
+  deleteContent: (id: text) -> ();
+  deleteEpisode: (id: text) -> ();
+  deleteReferral: (id: text) -> ();
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCharacterById: (id: text) -> (opt Character) query;
+  getCharacterImage: (id: text) -> (opt text) query;
+  getCharacters: () -> (vec Character) query;
+  getCharactersMetadata: () -> (vec Character) query;
+  getContactRequests: () -> (vec ContactRequest) query;
+  getContentById: (id: text) -> (opt Content) query;
+  getEpisodes: () -> (vec Episode) query;
+  getMyRole: () -> (text) query;
+  getReferrals: () -> (vec ReferralSource) query;
+  getUserProfile: (user: principal) -> (opt UserProfile) query;
+  getWorldbuilding: () -> (opt Worldbuilding) query;
+  initialize: () -> ();
+  markContactRequestProcessed: (id: text) -> (bool);
+  saveCallerUserProfile: (profile: UserProfile) -> ();
+  saveCharacterOrder: (orderedIds: vec text) -> ();
+  setWorldbuilding: (worldbuildingData: Worldbuilding) -> ();
+  submitContactRequest: (request: NewRequest) -> (ContactRequest);
+  submitReferral: (newReferral: NewReferral) -> (ReferralSource);
+  updateCharacter: (id: text, updatedChar: NewCharacter) -> (opt Character);
+  updateContent: (id: text, updatedContent: NewContent) -> (opt Content);
+  updateEpisode: (id: text, updatedEp: NewEpisode) -> (opt Episode);
+}

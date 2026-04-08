@@ -13,8 +13,8 @@ import { ArrowLeft, FileText, Loader2, Save } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import type { Content, NewContent } from "../backend";
 import { useCreateContent, useUpdateContent } from "../hooks/useQueries";
+import type { Content, NewContent } from "../types/backend-types";
 
 const CONTENT_TYPES = [
   "announcement",

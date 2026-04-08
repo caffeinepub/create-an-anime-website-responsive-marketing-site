@@ -133,52 +133,29 @@ export interface Worldbuilding {
   'shiranagiFamily' : ShiranagiFamily,
   'rankSystem' : Array<Rank>,
 }
-export interface _CaffeineStorageCreateCertificateResult {
-  'method' : string,
-  'blob_hash' : string,
-}
-export interface _CaffeineStorageRefillInformation {
-  'proposed_top_up_amount' : [] | [bigint],
-}
-export interface _CaffeineStorageRefillResult {
-  'success' : [] | [boolean],
-  'topped_up_amount' : [] | [bigint],
-}
 export interface _SERVICE {
-  '_caffeineStorageBlobIsLive' : ActorMethod<[Uint8Array], boolean>,
-  '_caffeineStorageBlobsToDelete' : ActorMethod<[], Array<Uint8Array>>,
-  '_caffeineStorageConfirmBlobDeletion' : ActorMethod<
-    [Array<Uint8Array>],
-    undefined
-  >,
-  '_caffeineStorageCreateCertificate' : ActorMethod<
-    [string],
-    _CaffeineStorageCreateCertificateResult
-  >,
-  '_caffeineStorageRefillCashier' : ActorMethod<
-    [[] | [_CaffeineStorageRefillInformation]],
-    _CaffeineStorageRefillResult
-  >,
-  '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
-  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'addCharacter' : ActorMethod<[NewCharacter], Character>,
   'addContent' : ActorMethod<[NewContent], Content>,
   'addEpisode' : ActorMethod<[NewEpisode], Episode>,
-  'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'assignRole' : ActorMethod<[Principal, UserRole], undefined>,
   'deleteCharacter' : ActorMethod<[string], undefined>,
+  'deleteContactRequest' : ActorMethod<[string], undefined>,
   'deleteContent' : ActorMethod<[string], undefined>,
   'deleteEpisode' : ActorMethod<[string], undefined>,
   'deleteReferral' : ActorMethod<[string], undefined>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
-  'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getCharacterById' : ActorMethod<[string], [] | [Character]>,
+  'getCharacterImage' : ActorMethod<[string], [] | [string]>,
   'getCharacters' : ActorMethod<[], Array<Character>>,
+  'getCharactersMetadata' : ActorMethod<[], Array<Character>>,
   'getContactRequests' : ActorMethod<[], Array<ContactRequest>>,
   'getContentById' : ActorMethod<[string], [] | [Content]>,
   'getEpisodes' : ActorMethod<[], Array<Episode>>,
+  'getMyRole' : ActorMethod<[], string>,
   'getReferrals' : ActorMethod<[], Array<ReferralSource>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'getWorldbuilding' : ActorMethod<[], [] | [Worldbuilding]>,
-  'isCallerAdmin' : ActorMethod<[], boolean>,
+  'initialize' : ActorMethod<[], undefined>,
   'markContactRequestProcessed' : ActorMethod<[string], boolean>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'saveCharacterOrder' : ActorMethod<[Array<string>], undefined>,

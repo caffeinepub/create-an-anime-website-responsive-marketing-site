@@ -1,5 +1,6 @@
 import { Principal } from "@dfinity/principal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createActorWithConfig } from "../config";
 import type {
   Character,
   ContactRequest,
@@ -11,9 +12,8 @@ import type {
   NewRequest,
   UserProfile,
   Worldbuilding,
-} from "../backend";
-import { UserRole } from "../backend";
-import { createActorWithConfig } from "../config";
+} from "../types/backend-types";
+import { UserRole } from "../types/backend-types";
 import { useActor } from "./useActor";
 import { useInternetIdentity } from "./useInternetIdentity";
 
@@ -254,6 +254,34 @@ export function useGetAllCharacters() {
       return actor.getCharacters();
     },
     enabled: !!actor && !isFetching,
+  });
+}
+
+export function useGetCharacterImage(id: string) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<string>({
+    queryKey: ["characterImage", id],
+    queryFn: async () => {
+      if (!actor) return "";
+      return actor.getCharacterImage(id);
+    },
+    enabled: !!actor && !isFetching && !!id,
+    staleTime: 5 * 60 * 1000, // cache image for 5 minutes
+  });
+}
+
+export function useGetCharacterById(id: string) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<Character | null>({
+    queryKey: ["characterById", id],
+    queryFn: async (): Promise<Character | null> => {
+      if (!actor) return null;
+      const result = await actor.getCharacterById(id);
+      return result.length > 0 ? (result[0] ?? null) : null;
+    },
+    enabled: !!actor && !isFetching && !!id,
   });
 }
 

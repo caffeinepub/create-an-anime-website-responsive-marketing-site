@@ -23,8 +23,8 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import { toast } from "sonner";
-import type { Episode } from "../backend";
 import { useDeleteEpisode, useGetAllEpisodes } from "../hooks/useQueries";
+import type { Episode } from "../types/backend-types";
 import { EpisodeForm } from "./EpisodeForm";
 
 export function AdminEpisodesPanel() {

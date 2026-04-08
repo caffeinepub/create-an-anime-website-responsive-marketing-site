@@ -25,14 +25,50 @@ import {
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import type { Character } from "../backend";
 import {
   useDeleteCharacter,
   useGetAllCharacters,
+  useGetCharacterImage,
   useReorderCharacters,
 } from "../hooks/useQueries";
 import { useSeedCharacters } from "../hooks/useSeedCharacters";
+import type { Character } from "../types/backend-types";
 import { CharacterForm } from "./CharacterForm";
+
+// Lazy-loads a single character's image thumbnail via the new getCharacterImage backend method
+function CharacterThumbnail({
+  characterId,
+  name,
+}: { characterId: string; name: string }) {
+  const { data: imageUrl, isLoading } = useGetCharacterImage(characterId);
+
+  if (isLoading) {
+    return (
+      <div className="w-8 h-8 rounded-full admin-surface flex items-center justify-center shrink-0 animate-pulse">
+        <Loader2 className="w-3 h-3 admin-muted-text animate-spin" />
+      </div>
+    );
+  }
+
+  if (imageUrl) {
+    return (
+      <img
+        src={imageUrl}
+        alt={name}
+        className="w-8 h-8 rounded-full object-cover admin-surface shrink-0"
+        onError={(e) => {
+          (e.target as HTMLImageElement).style.display = "none";
+        }}
+      />
+    );
+  }
+
+  return (
+    <div className="w-8 h-8 rounded-full admin-surface flex items-center justify-center shrink-0">
+      <Users className="w-4 h-4 admin-muted-text" />
+    </div>
+  );
+}
 
 export function AdminCharactersPanel() {
   const { data: characters, isLoading, error, refetch } = useGetAllCharacters();
@@ -84,8 +120,10 @@ export function AdminCharactersPanel() {
     try {
       await deleteCharacter.mutateAsync(characterId);
       toast.success("Character deleted successfully");
-    } catch (err: any) {
-      toast.error(err?.message ?? "Failed to delete character");
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error ? err.message : "Failed to delete character";
+      toast.error(msg);
     }
   };
 
@@ -98,7 +136,6 @@ export function AdminCharactersPanel() {
     dragIndexRef.current = index;
     setIsDragging(true);
     e.dataTransfer.effectAllowed = "move";
-    // Use a transparent 1x1 pixel as drag image so the row itself shows the ghost
     const ghost = document.createElement("div");
     ghost.style.position = "absolute";
     ghost.style.top = "-9999px";
@@ -134,7 +171,6 @@ export function AdminCharactersPanel() {
       return;
     }
 
-    // Reorder locally (optimistic update)
     const reordered = [...sortedCharacters];
     const [moved] = reordered.splice(fromIndex, 1);
     reordered.splice(dropIndex, 0, moved);
@@ -144,13 +180,12 @@ export function AdminCharactersPanel() {
     setIsDragging(false);
     dragIndexRef.current = null;
 
-    // Persist to backend
     try {
       await reorderCharacters.mutateAsync(reordered.map((c) => c.id));
       toast.success("Character order saved");
-    } catch (err: any) {
-      toast.error(err?.message ?? "Failed to save order");
-      // Revert on failure
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to save order";
+      toast.error(msg);
       if (characters) {
         const reverted = [...characters].sort(
           (a, b) => Number(a.displayOrder) - Number(b.displayOrder),
@@ -261,7 +296,6 @@ export function AdminCharactersPanel() {
             <table className="w-full">
               <thead>
                 <tr className="admin-table-header">
-                  {/* Drag handle column */}
                   <th className="w-8 px-2 py-3" aria-label="Drag to reorder" />
                   <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider admin-muted-text">
                     Name
@@ -317,21 +351,10 @@ export function AdminCharactersPanel() {
 
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-3">
-                          {character.imageUrl ? (
-                            <img
-                              src={character.imageUrl}
-                              alt={character.name}
-                              className="w-8 h-8 rounded-full object-cover admin-surface shrink-0"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).style.display =
-                                  "none";
-                              }}
-                            />
-                          ) : (
-                            <div className="w-8 h-8 rounded-full admin-surface flex items-center justify-center shrink-0">
-                              <Users className="w-4 h-4 admin-muted-text" />
-                            </div>
-                          )}
+                          <CharacterThumbnail
+                            characterId={character.id}
+                            name={character.name}
+                          />
                           <p className="text-sm font-medium admin-heading truncate max-w-[120px]">
                             {character.name}
                           </p>

@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import { toast } from "sonner";
-import type { ContactRequest, Topics } from "../backend";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import {
   useGetAllRequests,
@@ -28,6 +27,7 @@ import {
   useIsCallerAdmin,
   useUpdateRequestStatus,
 } from "../hooks/useQueries";
+import type { ContactRequest, Topics } from "../types/backend-types";
 
 const TOPIC_LABELS: Record<string, string> = {
   businessPartnerships: "Business Partnerships",

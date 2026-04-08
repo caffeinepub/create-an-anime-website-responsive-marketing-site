@@ -8,17 +8,6 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const _CaffeineStorageCreateCertificateResult = IDL.Record({
-  'method' : IDL.Text,
-  'blob_hash' : IDL.Text,
-});
-export const _CaffeineStorageRefillInformation = IDL.Record({
-  'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
-});
-export const _CaffeineStorageRefillResult = IDL.Record({
-  'success' : IDL.Opt(IDL.Bool),
-  'topped_up_amount' : IDL.Opt(IDL.Nat),
-});
 export const NewCharacter = IDL.Record({
   'bio' : IDL.Text,
   'traits' : IDL.Vec(IDL.Text),
@@ -157,47 +146,24 @@ export const NewReferral = IDL.Record({
 });
 
 export const idlService = IDL.Service({
-  '_caffeineStorageBlobIsLive' : IDL.Func(
-      [IDL.Vec(IDL.Nat8)],
-      [IDL.Bool],
-      ['query'],
-    ),
-  '_caffeineStorageBlobsToDelete' : IDL.Func(
-      [],
-      [IDL.Vec(IDL.Vec(IDL.Nat8))],
-      ['query'],
-    ),
-  '_caffeineStorageConfirmBlobDeletion' : IDL.Func(
-      [IDL.Vec(IDL.Vec(IDL.Nat8))],
-      [],
-      [],
-    ),
-  '_caffeineStorageCreateCertificate' : IDL.Func(
-      [IDL.Text],
-      [_CaffeineStorageCreateCertificateResult],
-      [],
-    ),
-  '_caffeineStorageRefillCashier' : IDL.Func(
-      [IDL.Opt(_CaffeineStorageRefillInformation)],
-      [_CaffeineStorageRefillResult],
-      [],
-    ),
-  '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
-  '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'addCharacter' : IDL.Func([NewCharacter], [Character], []),
   'addContent' : IDL.Func([NewContent], [Content], []),
   'addEpisode' : IDL.Func([NewEpisode], [Episode], []),
-  'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'assignRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'deleteCharacter' : IDL.Func([IDL.Text], [], []),
+  'deleteContactRequest' : IDL.Func([IDL.Text], [], []),
   'deleteContent' : IDL.Func([IDL.Text], [], []),
   'deleteEpisode' : IDL.Func([IDL.Text], [], []),
   'deleteReferral' : IDL.Func([IDL.Text], [], []),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
-  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getCharacterById' : IDL.Func([IDL.Text], [IDL.Opt(Character)], ['query']),
+  'getCharacterImage' : IDL.Func([IDL.Text], [IDL.Opt(IDL.Text)], ['query']),
   'getCharacters' : IDL.Func([], [IDL.Vec(Character)], ['query']),
+  'getCharactersMetadata' : IDL.Func([], [IDL.Vec(Character)], ['query']),
   'getContactRequests' : IDL.Func([], [IDL.Vec(ContactRequest)], ['query']),
   'getContentById' : IDL.Func([IDL.Text], [IDL.Opt(Content)], ['query']),
   'getEpisodes' : IDL.Func([], [IDL.Vec(Episode)], ['query']),
+  'getMyRole' : IDL.Func([], [IDL.Text], ['query']),
   'getReferrals' : IDL.Func([], [IDL.Vec(ReferralSource)], ['query']),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
@@ -205,7 +171,7 @@ export const idlService = IDL.Service({
       ['query'],
     ),
   'getWorldbuilding' : IDL.Func([], [IDL.Opt(Worldbuilding)], ['query']),
-  'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'initialize' : IDL.Func([], [], []),
   'markContactRequestProcessed' : IDL.Func([IDL.Text], [IDL.Bool], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'saveCharacterOrder' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
@@ -224,17 +190,6 @@ export const idlService = IDL.Service({
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
-  const _CaffeineStorageCreateCertificateResult = IDL.Record({
-    'method' : IDL.Text,
-    'blob_hash' : IDL.Text,
-  });
-  const _CaffeineStorageRefillInformation = IDL.Record({
-    'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
-  });
-  const _CaffeineStorageRefillResult = IDL.Record({
-    'success' : IDL.Opt(IDL.Bool),
-    'topped_up_amount' : IDL.Opt(IDL.Nat),
-  });
   const NewCharacter = IDL.Record({
     'bio' : IDL.Text,
     'traits' : IDL.Vec(IDL.Text),
@@ -373,47 +328,24 @@ export const idlFactory = ({ IDL }) => {
   });
   
   return IDL.Service({
-    '_caffeineStorageBlobIsLive' : IDL.Func(
-        [IDL.Vec(IDL.Nat8)],
-        [IDL.Bool],
-        ['query'],
-      ),
-    '_caffeineStorageBlobsToDelete' : IDL.Func(
-        [],
-        [IDL.Vec(IDL.Vec(IDL.Nat8))],
-        ['query'],
-      ),
-    '_caffeineStorageConfirmBlobDeletion' : IDL.Func(
-        [IDL.Vec(IDL.Vec(IDL.Nat8))],
-        [],
-        [],
-      ),
-    '_caffeineStorageCreateCertificate' : IDL.Func(
-        [IDL.Text],
-        [_CaffeineStorageCreateCertificateResult],
-        [],
-      ),
-    '_caffeineStorageRefillCashier' : IDL.Func(
-        [IDL.Opt(_CaffeineStorageRefillInformation)],
-        [_CaffeineStorageRefillResult],
-        [],
-      ),
-    '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
-    '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'addCharacter' : IDL.Func([NewCharacter], [Character], []),
     'addContent' : IDL.Func([NewContent], [Content], []),
     'addEpisode' : IDL.Func([NewEpisode], [Episode], []),
-    'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'assignRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'deleteCharacter' : IDL.Func([IDL.Text], [], []),
+    'deleteContactRequest' : IDL.Func([IDL.Text], [], []),
     'deleteContent' : IDL.Func([IDL.Text], [], []),
     'deleteEpisode' : IDL.Func([IDL.Text], [], []),
     'deleteReferral' : IDL.Func([IDL.Text], [], []),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
-    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getCharacterById' : IDL.Func([IDL.Text], [IDL.Opt(Character)], ['query']),
+    'getCharacterImage' : IDL.Func([IDL.Text], [IDL.Opt(IDL.Text)], ['query']),
     'getCharacters' : IDL.Func([], [IDL.Vec(Character)], ['query']),
+    'getCharactersMetadata' : IDL.Func([], [IDL.Vec(Character)], ['query']),
     'getContactRequests' : IDL.Func([], [IDL.Vec(ContactRequest)], ['query']),
     'getContentById' : IDL.Func([IDL.Text], [IDL.Opt(Content)], ['query']),
     'getEpisodes' : IDL.Func([], [IDL.Vec(Episode)], ['query']),
+    'getMyRole' : IDL.Func([], [IDL.Text], ['query']),
     'getReferrals' : IDL.Func([], [IDL.Vec(ReferralSource)], ['query']),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
@@ -421,7 +353,7 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'getWorldbuilding' : IDL.Func([], [IDL.Opt(Worldbuilding)], ['query']),
-    'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'initialize' : IDL.Func([], [], []),
     'markContactRequestProcessed' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'saveCharacterOrder' : IDL.Func([IDL.Vec(IDL.Text)], [], []),

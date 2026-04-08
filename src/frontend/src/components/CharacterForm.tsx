@@ -4,11 +4,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Loader2, Save, UploadCloud, Users, X } from "lucide-react";
 import type React from "react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useController, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import type { Character, NewCharacter } from "../backend";
-import { useCreateCharacter, useUpdateCharacter } from "../hooks/useQueries";
+import {
+  useCreateCharacter,
+  useGetCharacterImage,
+  useUpdateCharacter,
+} from "../hooks/useQueries";
+import type { Character, NewCharacter } from "../types/backend-types";
 
 const MAX_FILE_SIZE_MB = 50;
 const ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/gif", "image/webp"];
@@ -34,22 +38,35 @@ export function CharacterForm({ character, onClose }: CharacterFormProps) {
   const createCharacter = useCreateCharacter();
   const updateCharacter = useUpdateCharacter();
 
+  // When editing, imageUrl from getCharacters() is now "" (payload fix).
+  // Fetch the actual image separately via getCharacterImage.
+  const { data: fetchedImageUrl, isLoading: _imageLoading } =
+    useGetCharacterImage(character?.id ?? "");
+
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<CharacterFormData>({
     defaultValues: {
       name: character?.name ?? "",
       bio: character?.bio ?? "",
-      imageUrl: character?.imageUrl ?? (isEditing ? "" : DEFAULT_NEW_IMAGE),
+      imageUrl: isEditing ? "" : DEFAULT_NEW_IMAGE,
       weapon: character?.weapon ?? "",
       power: character?.power ?? "",
       role: character?.role ?? "",
       traits: character?.traits.join(", ") ?? "",
     },
   });
+
+  // Once the fetched image arrives, populate the form field
+  useEffect(() => {
+    if (isEditing && fetchedImageUrl) {
+      setValue("imageUrl", fetchedImageUrl);
+    }
+  }, [isEditing, fetchedImageUrl, setValue]);
 
   // Controlled imageUrl field — keeps drag-zone + text input in sync
   const { field: imageField } = useController({ name: "imageUrl", control });

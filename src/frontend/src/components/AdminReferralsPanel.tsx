@@ -27,8 +27,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import type { ReferralSource } from "../backend";
 import { useDeleteReferral, useGetAllReferrals } from "../hooks/useQueries";
+import type { ReferralSource } from "../types/backend-types";
 
 function formatDate(timestamp: bigint): string {
   const ms = Number(timestamp / 1_000_000n);

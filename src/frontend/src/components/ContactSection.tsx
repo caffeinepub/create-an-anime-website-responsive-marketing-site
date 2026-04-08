@@ -1,8 +1,8 @@
 import { Loader2, Mail, MessageSquare } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Topics } from "../backend";
 import { useSubmitContactRequest } from "../hooks/useQueries";
+import { Topics } from "../types/backend-types";
 import { SectionHeader } from "./SectionHeader";
 
 const SLATE_ACCENT = "oklch(0.65 0.14 230)";

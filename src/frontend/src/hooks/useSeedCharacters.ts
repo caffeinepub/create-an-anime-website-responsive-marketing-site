@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import type { NewCharacter } from "../backend";
+import type { NewCharacter } from "../types/backend-types";
 import { useInternetIdentity } from "./useInternetIdentity";
 import { useCreateCharacter, useGetAllCharacters } from "./useQueries";
 

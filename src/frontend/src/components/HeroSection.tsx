@@ -163,6 +163,35 @@ export function HeroSection() {
                 {animeSiteConfig.ctaButtons.secondary}
               </button>
             </div>
+
+            {/* ── QR Code block ── */}
+            <div
+              className="flex flex-col items-center gap-2 pt-6"
+              data-ocid="hero.qr_code.block"
+            >
+              <div
+                className="rounded-xl p-2 transition-all"
+                style={{
+                  background: "oklch(0.14 0.025 220 / 0.80)",
+                  border: "1px solid oklch(0.65 0.18 220 / 0.45)",
+                  boxShadow:
+                    "0 0 18px oklch(0.65 0.18 220 / 0.35), 0 0 40px oklch(0.60 0.16 220 / 0.18), 0 4px 16px oklch(0.05 0.01 240 / 0.60)",
+                }}
+              >
+                <img
+                  src="/assets/url_qrfast_20_07_47-019d6a72-febe-710f-838e-a57b13ed10d5.png"
+                  alt="QR code for Whispers of the White Moon"
+                  className="w-28 h-28 sm:w-32 sm:h-32 rounded-lg object-contain"
+                  style={{ imageRendering: "crisp-edges" }}
+                />
+              </div>
+              <p
+                className="text-xs font-semibold uppercase tracking-widest"
+                style={{ color: "oklch(0.65 0.14 220)" }}
+              >
+                Scan the code
+              </p>
+            </div>
           </div>
         </div>
       </div>

@@ -1,6 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import type { Episode } from "./backend";
 import { AboutSection } from "./components/AboutSection";
 import { AdminDashboard } from "./components/AdminDashboard";
 import { CharacterMatchSection } from "./components/CharacterMatchSection";
@@ -19,6 +18,7 @@ import { TopNav } from "./components/TopNav";
 import { VideoSection } from "./components/VideoSection";
 import { WorldbuildingSection } from "./components/WorldbuildingSection";
 import { Toaster } from "./components/ui/sonner";
+import type { Episode } from "./types/backend-types";
 
 const queryClient = new QueryClient({
   defaultOptions: {
